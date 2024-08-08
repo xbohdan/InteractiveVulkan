@@ -6,11 +6,15 @@ to facilitate the creation of interactive graphics applications.
 The project is in its early stages and may not be ready for production use.
 The goal is to visualize how Vulkan's complexities can be abstracted without relying on third-party libraries.
 
+The first example is a simple cube renderer that demonstrates some concepts of Vulkan 1.3.
+Most importantly, its render loop utilizes dynamic rendering, which could be more suitable for game engines because
+it is a more flexible alternative to hard-coded render passes and framebuffers.
+
 The project is structured as follows:
 
 ```
-├── src
-    ├── intvlk
+└── src
+    └── intvlk
         ├── glm_utils
         ├── glslang_utils
         └── vma_utils
