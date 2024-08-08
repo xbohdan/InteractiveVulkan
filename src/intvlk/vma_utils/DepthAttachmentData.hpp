@@ -26,23 +26,23 @@
 
 namespace intvlk::vma_utils
 {
-	class DepthAttachmentData : public ImageData
-	{
-	public:
-		DepthAttachmentData(const vk::raii::Device& device,
-			const VmaAllocator& allocator,
-			vk::Format format,
-			const vk::Extent2D& extent)
-			: ImageData{ device,
-						allocator,
-						format,
-						extent,
-						vk::ImageTiling::eOptimal,
-						vk::ImageUsageFlagBits::eDepthStencilAttachment,
-						vk::ImageLayout::eUndefined,
-						vk::MemoryPropertyFlagBits::eDeviceLocal,
-						vk::ImageAspectFlagBits::eDepth }
-		{
-		}
-	};
+    class DepthAttachmentData : public ImageData
+    {
+    public:
+        DepthAttachmentData(const vk::raii::Device& device,
+            const VmaAllocator& allocator,
+            vk::Format format,
+            const vk::Extent2D& extent)
+            : ImageData{ device,
+                        allocator,
+                        format,
+                        extent,
+                        vk::ImageTiling::eOptimal,
+                        vk::ImageUsageFlagBits::eDepthStencilAttachment,
+                        vk::ImageLayout::eUndefined,
+                        vk::MemoryPropertyFlagBits::eDeviceLocal,
+                        vk::ImageAspectFlagBits::eDepth }
+        {
+        }
+    };
 }

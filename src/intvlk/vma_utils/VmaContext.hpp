@@ -21,38 +21,38 @@
 
 namespace intvlk::vma_utils
 {
-	class VmaContext
-	{
-	public:
-		VmaContext(VmaAllocatorCreateFlags flags,
-			const vk::raii::PhysicalDevice& physicalDevice,
-			const vk::raii::Device& device,
-			const vk::raii::Instance& instance,
-			uint32_t apiVersion)
-		{
-			VmaAllocatorCreateInfo allocatorInfo{};
-			allocatorInfo.flags = flags;
-			allocatorInfo.physicalDevice = *physicalDevice;
-			allocatorInfo.device = *device;
-			allocatorInfo.instance = *instance;
-			allocatorInfo.vulkanApiVersion = apiVersion;
-			if (vmaCreateAllocator(&allocatorInfo, &allocator))
-			{
-				throw Error{ "Failed to create VMA allocator" };
-			}
-		}
+    class VmaContext
+    {
+    public:
+        VmaContext(VmaAllocatorCreateFlags flags,
+            const vk::raii::PhysicalDevice& physicalDevice,
+            const vk::raii::Device& device,
+            const vk::raii::Instance& instance,
+            uint32_t apiVersion)
+        {
+            VmaAllocatorCreateInfo allocatorInfo{};
+            allocatorInfo.flags = flags;
+            allocatorInfo.physicalDevice = *physicalDevice;
+            allocatorInfo.device = *device;
+            allocatorInfo.instance = *instance;
+            allocatorInfo.vulkanApiVersion = apiVersion;
+            if (vmaCreateAllocator(&allocatorInfo, &allocator))
+            {
+                throw Error{ "Failed to create VMA allocator" };
+            }
+        }
 
-		VmaContext(const VmaContext&) = delete;
-		VmaContext& operator=(const VmaContext&) = delete;
+        VmaContext(const VmaContext&) = delete;
+        VmaContext& operator=(const VmaContext&) = delete;
 
-		VmaContext(VmaContext&&) = delete;
-		VmaContext& operator=(VmaContext&&) = delete;
+        VmaContext(VmaContext&&) = delete;
+        VmaContext& operator=(VmaContext&&) = delete;
 
-		~VmaContext()
-		{
-			vmaDestroyAllocator(allocator);
-		}
+        ~VmaContext()
+        {
+            vmaDestroyAllocator(allocator);
+        }
 
-		VmaAllocator allocator{ nullptr };
-	};
+        VmaAllocator allocator{ nullptr };
+    };
 }

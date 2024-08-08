@@ -19,10 +19,10 @@
 
 namespace intvlk::glm_utils
 {
-	class DrawPushConstants
-	{
-	public:
-		glm::mat4 renderMatrix{};
-		vk::DeviceAddress vertexBufferAddress{};
-	};
+    class DrawPushConstants
+    {
+    public:
+        glm::mat4 renderMatrix{};
+        vk::DeviceAddress vertexBufferAddress{};
+    };
 }

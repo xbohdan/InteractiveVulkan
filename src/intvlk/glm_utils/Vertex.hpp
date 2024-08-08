@@ -19,10 +19,10 @@
 
 namespace intvlk::glm_utils
 {
-	class Vertex
-	{
-	public:
-		glm::vec4 position{};
-		glm::vec4 color{};
-	};
+    class Vertex
+    {
+    public:
+        glm::vec4 position{};
+        glm::vec4 color{};
+    };
 }

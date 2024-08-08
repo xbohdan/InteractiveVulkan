@@ -26,26 +26,26 @@
 
 namespace intvlk
 {
-	class SdlContext
-	{
-	public:
-		SdlContext()
-		{
-			if (SDL_Init(SDL_INIT_VIDEO))
-			{
-				throw Error{ "Failed to initialize SDL!" };
-			}
-		}
+    class SdlContext
+    {
+    public:
+        SdlContext()
+        {
+            if (SDL_Init(SDL_INIT_VIDEO))
+            {
+                throw Error{ "Failed to initialize SDL!" };
+            }
+        }
 
-		SdlContext(const SdlContext&) = delete;
-		SdlContext& operator=(const SdlContext&) = delete;
+        SdlContext(const SdlContext&) = delete;
+        SdlContext& operator=(const SdlContext&) = delete;
 
-		SdlContext(SdlContext&&) = default;
-		SdlContext& operator=(SdlContext&&) = default;
+        SdlContext(SdlContext&&) = default;
+        SdlContext& operator=(SdlContext&&) = default;
 
-		~SdlContext()
-		{
-			SDL_Quit();
-		}
-	};
+        ~SdlContext()
+        {
+            SDL_Quit();
+        }
+    };
 }

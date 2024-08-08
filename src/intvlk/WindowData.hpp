@@ -28,85 +28,85 @@
 
 namespace intvlk
 {
-	class WindowData
-	{
-	public:
-		WindowData(std::string_view windowName, const vk::Extent2D& extent)
-			: name{ windowName }, extent{ extent }
-		{
-			SDL_WindowFlags windowFlags{ static_cast<SDL_WindowFlags>(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE) };
-			handle = SDL_CreateWindow(windowName.data(),
-				SDL_WINDOWPOS_CENTERED,
-				SDL_WINDOWPOS_CENTERED,
-				extent.width,
-				extent.height,
-				windowFlags);
-			if (!handle)
-			{
-				throw Error{ "Failed to create window!" };
-			}
+    class WindowData
+    {
+    public:
+        WindowData(std::string_view windowName, const vk::Extent2D& extent)
+            : name{ windowName }, extent{ extent }
+        {
+            SDL_WindowFlags windowFlags{ static_cast<SDL_WindowFlags>(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE) };
+            handle = SDL_CreateWindow(windowName.data(),
+                SDL_WINDOWPOS_CENTERED,
+                SDL_WINDOWPOS_CENTERED,
+                extent.width,
+                extent.height,
+                windowFlags);
+            if (!handle)
+            {
+                throw Error{ "Failed to create window!" };
+            }
 
-			SDL_AddEventWatch(windowResizeEventWatch, this);
-		}
+            SDL_AddEventWatch(windowResizeEventWatch, this);
+        }
 
-		static int windowResizeEventWatch(void* userData, SDL_Event* event)
-		{
-			if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED)
-			{
-				auto windowData{ static_cast<WindowData*>(userData) };
-				windowData->setExtent(vk::Extent2D{ static_cast<uint32_t>(event->window.data1),
-												   static_cast<uint32_t>(event->window.data2) });
-			}
-			return 0;
-		}
+        static int windowResizeEventWatch(void* userData, SDL_Event* event)
+        {
+            if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED)
+            {
+                auto windowData{ static_cast<WindowData*>(userData) };
+                windowData->setExtent(vk::Extent2D{ static_cast<uint32_t>(event->window.data1),
+                                                   static_cast<uint32_t>(event->window.data2) });
+            }
+            return 0;
+        }
 
-		WindowData(const WindowData&) = delete;
-		WindowData& operator=(const WindowData&) = delete;
+        WindowData(const WindowData&) = delete;
+        WindowData& operator=(const WindowData&) = delete;
 
-		WindowData(WindowData&&) noexcept = default;
-		WindowData& operator=(WindowData&&) noexcept = default;
+        WindowData(WindowData&&) noexcept = default;
+        WindowData& operator=(WindowData&&) noexcept = default;
 
-		~WindowData() noexcept
-		{
-			if (handle)
-			{
-				SDL_DestroyWindow(handle);
-			}
-		}
+        ~WindowData() noexcept
+        {
+            if (handle)
+            {
+                SDL_DestroyWindow(handle);
+            }
+        }
 
-		vk::Extent2D getExtent()
-		{
-			std::lock_guard lock{ extentMutex };
-			return extent;
-		}
+        vk::Extent2D getExtent()
+        {
+            std::lock_guard lock{ extentMutex };
+            return extent;
+        }
 
-		SDL_Window* getHandle() const
-		{
-			return handle;
-		}
+        SDL_Window* getHandle() const
+        {
+            return handle;
+        }
 
-		std::string_view getName() const
-		{
-			return name;
-		}
+        std::string_view getName() const
+        {
+            return name;
+        }
 
-		void setExtent(const vk::Extent2D& newExtent)
-		{
-			std::lock_guard lock{ extentMutex };
-			extent = newExtent;
-		}
+        void setExtent(const vk::Extent2D& newExtent)
+        {
+            std::lock_guard lock{ extentMutex };
+            extent = newExtent;
+        }
 
-		void setName(std::string_view newName)
-		{
-			name = newName;
-			SDL_SetWindowTitle(handle, newName.data());
-		}
+        void setName(std::string_view newName)
+        {
+            name = newName;
+            SDL_SetWindowTitle(handle, newName.data());
+        }
 
-	private:
-		SdlContext sdlCtx{};
-		SDL_Window* handle{};
-		std::string name{};
-		vk::Extent2D extent{};
-		std::mutex extentMutex{};
-	};
+    private:
+        SdlContext sdlCtx{};
+        SDL_Window* handle{};
+        std::string name{};
+        vk::Extent2D extent{};
+        std::mutex extentMutex{};
+    };
 }

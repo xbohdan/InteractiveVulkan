@@ -19,33 +19,33 @@
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	try
-	{
-		const std::string appName{ "Vulkan App" };
-		const uint32_t width{ 900 };
-		const uint32_t height{ 600 };
-		VulkanApp app{ appName, width, height };
-		app.run();
-	}
-	catch (const intvlk::Error& e)
-	{
-		std::cerr << "intvlk::Error: " << e.what() << '\n';
-		return EXIT_FAILURE;
-	}
-	catch (const vk::Error& e)
-	{
-		std::cerr << "vk::Error: " << e.what() << '\n';
-		return EXIT_FAILURE;
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "std::exception: " << e.what() << '\n';
-		return EXIT_FAILURE;
-	}
-	catch (...)
-	{
-		std::cerr << "Unknown error!\n";
-		return EXIT_FAILURE;
-	}
-	return EXIT_SUCCESS;
+    try
+    {
+        const std::string appName{ "Vulkan App" };
+        const uint32_t width{ 900 };
+        const uint32_t height{ 600 };
+        VulkanApp app{ appName, width, height };
+        app.run();
+    }
+    catch (const intvlk::Error& e)
+    {
+        std::cerr << "intvlk::Error: " << e.what() << '\n';
+        return EXIT_FAILURE;
+    }
+    catch (const vk::Error& e)
+    {
+        std::cerr << "vk::Error: " << e.what() << '\n';
+        return EXIT_FAILURE;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "std::exception: " << e.what() << '\n';
+        return EXIT_FAILURE;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error!\n";
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }

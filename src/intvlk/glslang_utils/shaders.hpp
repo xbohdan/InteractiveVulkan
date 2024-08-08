@@ -19,49 +19,49 @@
 
 namespace intvlk::glslang_utils
 {
-	const std::string vertexShaderText{ R"(
-		#version 450
+    const std::string vertexShaderText{ R"(
+        #version 450
 
-		#extension GL_EXT_buffer_reference : require
+        #extension GL_EXT_buffer_reference : require
 
-		struct Vertex
-		{
-		  vec4 position;
-		  vec4 color;
-		};
+        struct Vertex
+        {
+          vec4 position;
+          vec4 color;
+        };
 
-		layout (buffer_reference, std430) readonly buffer VertexBuffer
-		{
-		  Vertex vertices[];
-		};
+        layout (buffer_reference, std430) readonly buffer VertexBuffer
+        {
+          Vertex vertices[];
+        };
 
-		layout (push_constant) uniform PushConstants
-		{
-		  mat4 renderMatrix;
-		  VertexBuffer vertexBuffer;
-		} pushConstants;
+        layout (push_constant) uniform PushConstants
+        {
+          mat4 renderMatrix;
+          VertexBuffer vertexBuffer;
+        } pushConstants;
 
-		layout (location = 0) out vec4 outColor;
+        layout (location = 0) out vec4 outColor;
 
-		void main()
-		{
-		  Vertex vertex = pushConstants.vertexBuffer.vertices[gl_VertexIndex];
+        void main()
+        {
+          Vertex vertex = pushConstants.vertexBuffer.vertices[gl_VertexIndex];
 
-		  outColor = vertex.color;
-		  gl_Position = pushConstants.renderMatrix * vertex.position;
-		}
-	)" };
+          outColor = vertex.color;
+          gl_Position = pushConstants.renderMatrix * vertex.position;
+        }
+    )" };
 
-	const std::string fragmentShaderText{ R"(
-		#version 450
+    const std::string fragmentShaderText{ R"(
+        #version 450
 
-		layout(location = 0) in vec4 color;
+        layout(location = 0) in vec4 color;
 
-		layout(location = 0) out vec4 outColor;
+        layout(location = 0) out vec4 outColor;
 
-		void main()
-		{
-			outColor = color;
-		}
-	)" };
+        void main()
+        {
+            outColor = color;
+        }
+    )" };
 }

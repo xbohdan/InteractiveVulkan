@@ -24,34 +24,34 @@
 
 namespace intvlk::vma_utils
 {
-	template <typename T>
-	void copyToDevice(const VmaAllocator& allocator,
-		const VmaAllocation& allocation,
-		std::span<T> data,
-		vk::DeviceSize stride = sizeof(T))
-	{
-		assert(sizeof(T) <= stride);
-		VmaAllocationInfo allocationInfo{};
-		vmaGetAllocationInfo(allocator, allocation, &allocationInfo);
-		auto* deviceData{ static_cast<std::byte*>(allocationInfo.pMappedData) };
-		assert(deviceData);
-		if (stride == sizeof(T))
-		{
-			memcpy(deviceData, data.data(), data.size() * sizeof(T));
-		}
-		else
-		{
-			for (size_t i{ 0 }; i < data.size(); ++i)
-			{
-				memcpy(deviceData, &data[i], sizeof(T));
-				deviceData += stride;
-			}
-		}
-	}
+    template <typename T>
+    void copyToDevice(const VmaAllocator& allocator,
+        const VmaAllocation& allocation,
+        std::span<T> data,
+        vk::DeviceSize stride = sizeof(T))
+    {
+        assert(sizeof(T) <= stride);
+        VmaAllocationInfo allocationInfo{};
+        vmaGetAllocationInfo(allocator, allocation, &allocationInfo);
+        auto* deviceData{ static_cast<std::byte*>(allocationInfo.pMappedData) };
+        assert(deviceData);
+        if (stride == sizeof(T))
+        {
+            memcpy(deviceData, data.data(), data.size() * sizeof(T));
+        }
+        else
+        {
+            for (size_t i{ 0 }; i < data.size(); ++i)
+            {
+                memcpy(deviceData, &data[i], sizeof(T));
+                deviceData += stride;
+            }
+        }
+    }
 
-	template <typename T>
-	void copyToDevice(const VmaAllocator& allocator, const VmaAllocation& allocation, const T& data)
-	{
-		copyToDevice(allocator, allocation, std::span{ &data, 1 });
-	}
+    template <typename T>
+    void copyToDevice(const VmaAllocator& allocator, const VmaAllocation& allocation, const T& data)
+    {
+        copyToDevice(allocator, allocation, std::span{ &data, 1 });
+    }
 }
