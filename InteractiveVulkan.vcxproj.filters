@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="src\intvlk">
+      <UniqueIdentifier>{2dde8d1b-5238-4d55-aeab-4d8c70616d32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intvlk\glm_utils">
+      <UniqueIdentifier>{26801a03-bb73-4d62-819a-c2a6cfa48c3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intvlk\glslang_utils">
+      <UniqueIdentifier>{f3f827cc-7ba3-4018-acd7-63e154191470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intvlk\vma_utils">
+      <UniqueIdentifier>{0c7df0ea-72df-431b-91f9-4979df147297}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\include.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VulkanApp.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\include.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\SwapchainData.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\utils.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\errors.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\WindowData.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glm_utils\geometries.hpp">
+      <Filter>src\intvlk\glm_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glm_utils\include.hpp">
+      <Filter>src\intvlk\glm_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glm_utils\math.hpp">
+      <Filter>src\intvlk\glm_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glslang_utils\GlslangContext.hpp">
+      <Filter>src\intvlk\glslang_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glslang_utils\include.hpp">
+      <Filter>src\intvlk\glslang_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glslang_utils\shaders.hpp">
+      <Filter>src\intvlk\glslang_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\BufferData.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\DepthAttachmentData.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\ImageData.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\include.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\utils.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glm_utils\Vertex.hpp">
+      <Filter>src\intvlk\glm_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\MeshData.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\PerFrameData.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glm_utils\DrawPushConstants.hpp">
+      <Filter>src\intvlk\glm_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\VmaContext.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\SdlContext.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\vma_utils\usage.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\intvlk\vma_utils\usage.cpp">
+      <Filter>src\intvlk\vma_utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="LICENSE.txt" />
+    <Text Include="NOTICE.txt" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+Interactive Vulkan
+
+This project includes parts of software from samples in the open-source
+Vulkan C++ API developed by The Khronos Group, Inc.
+https://github.com/KhronosGroup/Vulkan-Hpp
+
+Modifications to the original work have been made by Bohdan Soproniuk
+for the purpose of creating interactive Vulkan application examples.
+
+This project uses the following third-party libraries:
+- Vulkan
+- Simple DirectMedia Layer (SDL)
+- OpenGL Mathematics (GLM)
+- OpenGL / OpenGL ES Reference Compiler (Glslang)
+- Vulkan Memory Allocator (VMA)
+
+This project uses the following third-party tools:
+- Vulkan SDK
+- Visual Studio
+- Visual Studio Code
+
+Trademarks are the property of their respective owners.
