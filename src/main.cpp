@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-#include "VulkanApp.hpp"
+#include "include.hpp"
 
 #include <iostream>
 
@@ -21,10 +21,10 @@ int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        const std::string appName{ "Vulkan App" };
+        const std::string appName{ "Vulkan Cube" };
         const uint32_t width{ 900 };
         const uint32_t height{ 600 };
-        VulkanApp app{ appName, width, height };
+        VulkanCube app{ appName, width, height };
         app.run();
     }
     catch (const intvlk::Error& e)

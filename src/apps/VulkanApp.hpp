@@ -15,5 +15,10 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp.hpp"
-#include "apps/VulkanCube.hpp"
+class VulkanApp
+{
+public:
+    virtual ~VulkanApp() = default;
+
+    virtual void run() = 0;
+};

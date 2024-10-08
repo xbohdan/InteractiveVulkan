@@ -17,15 +17,15 @@
     <Filter Include="src\intvlk\vma_utils">
       <UniqueIdentifier>{0c7df0ea-72df-431b-91f9-4979df147297}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\apps">
+      <UniqueIdentifier>{f931b50f-9b37-4050-907a-900ba75f9ebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VulkanApp.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\include.hpp">
@@ -97,16 +97,25 @@
     <ClInclude Include="src\intvlk\vma_utils\usage.hpp">
       <Filter>src\intvlk\vma_utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\apps\VulkanCube.hpp">
+      <Filter>src\apps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\include.hpp">
+      <Filter>src\apps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\VulkanApp.hpp">
+      <Filter>src\apps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\VulkanApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\intvlk\vma_utils\usage.cpp">
       <Filter>src\intvlk\vma_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\apps\VulkanCube.cpp">
+      <Filter>src\apps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,28 +17,30 @@
 
 #include "include.hpp"
 
+#include "VulkanApp.hpp"
+
 #include <chrono>
 
-class VulkanApp
+class VulkanCube final : public VulkanApp
 {
 public:
-    VulkanApp(std::string_view appName, uint32_t width, uint32_t height);
+    VulkanCube(const std::string &appName, uint32_t width, uint32_t height);
 
-    ~VulkanApp();
+    ~VulkanCube() override;
 
-    void run();
+    void run() override;
 
 private:
-    void drawGeometry(const vk::raii::CommandBuffer& commandBuffer) const;
+    void drawGeometry(const vk::raii::CommandBuffer &commandBuffer) const;
 
     void draw();
     void makeGraphicsPipeline();
     intvlk::SwapchainData makeSwapchain(bool isNew);
     void remakeSwapchain();
 
-    const vk::Format drawImageFormat{ vk::Format::eR16G16B16A16Sfloat };
-    const vk::Extent2D drawImageExtent{ 1080, 1080 };
-    const uint32_t queuedFramesCount{ 2 };
+    const vk::Format drawImageFormat{vk::Format::eR16G16B16A16Sfloat};
+    const vk::Extent2D drawImageExtent{1080, 1080};
+    const uint32_t queuedFramesCount{2};
 
     uint32_t frameIndex{};
     size_t frameCount{};
@@ -48,13 +50,13 @@ private:
     intvlk::WindowData windowData;
     vk::raii::Instance instance;
 #if !defined(NDEBUG)
-    vk::raii::DebugUtilsMessengerEXT debugMessenger;
+    vk::raii::DebugUtilsMessengerEXT debugUtilsMessenger;
 #endif
     vk::raii::PhysicalDevice physicalDevice;
     vk::raii::SurfaceKHR surface;
     std::pair<uint32_t, uint32_t> graphicsAndPresentQueueFamilyIndices;
     vk::raii::Device device;
-    intvlk::vma_utils::VmaContext vmaCtx;
+    intvlk::vma_utils::VmaContext vmaContext;
     std::vector<intvlk::PerFrameData> perFrameData;
     vk::raii::Queue graphicsQueue;
     vk::raii::Queue presentQueue;
@@ -63,6 +65,6 @@ private:
     glm::mat4 renderMatrix;
     intvlk::vma_utils::DepthAttachmentData depthAttachmentData;
     intvlk::vma_utils::MeshData meshData;
-    vk::raii::PipelineLayout pipelineLayout{ VK_NULL_HANDLE };
-    vk::raii::Pipeline pipeline{ VK_NULL_HANDLE };
+    vk::raii::PipelineLayout pipelineLayout{VK_NULL_HANDLE};
+    vk::raii::Pipeline pipeline{VK_NULL_HANDLE};
 };

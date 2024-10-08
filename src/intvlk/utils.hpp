@@ -30,6 +30,8 @@
 
 namespace intvlk
 {
+    inline const char* const khronosValidationLayerName{ "VK_LAYER_KHRONOS_validation" };
+
     inline VKAPI_ATTR vk::Bool32 VKAPI_CALL debugUtilsMessengerCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageTypes,
@@ -128,27 +130,29 @@ namespace intvlk
         commandBuffer.blitImage2(blitInfo);
     }
 
-    inline uint32_t findGraphicsQueueFamilyIndex(std::vector<vk::QueueFamilyProperties>& queueFamilyProperties)
+    inline uint32_t findQueueFamilyIndex(const vk::raii::PhysicalDevice& physicalDevice, vk::QueueFlagBits queueFlags)
     {
-        auto graphicsQueueFamilyProperty{
-            std::ranges::find_if(queueFamilyProperties, [](const vk::QueueFamilyProperties& qfp)
-                                 { return static_cast<bool>(qfp.queueFlags & vk::QueueFlagBits::eGraphics); }) };
-        assert(graphicsQueueFamilyProperty != queueFamilyProperties.end());
-        return static_cast<uint32_t>(std::distance(queueFamilyProperties.begin(), graphicsQueueFamilyProperty));
+        std::vector<vk::QueueFamilyProperties> queueFamilyProperties{ physicalDevice.getQueueFamilyProperties() };
+        assert(queueFamilyProperties.size() < std::numeric_limits<uint32_t>::max());
+        auto queueFamilyProperty{
+            std::ranges::find_if(queueFamilyProperties, [queueFlags](const vk::QueueFamilyProperties& qfp)
+                                 { return static_cast<bool>(qfp.queueFlags & queueFlags); }) };
+        assert(queueFamilyProperty != queueFamilyProperties.end());
+        return static_cast<uint32_t>(std::distance(queueFamilyProperties.begin(), queueFamilyProperty));
     }
 
     inline std::pair<uint32_t, uint32_t> findGraphicsAndPresentQueueFamilyIndices(
         const vk::raii::PhysicalDevice& physicalDevice,
         const vk::raii::SurfaceKHR& surface)
     {
-        std::vector<vk::QueueFamilyProperties> queueFamilyProperties{ physicalDevice.getQueueFamilyProperties() };
-        assert(queueFamilyProperties.size() < std::numeric_limits<uint32_t>::max());
-
-        uint32_t graphicsQueueFamilyIndex{ findGraphicsQueueFamilyIndex(queueFamilyProperties) };
+        uint32_t graphicsQueueFamilyIndex{ findQueueFamilyIndex(physicalDevice, vk::QueueFlagBits::eGraphics) };
         if (physicalDevice.getSurfaceSupportKHR(graphicsQueueFamilyIndex, surface))
         {
             return { graphicsQueueFamilyIndex, graphicsQueueFamilyIndex };
         }
+
+        std::vector<vk::QueueFamilyProperties> queueFamilyProperties{ physicalDevice.getQueueFamilyProperties() };
+        assert(queueFamilyProperties.size() < std::numeric_limits<uint32_t>::max());
 
         for (size_t i{ 0 }; i < queueFamilyProperties.size(); ++i)
         {
@@ -251,11 +255,15 @@ namespace intvlk
             }
         }
 #if !defined(NDEBUG)
-        if (!uniqueExtensions.contains(vk::EXTDebugUtilsExtensionName) &&
-            std::ranges::any_of(extensionProperties, [](const vk::ExtensionProperties& ep)
-                { return strcmp(vk::EXTDebugUtilsExtensionName, ep.extensionName) == 0; }))
+        for (std::vector<const char*> debugExtensionNames{ vk::EXTDebugUtilsExtensionName, vk::EXTLayerSettingsExtensionName };
+            const auto & ext : debugExtensionNames)
         {
-            enabledExtensions.emplace_back(vk::EXTDebugUtilsExtensionName);
+            if (!uniqueExtensions.contains(ext) &&
+                std::ranges::any_of(extensionProperties, [ext](const vk::ExtensionProperties& ep)
+                    { return strcmp(ext, ep.extensionName) == 0; }))
+            {
+                enabledExtensions.emplace_back(ext);
+            }
         }
 #endif
         return enabledExtensions;
@@ -285,11 +293,11 @@ namespace intvlk
             }
         }
 #if !defined(NDEBUG)
-        if (!uniqueLayers.contains("VK_LAYER_KHRONOS_validation") &&
+        if (!uniqueLayers.contains(khronosValidationLayerName) &&
             std::ranges::any_of(layerProperties, [](const vk::LayerProperties& lp)
-                { return strcmp("VK_LAYER_KHRONOS_validation", lp.layerName) == 0; }))
+                { return strcmp(khronosValidationLayerName, lp.layerName) == 0; }))
         {
-            enabledLayers.emplace_back("VK_LAYER_KHRONOS_validation");
+            enabledLayers.emplace_back(khronosValidationLayerName);
         }
 #endif
         return enabledLayers;
@@ -340,27 +348,6 @@ namespace intvlk
                                                         vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
                                                         vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation,
                                                     debugUtilsMessengerCallback };
-    }
-
-    inline
-#if defined(NDEBUG)
-        vk::StructureChain<vk::InstanceCreateInfo>
-#else
-        vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT>
-#endif
-        makeInstanceCreateInfoChain(const vk::ApplicationInfo& applicationInfo,
-            const std::vector<const char*>& layers,
-            const std::vector<const char*>& extensions)
-    {
-#if defined(NDEBUG)
-        vk::StructureChain<vk::InstanceCreateInfo> instanceCreateInfo{
-            {vk::InstanceCreateFlags{}, &applicationInfo, layers, extensions} };
-#else
-        vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT> instanceCreateInfo{
-            {vk::InstanceCreateFlags{}, &applicationInfo, layers, extensions},
-            makeDebugUtilsMessengerCreateInfo() };
-#endif
-        return instanceCreateInfo;
     }
 
     inline vk::raii::DescriptorPool makeDescriptorPool(const vk::raii::Device& device,
@@ -558,6 +545,33 @@ namespace intvlk
                                   graphicsPipelineCreateInfoChain.get<vk::GraphicsPipelineCreateInfo>() };
     }
 
+    inline
+#if defined(NDEBUG)
+        vk::StructureChain<vk::InstanceCreateInfo>
+#else
+        vk::StructureChain<vk::InstanceCreateInfo, vk::LayerSettingsCreateInfoEXT, vk::DebugUtilsMessengerCreateInfoEXT>
+#endif
+        makeInstanceCreateInfoChain(const vk::ApplicationInfo& applicationInfo,
+            const std::vector<const char*>& layers,
+            const std::vector<const char*>& extensions
+#if !defined(NDEBUG)
+            ,
+            const std::vector<vk::LayerSettingEXT>& layerSettings
+#endif
+        )
+    {
+#if defined(NDEBUG)
+        vk::StructureChain<vk::InstanceCreateInfo> instanceCreateInfo{
+            {vk::InstanceCreateFlags{}, &applicationInfo, layers, extensions} };
+#else
+        vk::StructureChain<vk::InstanceCreateInfo, vk::LayerSettingsCreateInfoEXT, vk::DebugUtilsMessengerCreateInfoEXT> instanceCreateInfo{
+            {vk::InstanceCreateFlags{}, &applicationInfo, layers, extensions},
+            {layerSettings},
+            makeDebugUtilsMessengerCreateInfo() };
+#endif
+        return instanceCreateInfo;
+    }
+
     inline vk::raii::Instance makeInstance(const vk::raii::Context& context,
         const std::string& appName,
         const std::string& engineName,
@@ -582,12 +596,22 @@ namespace intvlk
 #endif
                                  ,
                              window) };
+#if !defined(NDEBUG)
+        std::vector<const char*> validateGpuBasedValues{ "GPU_BASED_GPU_ASSISTED" };
+        bool validateSyncValues{ true };
+        bool validateBestPracticesValues{ true };
+        std::vector<vk::LayerSettingEXT> layerSettings{
+            {khronosValidationLayerName, "validate_gpu_based", vk::LayerSettingTypeEXT::eString, validateGpuBasedValues},
+            {khronosValidationLayerName, "validate_sync", vk::LayerSettingTypeEXT::eBool32, 1, &validateSyncValues},
+            {khronosValidationLayerName, "validate_best_practices", vk::LayerSettingTypeEXT::eBool32, 1, &validateBestPracticesValues} };
+#endif
 #if defined(NDEBUG)
         vk::StructureChain<vk::InstanceCreateInfo>
-#else
-        vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT>
-#endif
             instanceCreateInfoChain{ makeInstanceCreateInfoChain(applicationInfo, enabledLayers, enabledExtensions) };
+#else
+        vk::StructureChain<vk::InstanceCreateInfo, vk::LayerSettingsCreateInfoEXT, vk::DebugUtilsMessengerCreateInfoEXT>
+            instanceCreateInfoChain{ makeInstanceCreateInfoChain(applicationInfo, enabledLayers, enabledExtensions, layerSettings) };
+#endif
         return vk::raii::Instance{ context, instanceCreateInfoChain.get<vk::InstanceCreateInfo>() };
     }
 

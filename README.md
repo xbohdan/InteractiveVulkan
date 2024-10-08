@@ -14,6 +14,7 @@ The project is structured as follows:
 
 ```
 └── src
+	├── apps
     └── intvlk
         ├── glm_utils
         ├── glslang_utils
@@ -22,6 +23,11 @@ The project is structured as follows:
 
 The `src` directory immediately contains the application source code for creating and manipulating visual content.
 Each subdirectory has a corresponding namespace and focuses on a different aspect of the application.
+
+The `apps` folder currently hosts a single example, which renders a static image of a colored cube. It is meant to
+serve as a base for any serious Vulkan application and address essentials many tutorials overlook: why to structure and
+design the program in a certain way, accounting for the future increase in complexity, what is dynamic rendering, how
+to utilize validation layers to the maximum extent during development, and in which way to handle window resizing.
 
 The `intvlk` namespace contains the main Vulkan wrapper classes and utility methods.
 It also includes SDL functionality, as it is the chosen framework for window management and input handling.

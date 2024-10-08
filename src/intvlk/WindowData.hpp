@@ -103,7 +103,7 @@ namespace intvlk
         }
 
     private:
-        SdlContext sdlCtx{};
+        SdlContext sdlContext{};
         SDL_Window* handle{};
         std::string name{};
         vk::Extent2D extent{};
