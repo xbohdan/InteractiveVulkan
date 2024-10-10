@@ -17,68 +17,68 @@
 
 #include <thread>
 
-VulkanCube::VulkanCube(const std::string &appName, uint32_t width, uint32_t height)
-    : windowData{appName, vk::Extent2D{width, height}},
+VulkanCube::VulkanCube(const std::string& appName, uint32_t width, uint32_t height)
+    : windowData{ appName, vk::Extent2D{width, height} },
 
-      instance{intvlk::makeInstance(context,
-                                    appName,
-                                    "No Engine",
-                                    {},
-                                    intvlk::getInstanceExtensions(),
-                                    vk::ApiVersion13,
-                                    windowData.getHandle())},
+    instance{ intvlk::makeInstance(context,
+                                  appName,
+                                  "No Engine",
+                                  {},
+                                  intvlk::getInstanceExtensions(),
+                                  vk::ApiVersion13,
+                                  windowData.handle.get()) },
 
 #if !defined(NDEBUG)
-      debugUtilsMessenger{instance, intvlk::makeDebugUtilsMessengerCreateInfo()},
+    debugUtilsMessenger{ instance, intvlk::makeDebugUtilsMessengerCreateInfo() },
 #endif
 
-      physicalDevice{intvlk::findPhysicalDevice(instance)},
+    physicalDevice{ intvlk::findPhysicalDevice(instance) },
 
-      surface{intvlk::makeSurface(windowData.getHandle(), instance)},
+    surface{ intvlk::makeSurface(windowData.handle.get(), instance) },
 
-      graphicsAndPresentQueueFamilyIndices{intvlk::findGraphicsAndPresentQueueFamilyIndices(physicalDevice, surface)},
+    graphicsAndPresentQueueFamilyIndices{ intvlk::findGraphicsAndPresentQueueFamilyIndices(physicalDevice, surface) },
 
-      device{intvlk::makeDevice(physicalDevice, graphicsAndPresentQueueFamilyIndices.first)},
+    device{ intvlk::makeDevice(physicalDevice, graphicsAndPresentQueueFamilyIndices.first) },
 
-      vmaContext{VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT,
-                 physicalDevice,
-                 device,
-                 instance,
-                 vk::ApiVersion13},
+    allocator{ intvlk::vma_utils::makeAllocator(VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT,
+                                               physicalDevice,
+                                               device,
+                                               instance,
+                                               vk::ApiVersion13) },
 
-      perFrameData{intvlk::PerFrameData::make(queuedFramesCount, device, graphicsAndPresentQueueFamilyIndices.first)},
+    perFrameData{ intvlk::PerFrameData::make(queuedFramesCount, device, graphicsAndPresentQueueFamilyIndices.first) },
 
-      graphicsQueue{device, graphicsAndPresentQueueFamilyIndices.first, 0},
+    graphicsQueue{ device, graphicsAndPresentQueueFamilyIndices.first, 0 },
 
-      presentQueue{device, graphicsAndPresentQueueFamilyIndices.second, 0},
+    presentQueue{ device, graphicsAndPresentQueueFamilyIndices.second, 0 },
 
-      swapchainData{makeSwapchain(true)},
+    swapchainData{ makeSwapchain(true) },
 
-      drawImage{device,
-                vmaContext.allocator,
-                drawImageFormat,
-                drawImageExtent,
-                vk::ImageTiling::eOptimal,
-                vk::ImageUsageFlagBits::eTransferSrc |
-                    vk::ImageUsageFlagBits::eTransferDst |
-                    vk::ImageUsageFlagBits::eStorage |
-                    vk::ImageUsageFlagBits::eColorAttachment,
-                vk::ImageLayout::eUndefined,
-                vk::MemoryPropertyFlagBits::eDeviceLocal,
-                vk::ImageAspectFlagBits::eColor},
+    drawImage{ device,
+              allocator,
+              drawImageFormat,
+              drawImageExtent,
+              vk::ImageTiling::eOptimal,
+              vk::ImageUsageFlagBits::eTransferSrc |
+                  vk::ImageUsageFlagBits::eTransferDst |
+                  vk::ImageUsageFlagBits::eStorage |
+                  vk::ImageUsageFlagBits::eColorAttachment,
+              vk::ImageLayout::eUndefined,
+              vk::MemoryPropertyFlagBits::eDeviceLocal,
+              vk::ImageAspectFlagBits::eColor },
 
-      renderMatrix{intvlk::glm_utils::createModelViewProjectionClipMatrix(drawImageExtent)},
+    renderMatrix{ intvlk::glm_utils::createModelViewProjectionClipMatrix(drawImageExtent) },
 
-      depthAttachmentData{device, vmaContext.allocator, vk::Format::eD32Sfloat, drawImage.extent},
+    depthAttachmentData{ device, allocator, vk::Format::eD32Sfloat, drawImage.extent },
 
-      meshData{device, vmaContext.allocator, intvlk::glm_utils::coloredCubeData.size() * sizeof(intvlk::glm_utils::Vertex)}
+    meshData{ device, allocator, intvlk::glm_utils::coloredCubeData.size() * sizeof(intvlk::glm_utils::Vertex) }
 {
     meshData.vertexBuffer.upload(device,
-                                 vk::raii::CommandPool{device,
-                                                       vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{},
-                                                                                 graphicsAndPresentQueueFamilyIndices.first}},
-                                 graphicsQueue,
-                                 intvlk::glm_utils::coloredCubeData);
+        vk::raii::CommandPool{ device,
+                              vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{},
+                                                        graphicsAndPresentQueueFamilyIndices.first} },
+        graphicsQueue,
+        intvlk::glm_utils::coloredCubeData);
 
     makeGraphicsPipeline();
 }
@@ -94,7 +94,7 @@ void VulkanCube::run()
 
     while (true)
     {
-        auto startTime{std::chrono::high_resolution_clock::now()};
+        auto startTime{ std::chrono::high_resolution_clock::now() };
 
         while (SDL_PollEvent(&e))
         {
@@ -113,14 +113,14 @@ void VulkanCube::run()
 
         frameIndex = (frameIndex + 1) % queuedFramesCount;
 
-        auto endTime{std::chrono::high_resolution_clock::now()};
+        auto endTime{ std::chrono::high_resolution_clock::now() };
         accumulatedTime += endTime - startTime;
         ++frameCount;
         if (1000 < std::chrono::duration_cast<std::chrono::milliseconds>(accumulatedTime).count())
         {
             assert(0 < frameCount);
 
-            SDL_SetWindowTitle(windowData.getHandle(), std::format("{}\tFPS = {}", windowData.getName(), frameCount).c_str());
+            SDL_SetWindowTitle(windowData.handle.get(), std::format("{}\tFPS = {}", windowData.getName(), frameCount).c_str());
 
             accumulatedTime = std::chrono::high_resolution_clock::duration{};
             frameCount = 0;
@@ -128,48 +128,48 @@ void VulkanCube::run()
     }
 }
 
-void VulkanCube::drawGeometry(const vk::raii::CommandBuffer &commandBuffer) const
+void VulkanCube::drawGeometry(const vk::raii::CommandBuffer& commandBuffer) const
 {
-    vk::RenderingAttachmentInfo colorAttachment{drawImage.imageView, vk::ImageLayout::eColorAttachmentOptimal};
+    vk::RenderingAttachmentInfo colorAttachment{ drawImage.imageView, vk::ImageLayout::eColorAttachmentOptimal };
 
-    vk::RenderingAttachmentInfo depthAttachment{depthAttachmentData.imageView,
+    vk::RenderingAttachmentInfo depthAttachment{ depthAttachmentData.imageView,
                                                 vk::ImageLayout::eDepthStencilAttachmentOptimal,
                                                 vk::ResolveModeFlagBits::eNone,
                                                 nullptr,
                                                 vk::ImageLayout::eUndefined,
                                                 vk::AttachmentLoadOp::eClear,
                                                 vk::AttachmentStoreOp::eStore,
-                                                vk::ClearDepthStencilValue{1.0f, 0}};
+                                                vk::ClearDepthStencilValue{1.0f, 0} };
 
-    vk::RenderingInfo renderingInfo{vk::RenderingFlags{},
+    vk::RenderingInfo renderingInfo{ vk::RenderingFlags{},
                                     vk::Rect2D{vk::Offset2D{0, 0}, drawImage.extent},
                                     1,
                                     0,
                                     colorAttachment,
-                                    &depthAttachment};
+                                    &depthAttachment };
 
     commandBuffer.beginRendering(renderingInfo);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
 
-    intvlk::glm_utils::DrawPushConstants pushConstants{renderMatrix,
-                                                       meshData.vertexBufferAddress};
+    intvlk::glm_utils::DrawPushConstants pushConstants{ renderMatrix,
+                                                       meshData.vertexBufferAddress };
 
     commandBuffer.pushConstants(pipelineLayout,
-                                vk::ShaderStageFlagBits::eVertex,
-                                0,
-                                vk::ArrayProxy<const intvlk::glm_utils::DrawPushConstants>{pushConstants});
+        vk::ShaderStageFlagBits::eVertex,
+        0,
+        vk::ArrayProxy<const intvlk::glm_utils::DrawPushConstants>{pushConstants});
 
-    vk::Viewport viewport{0.0f,
+    vk::Viewport viewport{ 0.0f,
                           0.0f,
                           static_cast<float>(drawImage.extent.width),
                           static_cast<float>(drawImage.extent.height),
                           0.0f,
-                          1.0f};
+                          1.0f };
 
     commandBuffer.setViewport(0, viewport);
 
-    vk::Rect2D scissor{vk::Offset2D{0, 0}, drawImage.extent};
+    vk::Rect2D scissor{ vk::Offset2D{0, 0}, drawImage.extent };
 
     commandBuffer.setScissor(0, scissor);
 
@@ -181,8 +181,8 @@ void VulkanCube::drawGeometry(const vk::raii::CommandBuffer &commandBuffer) cons
 void VulkanCube::draw()
 {
     while (vk::Result::eTimeout == device.waitForFences(*perFrameData[frameIndex].fence,
-                                                        vk::True,
-                                                        std::numeric_limits<uint64_t>::max()))
+        vk::True,
+        std::numeric_limits<uint64_t>::max()))
         ;
 
     vk::Result result{};
@@ -194,7 +194,7 @@ void VulkanCube::draw()
             std::numeric_limits<uint64_t>::max(),
             perFrameData[frameIndex].presentCompleteSemaphore);
     }
-    catch (const vk::OutOfDateKHRError &)
+    catch (const vk::OutOfDateKHRError&)
     {
         remakeSwapchain();
         return;
@@ -205,72 +205,72 @@ void VulkanCube::draw()
 
     perFrameData[frameIndex].commandPool.reset();
 
-    const auto &commandBuffer{perFrameData[frameIndex].commandBuffer};
+    const auto& commandBuffer{ perFrameData[frameIndex].commandBuffer };
 
-    commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
+    commandBuffer.begin(vk::CommandBufferBeginInfo{ vk::CommandBufferUsageFlagBits::eOneTimeSubmit });
 
     intvlk::setImageLayout(commandBuffer,
-                           drawImage.image,
-                           drawImage.format,
-                           vk::ImageLayout::eUndefined,
-                           vk::ImageLayout::eColorAttachmentOptimal);
+        drawImage.image,
+        drawImage.format,
+        vk::ImageLayout::eUndefined,
+        vk::ImageLayout::eColorAttachmentOptimal);
 
     drawGeometry(commandBuffer);
 
     intvlk::setImageLayout(commandBuffer,
-                           drawImage.image,
-                           drawImage.format,
-                           vk::ImageLayout::eColorAttachmentOptimal,
-                           vk::ImageLayout::eTransferSrcOptimal);
+        drawImage.image,
+        drawImage.format,
+        vk::ImageLayout::eColorAttachmentOptimal,
+        vk::ImageLayout::eTransferSrcOptimal);
 
     intvlk::setImageLayout(commandBuffer,
-                           swapchainData.images[backBufferIndex],
-                           swapchainData.colorFormat,
-                           vk::ImageLayout::eUndefined,
-                           vk::ImageLayout::eTransferDstOptimal);
+        swapchainData.images[backBufferIndex],
+        swapchainData.colorFormat,
+        vk::ImageLayout::eUndefined,
+        vk::ImageLayout::eTransferDstOptimal);
 
     commandBuffer.clearColorImage(swapchainData.images[backBufferIndex],
-                                  vk::ImageLayout::eTransferDstOptimal,
-                                  vk::ClearColorValue{std::array<float, 4>{0.0f, 0.0f, 0.0f, 1.0f}},
-                                  vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+        vk::ImageLayout::eTransferDstOptimal,
+        vk::ClearColorValue{ std::array<float, 4>{0.0f, 0.0f, 0.0f, 1.0f} },
+        vk::ImageSubresourceRange{ vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1 });
 
     intvlk::blitImage(commandBuffer,
-                      drawImage.image,
-                      drawImage.extent,
-                      swapchainData.images[backBufferIndex],
-                      swapchainData.extent);
+        drawImage.image,
+        drawImage.extent,
+        swapchainData.images[backBufferIndex],
+        swapchainData.extent);
 
     intvlk::setImageLayout(commandBuffer,
-                           swapchainData.images[backBufferIndex],
-                           swapchainData.colorFormat,
-                           vk::ImageLayout::eTransferDstOptimal,
-                           vk::ImageLayout::ePresentSrcKHR);
+        swapchainData.images[backBufferIndex],
+        swapchainData.colorFormat,
+        vk::ImageLayout::eTransferDstOptimal,
+        vk::ImageLayout::ePresentSrcKHR);
 
     commandBuffer.end();
 
-    vk::CommandBufferSubmitInfo commandBufferSubmitInfo{commandBuffer};
+    vk::CommandBufferSubmitInfo commandBufferSubmitInfo{ commandBuffer };
 
-    vk::SemaphoreSubmitInfo waitSemaphoreInfo{perFrameData[frameIndex].presentCompleteSemaphore,
+    vk::SemaphoreSubmitInfo waitSemaphoreInfo{ perFrameData[frameIndex].presentCompleteSemaphore,
                                               1,
-                                              vk::PipelineStageFlagBits2::eColorAttachmentOutput};
+                                              vk::PipelineStageFlagBits2::eColorAttachmentOutput };
 
-    vk::SemaphoreSubmitInfo signalSemaphoreInfo{perFrameData[frameIndex].renderCompleteSemaphore,
+    vk::SemaphoreSubmitInfo signalSemaphoreInfo{ perFrameData[frameIndex].renderCompleteSemaphore,
                                                 1,
-                                                vk::PipelineStageFlagBits2::eAllGraphics};
+                                                vk::PipelineStageFlagBits2::eAllGraphics };
 
-    vk::SubmitInfo2 submitInfo{vk::SubmitFlags{}, waitSemaphoreInfo, commandBufferSubmitInfo, signalSemaphoreInfo};
+    vk::SubmitInfo2 submitInfo{ vk::SubmitFlags{}, waitSemaphoreInfo, commandBufferSubmitInfo, signalSemaphoreInfo };
 
     graphicsQueue.submit2(submitInfo, perFrameData[frameIndex].fence);
 
-    vk::PresentInfoKHR presentInfo{*perFrameData[frameIndex].renderCompleteSemaphore,
+    vk::PresentInfoKHR presentInfo{ *perFrameData[frameIndex].renderCompleteSemaphore,
                                    *swapchainData.swapchain,
-                                   backBufferIndex};
+                                   backBufferIndex };
 
     try
     {
         result = presentQueue.presentKHR(presentInfo);
     }
-    catch (const vk::OutOfDateKHRError &)
+    catch (const vk::OutOfDateKHRError&)
     {
         remakeSwapchain();
         return;
@@ -287,40 +287,40 @@ void VulkanCube::makeGraphicsPipeline()
 {
     intvlk::glslang_utils::GlslangContext glslCtx{};
 
-    vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eVertex,
+    vk::PushConstantRange pushConstantRange{ vk::ShaderStageFlagBits::eVertex,
                                             0,
-                                            sizeof(intvlk::glm_utils::DrawPushConstants)};
+                                            sizeof(intvlk::glm_utils::DrawPushConstants) };
     pipelineLayout = vk::raii::PipelineLayout{
         device,
-        vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange}};
+        vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange} };
 
-    vk::raii::ShaderModule vertexShaderModule{glslCtx.makeShaderModule(device,
+    vk::raii::ShaderModule vertexShaderModule{ glslCtx.makeShaderModule(device,
                                                                        vk::ShaderStageFlagBits::eVertex,
-                                                                       intvlk::glslang_utils::vertexShaderText)};
-    vk::raii::ShaderModule fragmentShaderModule{glslCtx.makeShaderModule(device,
+                                                                       intvlk::glslang_utils::vertexShaderText) };
+    vk::raii::ShaderModule fragmentShaderModule{ glslCtx.makeShaderModule(device,
                                                                          vk::ShaderStageFlagBits::eFragment,
-                                                                         intvlk::glslang_utils::fragmentShaderText)};
+                                                                         intvlk::glslang_utils::fragmentShaderText) };
 
-    vk::raii::PipelineCache pipelineCache{device, vk::PipelineCacheCreateInfo{}};
+    vk::raii::PipelineCache pipelineCache{ device, vk::PipelineCacheCreateInfo{} };
     pipeline = intvlk::makeGraphicsPipeline(device,
-                                            pipelineCache,
-                                            vertexShaderModule,
-                                            nullptr,
-                                            fragmentShaderModule,
-                                            nullptr,
-                                            0,
-                                            {},
-                                            vk::FrontFace::eClockwise,
-                                            true,
-                                            pipelineLayout,
-                                            drawImage.format,
-                                            depthAttachmentData.format);
+        pipelineCache,
+        vertexShaderModule,
+        nullptr,
+        fragmentShaderModule,
+        nullptr,
+        0,
+        {},
+        vk::FrontFace::eClockwise,
+        true,
+        pipelineLayout,
+        drawImage.format,
+        depthAttachmentData.format);
 }
 
 intvlk::SwapchainData VulkanCube::makeSwapchain(bool isNew)
 {
     device.waitIdle();
-    return intvlk::SwapchainData{physicalDevice,
+    return intvlk::SwapchainData{ physicalDevice,
                                  device,
                                  surface,
                                  windowData.getExtent(),
@@ -328,7 +328,7 @@ intvlk::SwapchainData VulkanCube::makeSwapchain(bool isNew)
                                  isNew ? nullptr : &swapchainData.swapchain,
                                  graphicsAndPresentQueueFamilyIndices.first,
                                  graphicsAndPresentQueueFamilyIndices.second,
-                                 vk::PresentModeKHR::eMailbox};
+                                 vk::PresentModeKHR::eMailbox };
 }
 
 void VulkanCube::remakeSwapchain()
@@ -337,7 +337,7 @@ void VulkanCube::remakeSwapchain()
     {
         swapchainData = makeSwapchain(false);
     }
-    catch (const intvlk::SwapchainZeroDimensionError &)
+    catch (const intvlk::SwapchainZeroDimensionError&)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }

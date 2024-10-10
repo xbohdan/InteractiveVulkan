@@ -25,7 +25,7 @@
 namespace intvlk::vma_utils
 {
     template <typename T>
-    void copyToDevice(const VmaAllocator& allocator,
+    inline void copyToDevice(const VmaAllocator& allocator,
         const VmaAllocation& allocation,
         std::span<T> data,
         vk::DeviceSize stride = sizeof(T))
@@ -50,8 +50,28 @@ namespace intvlk::vma_utils
     }
 
     template <typename T>
-    void copyToDevice(const VmaAllocator& allocator, const VmaAllocation& allocation, const T& data)
+    inline void copyToDevice(const VmaAllocator& allocator, const VmaAllocation& allocation, const T& data)
     {
         copyToDevice(allocator, allocation, std::span{ &data, 1 });
+    }
+
+    inline std::shared_ptr<VmaAllocator_T> makeAllocator(VmaAllocatorCreateFlags flags,
+        const vk::raii::PhysicalDevice& physicalDevice,
+        const vk::raii::Device& device,
+        const vk::raii::Instance& instance,
+        uint32_t apiVersion)
+    {
+        VmaAllocatorCreateInfo allocatorInfo{};
+        allocatorInfo.flags = flags;
+        allocatorInfo.physicalDevice = *physicalDevice;
+        allocatorInfo.device = *device;
+        allocatorInfo.instance = *instance;
+        allocatorInfo.vulkanApiVersion = apiVersion;
+        VmaAllocator _allocator{ nullptr };
+        if (vmaCreateAllocator(&allocatorInfo, &_allocator))
+        {
+            throw Error{ "Failed to create VMA allocator" };
+        }
+        return std::shared_ptr<VmaAllocator_T>{_allocator, vmaDestroyAllocator};
     }
 }
