@@ -32,21 +32,33 @@ namespace intvlk
     {
     public:
         WindowData(std::string_view windowName, const vk::Extent2D& extent)
-            : name{ windowName }, extent{ extent }
+            : handle{ makeWindow(windowName, extent) },
+            name{ windowName },
+            extent{ extent }
+        {
+            SDL_AddEventWatch(windowResizeEventWatch, this);
+        }
+
+        static std::shared_ptr<SDL_Window> makeWindow(std::string_view windowName, const vk::Extent2D& extent)
         {
             SDL_WindowFlags windowFlags{ static_cast<SDL_WindowFlags>(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE) };
-            handle = SDL_CreateWindow(windowName.data(),
-                SDL_WINDOWPOS_CENTERED,
-                SDL_WINDOWPOS_CENTERED,
-                extent.width,
-                extent.height,
-                windowFlags);
+            SDL_Window* handle{ SDL_CreateWindow(windowName.data(),
+                                                SDL_WINDOWPOS_CENTERED,
+                                                SDL_WINDOWPOS_CENTERED,
+                                                extent.width,
+                                                extent.height,
+                                                windowFlags) };
             if (!handle)
             {
                 throw Error{ "Failed to create window!" };
             }
-
-            SDL_AddEventWatch(windowResizeEventWatch, this);
+            return std::shared_ptr<SDL_Window>{handle, [](SDL_Window* window)
+                {
+                    if (window)
+                    {
+                        SDL_DestroyWindow(window);
+                    }
+                }};
         }
 
         static int windowResizeEventWatch(void* userData, SDL_Event* event)
@@ -60,29 +72,10 @@ namespace intvlk
             return 0;
         }
 
-        WindowData(const WindowData&) = delete;
-        WindowData& operator=(const WindowData&) = delete;
-
-        WindowData(WindowData&&) noexcept = default;
-        WindowData& operator=(WindowData&&) noexcept = default;
-
-        ~WindowData() noexcept
-        {
-            if (handle)
-            {
-                SDL_DestroyWindow(handle);
-            }
-        }
-
         vk::Extent2D getExtent()
         {
             std::lock_guard lock{ extentMutex };
             return extent;
-        }
-
-        SDL_Window* getHandle() const
-        {
-            return handle;
         }
 
         std::string_view getName() const
@@ -99,12 +92,13 @@ namespace intvlk
         void setName(std::string_view newName)
         {
             name = newName;
-            SDL_SetWindowTitle(handle, newName.data());
+            SDL_SetWindowTitle(handle.get(), newName.data());
         }
+
+        std::shared_ptr<SDL_Window> handle{};
 
     private:
         SdlContext sdlContext{};
-        SDL_Window* handle{};
         std::string name{};
         vk::Extent2D extent{};
         std::mutex extentMutex{};

@@ -27,7 +27,7 @@ namespace intvlk::vma_utils
     {
     public:
         MeshData(const vk::raii::Device& device,
-            const VmaAllocator& allocator,
+            const std::shared_ptr<VmaAllocator_T>& allocator,
             vk::DeviceSize indexBufferSize,
             vk::DeviceSize vertexBufferSize)
             : indexBuffer{ makeIndexBuffer(device, allocator, indexBufferSize) },
@@ -47,12 +47,12 @@ namespace intvlk::vma_utils
         }
 
         MeshData(const vk::raii::Device& device,
-            const VmaAllocator& allocator,
+            const std::shared_ptr<VmaAllocator_T>& allocator,
             vk::DeviceSize vertexBufferSize)
             : MeshData{ device, allocator, 0, vertexBufferSize } {}
 
         static BufferData makeIndexBuffer(const vk::raii::Device& device,
-            const VmaAllocator& allocator,
+            const std::shared_ptr<VmaAllocator_T>& allocator,
             vk::DeviceSize indexBufferSize)
         {
             if (indexBufferSize > 0)

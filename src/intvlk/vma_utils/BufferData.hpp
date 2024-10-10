@@ -32,22 +32,38 @@ namespace intvlk::vma_utils
     {
     public:
         BufferData(const vk::raii::Device& device,
-            const VmaAllocator& _allocator,
+            const std::shared_ptr<VmaAllocator_T>& _allocator,
             vk::DeviceSize _size,
             vk::BufferUsageFlags _bufferUsage,
             VmaMemoryUsage usage,
             VmaAllocationCreateFlags flags = 0)
-            : allocator{ _allocator },
+            : allocator{ _allocator }
 
-            buffer{ device, vk::BufferCreateInfo{vk::BufferCreateFlags{},
-                                                _size,
-                                                _bufferUsage} }
 #if !defined(NDEBUG)
             ,
             size{ _size },
 
             bufferUsage{ _bufferUsage }
 #endif
+        {
+            std::tie(buffer, allocation) = makeBufferAllocation(device, allocator, _size, _bufferUsage, usage, flags);
+
+            vmaGetAllocationInfo(allocator.get(), allocation.get(), &allocationInfo);
+
+            VkMemoryPropertyFlags _propertyFlags{};
+            vmaGetAllocationMemoryProperties(allocator.get(), allocation.get(), &_propertyFlags);
+            propertyFlags = vk::MemoryPropertyFlags{ _propertyFlags };
+        }
+
+        explicit BufferData(std::nullptr_t) {}
+
+        static std::pair<vk::raii::Buffer, std::shared_ptr<VmaAllocation_T>> makeBufferAllocation(
+            const vk::raii::Device& device,
+            const std::shared_ptr<VmaAllocator_T>& allocator,
+            vk::DeviceSize _size,
+            vk::BufferUsageFlags _bufferUsage,
+            VmaMemoryUsage usage,
+            VmaAllocationCreateFlags flags = 0)
         {
             vk::BufferCreateInfo bufferCreateInfo{ vk::BufferCreateFlags{}, _size, _bufferUsage };
             VkBufferCreateInfo _bufferCreateInfo = bufferCreateInfo;
@@ -56,19 +72,20 @@ namespace intvlk::vma_utils
             VmaAllocationCreateInfo allocationCreateInfo{};
             allocationCreateInfo.usage = usage;
             allocationCreateInfo.flags = flags | VMA_ALLOCATION_CREATE_MAPPED_BIT;
-            vmaCreateBuffer(allocator,
+            VmaAllocation _allocation{ nullptr };
+            vmaCreateBuffer(allocator.get(),
                 &_bufferCreateInfo,
                 &allocationCreateInfo,
                 &_buffer,
-                &allocation,
-                &allocationInfo);
-            buffer = vk::raii::Buffer{ device, _buffer };
-            VkMemoryPropertyFlags _propertyFlags;
-            vmaGetAllocationMemoryProperties(allocator, allocation, &_propertyFlags);
-            propertyFlags = vk::MemoryPropertyFlags{ _propertyFlags };
-        }
+                &_allocation,
+                nullptr);
 
-        explicit BufferData(std::nullptr_t) {}
+            vk::raii::Buffer buffer{ vk::raii::Buffer{device, _buffer} };
+            std::shared_ptr<VmaAllocation_T> allocation{ std::shared_ptr<VmaAllocation_T>{_allocation,
+                                                                                         [allocator](VmaAllocation a)
+                                                                                         { vmaFreeMemory(allocator.get(), a); }} };
+            return { std::move(buffer), allocation };
+        }
 
         template <typename DataType>
         void upload(const vk::raii::Device& device,
@@ -82,7 +99,7 @@ namespace intvlk::vma_utils
                 size_t elementSize{ stride ? stride : sizeof(DataType) };
                 assert(sizeof(DataType) <= elementSize);
 
-                copyToDevice(allocator, allocation, std::span{ data }, elementSize);
+                copyToDevice(allocator.get(), allocation.get(), std::span{ data }, elementSize);
             }
             else
             {
@@ -101,30 +118,16 @@ namespace intvlk::vma_utils
                                          vk::BufferUsageFlagBits::eTransferSrc,
                                          VMA_MEMORY_USAGE_AUTO,
                                          VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT };
-                copyToDevice(allocator, stagingBuffer.allocation, std::span{ data }, elementSize);
-                vmaFlushAllocation(allocator, stagingBuffer.allocation, 0, dataSize);
+                copyToDevice(allocator.get(), stagingBuffer.allocation.get(), std::span{ data }, elementSize);
+                vmaFlushAllocation(allocator.get(), stagingBuffer.allocation.get(), 0, dataSize);
 
                 oneTimeSubmit(device, commandPool, queue, [&](const vk::raii::CommandBuffer& commandBuffer)
                     { commandBuffer.copyBuffer(stagingBuffer.buffer, buffer, vk::BufferCopy{ 0, 0, dataSize }); });
             }
         }
 
-        BufferData(const BufferData&) = delete;
-        BufferData& operator=(const BufferData&) = delete;
-
-        BufferData(BufferData&&) noexcept = default;
-        BufferData& operator=(BufferData&&) noexcept = default;
-
-        ~BufferData()
-        {
-            if (allocator)
-            {
-                vmaFreeMemory(allocator, allocation);
-            }
-        }
-
-        const VmaAllocator& allocator{ nullptr };
-        VmaAllocation allocation{ nullptr };
+        const std::shared_ptr<VmaAllocator_T>& allocator{ nullptr };
+        std::shared_ptr<VmaAllocation_T> allocation{ nullptr };
         vk::raii::Buffer buffer{ VK_NULL_HANDLE };
         VmaAllocationInfo allocationInfo{};
         vk::MemoryPropertyFlags propertyFlags{};

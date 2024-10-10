@@ -30,7 +30,6 @@
 #include "../intvlk/vma_utils/DepthAttachmentData.hpp"
 #include "../intvlk/vma_utils/ImageData.hpp"
 #include "../intvlk/vma_utils/MeshData.hpp"
-#include "../intvlk/vma_utils/VmaContext.hpp"
 
 #include "../intvlk/errors.hpp"
 #include "../intvlk/PerFrameData.hpp"

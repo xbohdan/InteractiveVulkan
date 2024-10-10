@@ -88,9 +88,6 @@
     <ClInclude Include="src\intvlk\glm_utils\DrawPushConstants.hpp">
       <Filter>src\intvlk\glm_utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\intvlk\vma_utils\VmaContext.hpp">
-      <Filter>src\intvlk\vma_utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\intvlk\SdlContext.hpp">
       <Filter>src\intvlk</Filter>
     </ClInclude>
