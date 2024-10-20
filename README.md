@@ -14,7 +14,7 @@ The project is structured as follows:
 
 ```
 └── src
-	├── apps
+    ├── apps
     └── intvlk
         ├── glm_utils
         ├── glslang_utils
