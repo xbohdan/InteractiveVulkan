@@ -39,7 +39,9 @@ namespace intvlk::vma_utils
                              vk::BufferUsageFlagBits::eTransferDst |
                              vk::BufferUsageFlagBits::eShaderDeviceAddress,
                          VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
-                         VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT }
+                         {},
+                         VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
+                             VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT }
         {
             vk::BufferDeviceAddressInfo bufferDeviceAddressInfo{};
             bufferDeviceAddressInfo.buffer = *vertexBuffer.buffer;
@@ -63,7 +65,9 @@ namespace intvlk::vma_utils
                                   vk::BufferUsageFlagBits::eIndexBuffer |
                                       vk::BufferUsageFlagBits::eTransferDst,
                                   VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
-                                  VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT };
+                                  {},
+                                  VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
+                                      VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT };
             }
             return BufferData{ nullptr };
         }

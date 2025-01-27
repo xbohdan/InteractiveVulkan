@@ -60,7 +60,7 @@ namespace intvlk
         if (0 < pCallbackData->queueLabelCount)
         {
             std::cerr << std::string("\t") << "Queue Labels:\n";
-            for (uint32_t i = 0; i < pCallbackData->queueLabelCount; i++)
+            for (uint32_t i{ 0 }; i < pCallbackData->queueLabelCount; i++)
             {
                 std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pQueueLabels[i].pLabelName << ">\n";
             }
@@ -68,7 +68,7 @@ namespace intvlk
         if (0 < pCallbackData->cmdBufLabelCount)
         {
             std::cerr << std::string("\t") << "CommandBuffer Labels:\n";
-            for (uint32_t i = 0; i < pCallbackData->cmdBufLabelCount; i++)
+            for (uint32_t i{ 0 }; i < pCallbackData->cmdBufLabelCount; i++)
             {
                 std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pCmdBufLabels[i].pLabelName << ">\n";
             }
@@ -76,7 +76,7 @@ namespace intvlk
         if (0 < pCallbackData->objectCount)
         {
             std::cerr << std::string("\t") << "Objects:\n";
-            for (uint32_t i = 0; i < pCallbackData->objectCount; i++)
+            for (uint32_t i{ 0 }; i < pCallbackData->objectCount; i++)
             {
                 std::cerr << std::string("\t\t") << "Object " << i << "\n";
                 std::cerr << std::string("\t\t\t") << "objectType   = " << vk::to_string(static_cast<vk::ObjectType>(pCallbackData->pObjects[i].objectType))
@@ -660,6 +660,7 @@ namespace intvlk
         commandBuffer.end();
         vk::CommandBufferSubmitInfo commandBufferSubmitInfo{ commandBuffer };
         vk::SubmitInfo2 submitInfo{ vk::SubmitFlags{}, nullptr, commandBufferSubmitInfo };
+        queue.submit2(submitInfo);
         queue.waitIdle();
     }
 

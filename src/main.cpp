@@ -21,10 +21,9 @@ int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        const std::string appName{ "Vulkan Cube" };
         const uint32_t width{ 900 };
         const uint32_t height{ 600 };
-        VulkanCube app{ appName, width, height };
+        VulkanCube app{ width, height };
         app.run();
     }
     catch (const intvlk::Error& e)
