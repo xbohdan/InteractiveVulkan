@@ -19,8 +19,6 @@
 
 #include "VulkanApp.hpp"
 
-#include <chrono>
-
 class VulkanCube final : public VulkanApp
 {
 public:

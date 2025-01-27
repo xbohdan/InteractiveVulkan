@@ -1,6 +1,4 @@
-#pragma once
-
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +13,13 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp.hpp"
-#include "apps/VulkanCube.hpp"
-#include "apps/HammingOneGenerator.hpp"
+#version 450
+
+layout(location = 0) in vec4 color;
+
+layout(location = 0) out vec4 outColor;
+
+void main()
+{
+    outColor = color;
+}

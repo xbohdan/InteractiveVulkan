@@ -20,9 +20,15 @@
     <Filter Include="src\apps">
       <UniqueIdentifier>{f931b50f-9b37-4050-907a-900ba75f9ebb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\shaders">
+      <UniqueIdentifier>{e84ad96e-8305-43be-a574-330582aa943a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="src\shaders\VulkanGenerator.comp">
+      <Filter>src\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include.hpp">
@@ -103,6 +109,9 @@
     <ClInclude Include="src\apps\VulkanApp.hpp">
       <Filter>src\apps</Filter>
     </ClInclude>
+    <ClInclude Include="src\apps\VulkanGenerator.hpp">
+      <Filter>src\apps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -112,6 +121,9 @@
       <Filter>src\intvlk\vma_utils</Filter>
     </ClCompile>
     <ClCompile Include="src\apps\VulkanCube.cpp">
+      <Filter>src\apps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\apps\VulkanGenerator.cpp">
       <Filter>src\apps</Filter>
     </ClCompile>
   </ItemGroup>

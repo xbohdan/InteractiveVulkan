@@ -131,8 +131,8 @@ namespace intvlk::vma_utils
                 copyToDevice(allocator.get(), stagingBuffer.allocation.get(), std::span{ data }, elementSize);
                 vmaFlushAllocation(allocator.get(), stagingBuffer.allocation.get(), 0, dataSize);
 
-                oneTimeSubmit(device, commandPool, queue, [&](const vk::raii::CommandBuffer& commandBuffer)
-                    { commandBuffer.copyBuffer(stagingBuffer.buffer, buffer, vk::BufferCopy{ 0, 0, dataSize }); });
+                oneTimeSubmit(device, commandPool, queue, [this, &stagingBuffer, dataSize](const vk::raii::CommandBuffer& cb)
+                    { cb.copyBuffer(stagingBuffer.buffer, buffer, vk::BufferCopy{ 0, 0, dataSize }); });
             }
         }
 

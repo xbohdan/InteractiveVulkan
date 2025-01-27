@@ -38,7 +38,9 @@ VulkanCube::VulkanCube(uint32_t width, uint32_t height)
 
     graphicsAndPresentQueueFamilyIndices{ intvlk::findGraphicsAndPresentQueueFamilyIndices(physicalDevice, surface) },
 
-    device{ intvlk::makeDevice(physicalDevice, graphicsAndPresentQueueFamilyIndices.first) },
+    device{ intvlk::makeDevice(physicalDevice,
+                               intvlk::getDeviceExtensions(),
+                               graphicsAndPresentQueueFamilyIndices.first) },
 
     allocator{ intvlk::vma_utils::makeAllocator(VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT,
                                                physicalDevice,
@@ -297,10 +299,10 @@ void VulkanCube::makeGraphicsPipeline()
 
     vk::raii::ShaderModule vertexShaderModule{ glslContext.makeShaderModule(device,
                                                                            vk::ShaderStageFlagBits::eVertex,
-                                                                           intvlk::glslang_utils::vertexShaderText) };
+                                                                           intvlk::readFile("src/shaders/vulkan_cube.vert"))};
     vk::raii::ShaderModule fragmentShaderModule{ glslContext.makeShaderModule(device,
                                                                              vk::ShaderStageFlagBits::eFragment,
-                                                                             intvlk::glslang_utils::fragmentShaderText) };
+                                                                             intvlk::readFile("src/shaders/vulkan_cube.frag")) };
 
     vk::raii::PipelineCache pipelineCache{ device, vk::PipelineCacheCreateInfo{} };
     pipeline = intvlk::makeGraphicsPipeline(device,

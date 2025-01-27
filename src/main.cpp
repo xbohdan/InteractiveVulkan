@@ -23,7 +23,8 @@ int main(int /*argc*/, char** /*argv*/)
     {
         const uint32_t width{ 900 };
         const uint32_t height{ 600 };
-        VulkanCube app{ width, height };
+        VulkanCube a{ width, height };
+        VulkanApp& app{ a };
         app.run();
     }
     catch (const intvlk::Error& e)
