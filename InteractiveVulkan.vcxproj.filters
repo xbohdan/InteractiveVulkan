@@ -20,9 +20,21 @@
     <Filter Include="src\apps">
       <UniqueIdentifier>{f931b50f-9b37-4050-907a-900ba75f9ebb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\shaders">
+      <UniqueIdentifier>{e84ad96e-8305-43be-a574-330582aa943a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="src\shaders\hamming_one_generator.comp">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\vulkan_cube.frag">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\vulkan_cube.vert">
+      <Filter>src\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include.hpp">
@@ -56,9 +68,6 @@
       <Filter>src\intvlk\glslang_utils</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\glslang_utils\include.hpp">
-      <Filter>src\intvlk\glslang_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\glslang_utils\shaders.hpp">
       <Filter>src\intvlk\glslang_utils</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\vma_utils\BufferData.hpp">
@@ -103,6 +112,9 @@
     <ClInclude Include="src\apps\VulkanApp.hpp">
       <Filter>src\apps</Filter>
     </ClInclude>
+    <ClInclude Include="src\apps\HammingOneGenerator.hpp">
+      <Filter>src\apps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -112,6 +124,9 @@
       <Filter>src\intvlk\vma_utils</Filter>
     </ClCompile>
     <ClCompile Include="src\apps\VulkanCube.cpp">
+      <Filter>src\apps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\apps\HammingOneGenerator.cpp">
       <Filter>src\apps</Filter>
     </ClCompile>
   </ItemGroup>

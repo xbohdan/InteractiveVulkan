@@ -32,15 +32,24 @@ namespace intvlk::vma_utils
             vk::Format _format,
             const vk::Extent2D& _extent,
             vk::ImageTiling tiling,
-            vk::ImageUsageFlags usage,
+            vk::ImageUsageFlags imageUsage,
             vk::ImageLayout initialLayout,
-            vk::MemoryPropertyFlags memoryProperties,
+            vk::MemoryPropertyFlags requiredMemoryProperties,
+            VmaAllocationCreateFlags allocationFlags,
             vk::ImageAspectFlags aspectMask)
             : allocator{ _allocator },
             format{ _format },
             extent{ _extent }
         {
-            std::tie(image, allocation) = makeImageAllocation(device, allocator, format, extent, tiling, usage, initialLayout, memoryProperties);
+            std::tie(image, allocation) = makeImageAllocation(device,
+                allocator,
+                format,
+                extent,
+                tiling,
+                imageUsage,
+                initialLayout,
+                requiredMemoryProperties,
+                allocationFlags);
 
             imageView = vk::raii::ImageView{
                 device,
@@ -60,9 +69,10 @@ namespace intvlk::vma_utils
             vk::Format format,
             const vk::Extent2D& extent,
             vk::ImageTiling tiling,
-            vk::ImageUsageFlags usage,
+            vk::ImageUsageFlags imageUsage,
             vk::ImageLayout initialLayout,
-            vk::MemoryPropertyFlags memoryProperties)
+            vk::MemoryPropertyFlags requiredMemoryProperties,
+            VmaAllocationCreateFlags allocationFlags)
         {
             vk::ImageCreateInfo imageCreateInfo{ vk::ImageCreateFlags{},
                                                 vk::ImageType::e2D,
@@ -72,7 +82,7 @@ namespace intvlk::vma_utils
                                                 1,
                                                 vk::SampleCountFlagBits::e1,
                                                 tiling,
-                                                usage | vk::ImageUsageFlagBits::eSampled,
+                                                imageUsage | vk::ImageUsageFlagBits::eSampled,
                                                 vk::SharingMode::eExclusive,
                                                 {},
                                                 initialLayout };
@@ -81,7 +91,8 @@ namespace intvlk::vma_utils
 
             VmaAllocationCreateInfo allocationCreateInfo{};
             allocationCreateInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
-            allocationCreateInfo.requiredFlags = static_cast<VkMemoryPropertyFlags>(memoryProperties);
+            allocationCreateInfo.requiredFlags = static_cast<VkMemoryPropertyFlags>(requiredMemoryProperties);
+            allocationCreateInfo.flags = allocationFlags;
             VmaAllocation _allocation{ nullptr };
             vmaCreateImage(allocator.get(),
                 &_imageCreateInfo,

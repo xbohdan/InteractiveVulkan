@@ -41,6 +41,7 @@ namespace intvlk::vma_utils
                         vk::ImageUsageFlagBits::eDepthStencilAttachment,
                         vk::ImageLayout::eUndefined,
                         vk::MemoryPropertyFlagBits::eDeviceLocal,
+                        VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT,
                         vk::ImageAspectFlagBits::eDepth }
         {
         }

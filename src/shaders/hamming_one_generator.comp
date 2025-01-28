@@ -1,0 +1,89 @@
+// This work is adapted from static.frag (c) 2013 by Spatial, used under CC BY-SA 3.0.
+// This work (c) 2025 is openly licensed via CC BY-SA 3.0 by Bohdan Soproniuk
+
+#version 450
+
+#extension GL_EXT_buffer_reference : require
+
+layout(local_size_x_id = 0) in;
+
+layout(constant_id = 1) const uint createCount = 0;
+layout(constant_id = 2) const uint changeCount = 0;
+layout(constant_id = 3) const uint length = 0;
+
+layout(buffer_reference, std430) buffer SSBO {
+	uint data[];
+};
+
+layout(push_constant) uniform UBO {
+	uint seed;
+	uint algorithm;
+	SSBO ssbo;
+};
+
+float floatConstruct(uint x)
+{
+	const uint ieeeMantissa = 0x007FFFFFu;
+	const uint ieeeOne = 0x3F800000u;
+	x &= ieeeMantissa;
+	x |= ieeeOne;
+	float f = uintBitsToFloat(x);
+	return f - 1.0f;
+}
+
+uint hash(uint x)
+{
+	x += (x << 10u);
+	x ^= (x >> 6u);
+	x += (x << 3u);
+	x ^= (x >> 11u);
+	x += (x << 15u);
+	return x;
+}
+
+float random(uint x)
+{
+	return floatConstruct(hash(x));
+}
+
+void create()
+{
+	const uint id = gl_GlobalInvocationID.x;
+	const uint size = createCount * length;
+	const uint part = changeCount * length;
+	if (id < size - part)
+	{
+		const uint value = uint(random(seed * id) * 2.0f);
+		ssbo.data[id] = value;
+		if (id < part)
+		{
+			ssbo.data[size - part + id] = value;
+		}
+	}
+}
+
+void change()
+{
+	const uint id = gl_GlobalInvocationID.x;
+	if (id < changeCount)
+	{
+		uint pos = uint(random(seed * id) * length);
+		ssbo.data[id * length + pos] ^= 1;
+	}
+}
+
+const uint eCreate = 0;
+const uint eChange = 1;
+
+void main()
+{
+	switch (algorithm)
+	{
+		case eCreate:
+			create();
+			break;
+		case eChange:
+			change();
+			break;
+	}
+}

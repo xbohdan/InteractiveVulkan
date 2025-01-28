@@ -23,7 +23,6 @@
 #include "../intvlk/glm_utils/Vertex.hpp"
 
 #include "../intvlk/glslang_utils/GlslangContext.hpp"
-#include "../intvlk/glslang_utils/shaders.hpp"
 
 #include "../intvlk/vma_utils/utils.hpp"
 

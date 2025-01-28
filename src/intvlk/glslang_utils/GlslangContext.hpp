@@ -124,7 +124,7 @@ namespace intvlk::glslang_utils
             vk::ShaderStageFlagBits shaderStage,
             const std::string& shaderText) const
         {
-            std::vector<uint32_t> shaderSPV;
+            std::vector<uint32_t> shaderSPV{};
             if (!GLSLtoSPV(shaderStage, shaderText, shaderSPV))
             {
                 throw Error{ "Failed to compile shader!" };

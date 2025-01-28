@@ -19,12 +19,10 @@
 
 #include "VulkanApp.hpp"
 
-#include <chrono>
-
 class VulkanCube final : public VulkanApp
 {
 public:
-    VulkanCube(const std::string& appName, uint32_t width, uint32_t height);
+    VulkanCube(uint32_t width, uint32_t height);
 
     ~VulkanCube() override;
 
@@ -38,6 +36,7 @@ private:
     intvlk::SwapchainData makeSwapchain(bool isNew);
     void remakeSwapchain();
 
+    const std::string appName{ "Vulkan Cube" };
     const vk::Format drawImageFormat{ vk::Format::eR16G16B16A16Sfloat };
     const vk::Extent2D drawImageExtent{ 1080, 1080 };
     const uint32_t queuedFramesCount{ 2 };

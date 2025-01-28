@@ -42,9 +42,9 @@ namespace intvlk
             const vk::raii::Device& device,
             uint32_t queueFamilyIndex)
         {
-            std::vector<PerFrameData> perFrameData;
+            std::vector<PerFrameData> perFrameData{};
             perFrameData.reserve(queuedFramesCount);
-            for (uint32_t i = 0; i < queuedFramesCount; ++i)
+            for (uint32_t i{ 0 }; i < queuedFramesCount; ++i)
             {
                 perFrameData.emplace_back(device, queueFamilyIndex);
             }

@@ -17,7 +17,7 @@
 
 #include <thread>
 
-VulkanCube::VulkanCube(const std::string& appName, uint32_t width, uint32_t height)
+VulkanCube::VulkanCube(uint32_t width, uint32_t height)
     : windowData{ appName, vk::Extent2D{width, height} },
 
     instance{ intvlk::makeInstance(context,
@@ -38,7 +38,9 @@ VulkanCube::VulkanCube(const std::string& appName, uint32_t width, uint32_t heig
 
     graphicsAndPresentQueueFamilyIndices{ intvlk::findGraphicsAndPresentQueueFamilyIndices(physicalDevice, surface) },
 
-    device{ intvlk::makeDevice(physicalDevice, graphicsAndPresentQueueFamilyIndices.first) },
+    device{ intvlk::makeDevice(physicalDevice,
+                               intvlk::getDeviceExtensions(),
+                               graphicsAndPresentQueueFamilyIndices.first) },
 
     allocator{ intvlk::vma_utils::makeAllocator(VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT,
                                                physicalDevice,
@@ -65,6 +67,7 @@ VulkanCube::VulkanCube(const std::string& appName, uint32_t width, uint32_t heig
                   vk::ImageUsageFlagBits::eColorAttachment,
               vk::ImageLayout::eUndefined,
               vk::MemoryPropertyFlagBits::eDeviceLocal,
+              VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT,
               vk::ImageAspectFlagBits::eColor },
 
     renderMatrix{ intvlk::glm_utils::createModelViewProjectionClipMatrix(drawImageExtent) },
@@ -285,7 +288,7 @@ void VulkanCube::draw()
 
 void VulkanCube::makeGraphicsPipeline()
 {
-    intvlk::glslang_utils::GlslangContext glslCtx{};
+    intvlk::glslang_utils::GlslangContext glslContext{};
 
     vk::PushConstantRange pushConstantRange{ vk::ShaderStageFlagBits::eVertex,
                                             0,
@@ -294,12 +297,12 @@ void VulkanCube::makeGraphicsPipeline()
         device,
         vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange} };
 
-    vk::raii::ShaderModule vertexShaderModule{ glslCtx.makeShaderModule(device,
-                                                                       vk::ShaderStageFlagBits::eVertex,
-                                                                       intvlk::glslang_utils::vertexShaderText) };
-    vk::raii::ShaderModule fragmentShaderModule{ glslCtx.makeShaderModule(device,
-                                                                         vk::ShaderStageFlagBits::eFragment,
-                                                                         intvlk::glslang_utils::fragmentShaderText) };
+    vk::raii::ShaderModule vertexShaderModule{ glslContext.makeShaderModule(device,
+                                                                           vk::ShaderStageFlagBits::eVertex,
+                                                                           intvlk::readFile("src/shaders/vulkan_cube.vert"))};
+    vk::raii::ShaderModule fragmentShaderModule{ glslContext.makeShaderModule(device,
+                                                                             vk::ShaderStageFlagBits::eFragment,
+                                                                             intvlk::readFile("src/shaders/vulkan_cube.frag")) };
 
     vk::raii::PipelineCache pipelineCache{ device, vk::PipelineCacheCreateInfo{} };
     pipeline = intvlk::makeGraphicsPipeline(device,

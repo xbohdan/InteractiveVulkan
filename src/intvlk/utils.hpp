@@ -24,7 +24,7 @@
 
 #include "errors.hpp"
 
-#include <iostream>
+#include <fstream>
 #include <numeric>
 #include <unordered_set>
 
@@ -60,7 +60,7 @@ namespace intvlk
         if (0 < pCallbackData->queueLabelCount)
         {
             std::cerr << std::string("\t") << "Queue Labels:\n";
-            for (uint32_t i = 0; i < pCallbackData->queueLabelCount; i++)
+            for (uint32_t i{ 0 }; i < pCallbackData->queueLabelCount; i++)
             {
                 std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pQueueLabels[i].pLabelName << ">\n";
             }
@@ -68,7 +68,7 @@ namespace intvlk
         if (0 < pCallbackData->cmdBufLabelCount)
         {
             std::cerr << std::string("\t") << "CommandBuffer Labels:\n";
-            for (uint32_t i = 0; i < pCallbackData->cmdBufLabelCount; i++)
+            for (uint32_t i{ 0 }; i < pCallbackData->cmdBufLabelCount; i++)
             {
                 std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pCmdBufLabels[i].pLabelName << ">\n";
             }
@@ -76,7 +76,7 @@ namespace intvlk
         if (0 < pCallbackData->objectCount)
         {
             std::cerr << std::string("\t") << "Objects:\n";
-            for (uint32_t i = 0; i < pCallbackData->objectCount; i++)
+            for (uint32_t i{ 0 }; i < pCallbackData->objectCount; i++)
             {
                 std::cerr << std::string("\t\t") << "Object " << i << "\n";
                 std::cerr << std::string("\t\t\t") << "objectType   = " << vk::to_string(static_cast<vk::ObjectType>(pCallbackData->pObjects[i].objectType))
@@ -381,9 +381,10 @@ namespace intvlk
         return vk::raii::DescriptorSetLayout{ device, descriptorSetLayoutCreateInfo };
     }
 
-    inline vk::raii::Device makeDevice(const vk::raii::PhysicalDevice& physicalDevice, uint32_t queueFamilyIndex)
+    inline vk::raii::Device makeDevice(const vk::raii::PhysicalDevice& physicalDevice,
+        const std::vector<std::string>& extensions,
+        uint32_t queueFamilyIndex)
     {
-        std::vector<std::string> extensions{ getDeviceExtensions() };
         std::vector<const char*> enabledExtensions{};
         enabledExtensions.reserve(extensions.size());
         for (const auto& ext : extensions)
@@ -660,6 +661,7 @@ namespace intvlk
         commandBuffer.end();
         vk::CommandBufferSubmitInfo commandBufferSubmitInfo{ commandBuffer };
         vk::SubmitInfo2 submitInfo{ vk::SubmitFlags{}, nullptr, commandBufferSubmitInfo };
+        queue.submit2(submitInfo);
         queue.waitIdle();
     }
 
@@ -718,6 +720,20 @@ namespace intvlk
         }
         assert(pickedFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear);
         return pickedFormat;
+    }
+
+    inline std::string readFile(std::string_view filename)
+    {
+        std::string shaderCode{};
+        if (std::ifstream file{ std::string{filename}, std::ios::ate })
+        {
+            const auto fileSize{ static_cast<size_t>(file.tellg()) };
+            shaderCode.resize(fileSize);
+            file.seekg(0);
+            file.read(shaderCode.data(), fileSize);
+            return shaderCode;
+        }
+        throw std::runtime_error("Failed to open file: " + std::string{ filename });
     }
 
     inline void setImageLayout(const vk::raii::CommandBuffer& commandBuffer,
