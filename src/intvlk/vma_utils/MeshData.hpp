@@ -26,40 +26,40 @@ namespace intvlk::vma_utils
     class MeshData
     {
     public:
-        MeshData(const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& allocator,
-            vk::DeviceSize indexBufferSize,
-            vk::DeviceSize vertexBufferSize)
-            : indexBuffer{ makeIndexBuffer(device, allocator, indexBufferSize) },
+        MeshData(const vk::raii::Device &device,
+                 const std::shared_ptr<VmaAllocator_T> &allocator,
+                 vk::DeviceSize indexBufferSize,
+                 vk::DeviceSize vertexBufferSize)
+            : indexBuffer{makeIndexBuffer(device, allocator, indexBufferSize)},
 
-            vertexBuffer{ device,
-                         allocator,
-                         vertexBufferSize,
-                         vk::BufferUsageFlagBits::eVertexBuffer |
-                             vk::BufferUsageFlagBits::eTransferDst |
-                             vk::BufferUsageFlagBits::eShaderDeviceAddress,
-                         VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
-                         {},
-                         VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                             VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT }
+              vertexBuffer{device,
+                           allocator,
+                           vertexBufferSize,
+                           vk::BufferUsageFlagBits::eVertexBuffer |
+                               vk::BufferUsageFlagBits::eTransferDst |
+                               vk::BufferUsageFlagBits::eShaderDeviceAddress,
+                           VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
+                           {},
+                           VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
+                               VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT}
         {
             vk::BufferDeviceAddressInfo bufferDeviceAddressInfo{};
             bufferDeviceAddressInfo.buffer = *vertexBuffer.buffer;
             vertexBufferAddress = device.getBufferAddress(bufferDeviceAddressInfo);
         }
 
-        MeshData(const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& allocator,
-            vk::DeviceSize vertexBufferSize)
-            : MeshData{ device, allocator, 0, vertexBufferSize } {}
+        MeshData(const vk::raii::Device &device,
+                 const std::shared_ptr<VmaAllocator_T> &allocator,
+                 vk::DeviceSize vertexBufferSize)
+            : MeshData{device, allocator, 0, vertexBufferSize} {}
 
-        static BufferData makeIndexBuffer(const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& allocator,
-            vk::DeviceSize indexBufferSize)
+        static BufferData makeIndexBuffer(const vk::raii::Device &device,
+                                          const std::shared_ptr<VmaAllocator_T> &allocator,
+                                          vk::DeviceSize indexBufferSize)
         {
             if (indexBufferSize > 0)
             {
-                return BufferData{ device,
+                return BufferData{device,
                                   allocator,
                                   indexBufferSize,
                                   vk::BufferUsageFlagBits::eIndexBuffer |
@@ -67,13 +67,13 @@ namespace intvlk::vma_utils
                                   VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
                                   {},
                                   VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                                      VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT };
+                                      VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT};
             }
-            return BufferData{ nullptr };
+            return BufferData{nullptr};
         }
 
-        BufferData indexBuffer{ nullptr };
-        BufferData vertexBuffer{ nullptr };
+        BufferData indexBuffer{nullptr};
+        BufferData vertexBuffer{nullptr};
         vk::DeviceAddress vertexBufferAddress{};
     };
 }

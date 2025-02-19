@@ -31,39 +31,39 @@ namespace intvlk
     class SwapchainData
     {
     public:
-        SwapchainData(const vk::raii::PhysicalDevice& physicalDevice,
-            const vk::raii::Device& device,
-            const vk::raii::SurfaceKHR& surface,
-            const vk::Extent2D& _extent,
-            vk::ImageUsageFlags usage,
-            const vk::raii::SwapchainKHR* oldSwapchain,
-            uint32_t graphicsQueueFamilyIndex,
-            uint32_t presentQueueFamilyIndex,
-            vk::PresentModeKHR desiredPresentMode)
+        SwapchainData(const vk::raii::PhysicalDevice &physicalDevice,
+                      const vk::raii::Device &device,
+                      const vk::raii::SurfaceKHR &surface,
+                      const vk::Extent2D &_extent,
+                      vk::ImageUsageFlags usage,
+                      const vk::raii::SwapchainKHR *oldSwapchain,
+                      uint32_t graphicsQueueFamilyIndex,
+                      uint32_t presentQueueFamilyIndex,
+                      vk::PresentModeKHR desiredPresentMode)
         {
-            vk::SurfaceFormatKHR surfaceFormat{ pickSurfaceFormat(physicalDevice.getSurfaceFormatsKHR(surface)) };
+            vk::SurfaceFormatKHR surfaceFormat{pickSurfaceFormat(physicalDevice.getSurfaceFormatsKHR(surface))};
             colorFormat = surfaceFormat.format;
 
-            vk::SurfaceCapabilitiesKHR surfaceCapabilities{ physicalDevice.getSurfaceCapabilitiesKHR(surface) };
-            vk::Extent2D swapchainExtent{ surfaceCapabilities.currentExtent };
+            vk::SurfaceCapabilitiesKHR surfaceCapabilities{physicalDevice.getSurfaceCapabilitiesKHR(surface)};
+            vk::Extent2D swapchainExtent{surfaceCapabilities.currentExtent};
             if (surfaceCapabilities.currentExtent.width == std::numeric_limits<uint32_t>::max())
             {
                 swapchainExtent.width = std::clamp(_extent.width,
-                    surfaceCapabilities.minImageExtent.width,
-                    surfaceCapabilities.maxImageExtent.width);
+                                                   surfaceCapabilities.minImageExtent.width,
+                                                   surfaceCapabilities.maxImageExtent.width);
                 swapchainExtent.height = std::clamp(_extent.height,
-                    surfaceCapabilities.minImageExtent.height,
-                    surfaceCapabilities.maxImageExtent.height);
+                                                    surfaceCapabilities.minImageExtent.height,
+                                                    surfaceCapabilities.maxImageExtent.height);
             }
             if (swapchainExtent.width == 0 || swapchainExtent.height == 0)
             {
-                throw SwapchainZeroDimensionError{ "Swapchain extent is zero" };
+                throw SwapchainZeroDimensionError{"Swapchain extent is zero"};
             }
             extent = swapchainExtent;
             vk::SurfaceTransformFlagBitsKHR preTransform{
                 (surfaceCapabilities.supportedTransforms & vk::SurfaceTransformFlagBitsKHR::eIdentity)
                     ? vk::SurfaceTransformFlagBitsKHR::eIdentity
-                    : surfaceCapabilities.currentTransform };
+                    : surfaceCapabilities.currentTransform};
             vk::CompositeAlphaFlagBitsKHR compositeAlpha{
                 (surfaceCapabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::ePreMultiplied)
                     ? vk::CompositeAlphaFlagBitsKHR::ePreMultiplied
@@ -71,9 +71,9 @@ namespace intvlk
                     ? vk::CompositeAlphaFlagBitsKHR::ePostMultiplied
                 : (surfaceCapabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eInherit)
                     ? vk::CompositeAlphaFlagBitsKHR::eInherit
-                    : vk::CompositeAlphaFlagBitsKHR::eOpaque };
-            vk::PresentModeKHR presentMode{ pickPresentMode(physicalDevice.getSurfacePresentModesKHR(surface),
-                                                           desiredPresentMode) };
+                    : vk::CompositeAlphaFlagBitsKHR::eOpaque};
+            vk::PresentModeKHR presentMode{pickPresentMode(physicalDevice.getSurfacePresentModesKHR(surface),
+                                                           desiredPresentMode)};
             vk::SwapchainCreateInfoKHR swapchainCreateInfo{
                 vk::SwapchainCreateFlagsKHR{},
                 surface,
@@ -89,15 +89,15 @@ namespace intvlk
                 compositeAlpha,
                 presentMode,
                 vk::True,
-                oldSwapchain ? **oldSwapchain : nullptr };
+                oldSwapchain ? **oldSwapchain : nullptr};
             if (graphicsQueueFamilyIndex != presentQueueFamilyIndex)
             {
-                std::vector<uint32_t> queueFamilyIndices{ graphicsQueueFamilyIndex, presentQueueFamilyIndex };
+                std::vector<uint32_t> queueFamilyIndices{graphicsQueueFamilyIndex, presentQueueFamilyIndex};
                 swapchainCreateInfo.imageSharingMode = vk::SharingMode::eConcurrent;
                 swapchainCreateInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndices.size());
                 swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices.data();
             }
-            swapchain = vk::raii::SwapchainKHR{ device, swapchainCreateInfo };
+            swapchain = vk::raii::SwapchainKHR{device, swapchainCreateInfo};
 
             images = swapchain.getImages();
 
@@ -108,8 +108,8 @@ namespace intvlk
                 vk::ImageViewType::e2D,
                 colorFormat,
                 vk::ComponentMapping{},
-                vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1} };
-            for (const auto& image : images)
+                vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1}};
+            for (const auto &image : images)
             {
                 imageViewCreateInfo.image = image;
                 imageViews.emplace_back(device, imageViewCreateInfo);
@@ -118,7 +118,7 @@ namespace intvlk
 
         vk::Format colorFormat{};
         vk::Extent2D extent{};
-        vk::raii::SwapchainKHR swapchain{ VK_NULL_HANDLE };
+        vk::raii::SwapchainKHR swapchain{VK_NULL_HANDLE};
         std::vector<vk::Image> images{};
         std::vector<vk::raii::ImageView> imageViews{};
     };

@@ -29,32 +29,32 @@ namespace intvlk
     class PerFrameData
     {
     public:
-        PerFrameData(const vk::raii::Device& device, uint32_t queueFamilyIndex)
-            : commandPool{ device, vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, queueFamilyIndex} },
-            commandBuffer{ makeCommandBuffer(device, commandPool) },
-            fence{ device, vk::FenceCreateInfo{vk::FenceCreateFlagBits::eSignaled} },
-            presentCompleteSemaphore{ device, vk::SemaphoreCreateInfo{} },
-            renderCompleteSemaphore{ device, vk::SemaphoreCreateInfo{} }
+        PerFrameData(const vk::raii::Device &device, uint32_t queueFamilyIndex)
+            : commandPool{device, vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, queueFamilyIndex}},
+              commandBuffer{makeCommandBuffer(device, commandPool)},
+              fence{device, vk::FenceCreateInfo{vk::FenceCreateFlagBits::eSignaled}},
+              presentCompleteSemaphore{device, vk::SemaphoreCreateInfo{}},
+              renderCompleteSemaphore{device, vk::SemaphoreCreateInfo{}}
         {
         }
 
         static std::vector<PerFrameData> make(uint32_t queuedFramesCount,
-            const vk::raii::Device& device,
-            uint32_t queueFamilyIndex)
+                                              const vk::raii::Device &device,
+                                              uint32_t queueFamilyIndex)
         {
             std::vector<PerFrameData> perFrameData{};
             perFrameData.reserve(queuedFramesCount);
-            for (uint32_t i{ 0 }; i < queuedFramesCount; ++i)
+            for (uint32_t i{0}; i < queuedFramesCount; ++i)
             {
                 perFrameData.emplace_back(device, queueFamilyIndex);
             }
             return perFrameData;
         }
 
-        vk::raii::CommandPool commandPool{ VK_NULL_HANDLE };
-        vk::raii::CommandBuffer commandBuffer{ nullptr };
-        vk::raii::Fence fence{ VK_NULL_HANDLE };
-        vk::raii::Semaphore presentCompleteSemaphore{ VK_NULL_HANDLE };
-        vk::raii::Semaphore renderCompleteSemaphore{ VK_NULL_HANDLE };
+        vk::raii::CommandPool commandPool{VK_NULL_HANDLE};
+        vk::raii::CommandBuffer commandBuffer{nullptr};
+        vk::raii::Fence fence{VK_NULL_HANDLE};
+        vk::raii::Semaphore presentCompleteSemaphore{VK_NULL_HANDLE};
+        vk::raii::Semaphore renderCompleteSemaphore{VK_NULL_HANDLE};
     };
 }

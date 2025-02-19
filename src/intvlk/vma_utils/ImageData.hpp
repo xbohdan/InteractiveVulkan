@@ -27,29 +27,29 @@ namespace intvlk::vma_utils
     class ImageData
     {
     public:
-        ImageData(const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& _allocator,
-            vk::Format _format,
-            const vk::Extent2D& _extent,
-            vk::ImageTiling tiling,
-            vk::ImageUsageFlags imageUsage,
-            vk::ImageLayout initialLayout,
-            vk::MemoryPropertyFlags requiredMemoryProperties,
-            VmaAllocationCreateFlags allocationFlags,
-            vk::ImageAspectFlags aspectMask)
-            : allocator{ _allocator },
-            format{ _format },
-            extent{ _extent }
+        ImageData(const vk::raii::Device &device,
+                  const std::shared_ptr<VmaAllocator_T> &_allocator,
+                  vk::Format _format,
+                  const vk::Extent2D &_extent,
+                  vk::ImageTiling tiling,
+                  vk::ImageUsageFlags imageUsage,
+                  vk::ImageLayout initialLayout,
+                  vk::MemoryPropertyFlags requiredMemoryProperties,
+                  VmaAllocationCreateFlags allocationFlags,
+                  vk::ImageAspectFlags aspectMask)
+            : allocator{_allocator},
+              format{_format},
+              extent{_extent}
         {
             std::tie(image, allocation) = makeImageAllocation(device,
-                allocator,
-                format,
-                extent,
-                tiling,
-                imageUsage,
-                initialLayout,
-                requiredMemoryProperties,
-                allocationFlags);
+                                                              allocator,
+                                                              format,
+                                                              extent,
+                                                              tiling,
+                                                              imageUsage,
+                                                              initialLayout,
+                                                              requiredMemoryProperties,
+                                                              allocationFlags);
 
             imageView = vk::raii::ImageView{
                 device,
@@ -58,23 +58,23 @@ namespace intvlk::vma_utils
                                         vk::ImageViewType::e2D,
                                         format,
                                         vk::ComponentMapping{},
-                                        vk::ImageSubresourceRange{aspectMask, 0, 1, 0, 1}} };
+                                        vk::ImageSubresourceRange{aspectMask, 0, 1, 0, 1}}};
         }
 
         explicit ImageData(std::nullptr_t) {}
 
         static std::pair<vk::raii::Image, std::shared_ptr<VmaAllocation_T>> makeImageAllocation(
-            const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& allocator,
+            const vk::raii::Device &device,
+            const std::shared_ptr<VmaAllocator_T> &allocator,
             vk::Format format,
-            const vk::Extent2D& extent,
+            const vk::Extent2D &extent,
             vk::ImageTiling tiling,
             vk::ImageUsageFlags imageUsage,
             vk::ImageLayout initialLayout,
             vk::MemoryPropertyFlags requiredMemoryProperties,
             VmaAllocationCreateFlags allocationFlags)
         {
-            vk::ImageCreateInfo imageCreateInfo{ vk::ImageCreateFlags{},
+            vk::ImageCreateInfo imageCreateInfo{vk::ImageCreateFlags{},
                                                 vk::ImageType::e2D,
                                                 format,
                                                 vk::Extent3D{extent, 1},
@@ -85,33 +85,34 @@ namespace intvlk::vma_utils
                                                 imageUsage | vk::ImageUsageFlagBits::eSampled,
                                                 vk::SharingMode::eExclusive,
                                                 {},
-                                                initialLayout };
+                                                initialLayout};
             VkImageCreateInfo _imageCreateInfo = imageCreateInfo;
-            VkImage _image{ VK_NULL_HANDLE };
+            VkImage _image{VK_NULL_HANDLE};
 
             VmaAllocationCreateInfo allocationCreateInfo{};
             allocationCreateInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
             allocationCreateInfo.requiredFlags = static_cast<VkMemoryPropertyFlags>(requiredMemoryProperties);
             allocationCreateInfo.flags = allocationFlags;
-            VmaAllocation _allocation{ nullptr };
+            VmaAllocation _allocation{nullptr};
             vmaCreateImage(allocator.get(),
-                &_imageCreateInfo,
-                &allocationCreateInfo,
-                &_image,
-                &_allocation,
-                nullptr);
+                           &_imageCreateInfo,
+                           &allocationCreateInfo,
+                           &_image,
+                           &_allocation,
+                           nullptr);
 
-            vk::raii::Image image{ vk::raii::Image{device, _image} };
-            std::shared_ptr<VmaAllocation_T> allocation{ std::shared_ptr<VmaAllocation_T>{_allocation,
-                                                                                         [allocator](VmaAllocation a)
-                                                                                         { vmaFreeMemory(allocator.get(), a); }} };
-            return { std::move(image), allocation };
+            vk::raii::Image image{vk::raii::Image{device, _image}};
+            std::shared_ptr<VmaAllocation_T> allocation{std::shared_ptr<VmaAllocation_T>{
+                _allocation,
+                [allocator](VmaAllocation a)
+                { vmaFreeMemory(allocator.get(), a); }}};
+            return {std::move(image), allocation};
         }
 
-        const std::shared_ptr<VmaAllocator_T>& allocator{ nullptr };
-        std::shared_ptr<VmaAllocation_T> allocation{ nullptr };
-        vk::raii::Image image{ VK_NULL_HANDLE };
-        vk::raii::ImageView imageView{ VK_NULL_HANDLE };
+        const std::shared_ptr<VmaAllocator_T> &allocator{nullptr};
+        std::shared_ptr<VmaAllocation_T> allocation{nullptr};
+        vk::raii::Image image{VK_NULL_HANDLE};
+        vk::raii::ImageView imageView{VK_NULL_HANDLE};
         vk::Format format{};
         vk::Extent2D extent{};
     };

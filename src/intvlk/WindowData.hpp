@@ -31,50 +31,50 @@ namespace intvlk
     class WindowData
     {
     public:
-        WindowData(std::string_view windowName, const vk::Extent2D& extent)
-            : handle{ makeWindow(windowName, extent) },
-            name{ windowName },
-            extent{ extent }
+        WindowData(std::string_view windowName, const vk::Extent2D &extent)
+            : handle{makeWindow(windowName, extent)},
+              name{windowName},
+              extent{extent}
         {
             SDL_AddEventWatch(windowResizeEventWatch, this);
         }
 
-        static std::shared_ptr<SDL_Window> makeWindow(std::string_view windowName, const vk::Extent2D& extent)
+        static std::shared_ptr<SDL_Window> makeWindow(std::string_view windowName, const vk::Extent2D &extent)
         {
-            SDL_WindowFlags windowFlags{ static_cast<SDL_WindowFlags>(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE) };
-            SDL_Window* handle{ SDL_CreateWindow(windowName.data(),
+            SDL_WindowFlags windowFlags{static_cast<SDL_WindowFlags>(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE)};
+            SDL_Window *handle{SDL_CreateWindow(windowName.data(),
                                                 SDL_WINDOWPOS_CENTERED,
                                                 SDL_WINDOWPOS_CENTERED,
                                                 extent.width,
                                                 extent.height,
-                                                windowFlags) };
+                                                windowFlags)};
             if (!handle)
             {
-                throw Error{ "Failed to create window!" };
+                throw Error{"Failed to create window!"};
             }
-            return std::shared_ptr<SDL_Window>{handle, [](SDL_Window* window)
-                {
-                    if (window)
-                    {
-                        SDL_DestroyWindow(window);
-                    }
-                }};
+            return std::shared_ptr<SDL_Window>{handle, [](SDL_Window *window)
+                                               {
+                                                   if (window)
+                                                   {
+                                                       SDL_DestroyWindow(window);
+                                                   }
+                                               }};
         }
 
-        static int windowResizeEventWatch(void* userData, SDL_Event* event)
+        static int windowResizeEventWatch(void *userData, SDL_Event *event)
         {
             if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED)
             {
-                auto windowData{ static_cast<WindowData*>(userData) };
-                windowData->setExtent(vk::Extent2D{ static_cast<uint32_t>(event->window.data1),
-                                                   static_cast<uint32_t>(event->window.data2) });
+                auto windowData{static_cast<WindowData *>(userData)};
+                windowData->setExtent(vk::Extent2D{static_cast<uint32_t>(event->window.data1),
+                                                   static_cast<uint32_t>(event->window.data2)});
             }
             return 0;
         }
 
         vk::Extent2D getExtent()
         {
-            std::lock_guard lock{ extentMutex };
+            std::lock_guard lock{extentMutex};
             return extent;
         }
 
@@ -83,9 +83,9 @@ namespace intvlk
             return name;
         }
 
-        void setExtent(const vk::Extent2D& newExtent)
+        void setExtent(const vk::Extent2D &newExtent)
         {
-            std::lock_guard lock{ extentMutex };
+            std::lock_guard lock{extentMutex};
             extent = newExtent;
         }
 

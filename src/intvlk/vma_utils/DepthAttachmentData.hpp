@@ -29,11 +29,11 @@ namespace intvlk::vma_utils
     class DepthAttachmentData : public ImageData
     {
     public:
-        DepthAttachmentData(const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& allocator,
-            vk::Format format,
-            const vk::Extent2D& extent)
-            : ImageData{ device,
+        DepthAttachmentData(const vk::raii::Device &device,
+                            const std::shared_ptr<VmaAllocator_T> &allocator,
+                            vk::Format format,
+                            const vk::Extent2D &extent)
+            : ImageData{device,
                         allocator,
                         format,
                         extent,
@@ -42,7 +42,7 @@ namespace intvlk::vma_utils
                         vk::ImageLayout::eUndefined,
                         vk::MemoryPropertyFlagBits::eDeviceLocal,
                         VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT,
-                        vk::ImageAspectFlagBits::eDepth }
+                        vk::ImageAspectFlagBits::eDepth}
         {
         }
     };
