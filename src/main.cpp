@@ -17,27 +17,27 @@
 
 #include <iostream>
 
-int main(int /*argc*/, char** /*argv*/)
+int main(int /*argc*/, char ** /*argv*/)
 {
     try
     {
-        const uint32_t width{ 900 };
-        const uint32_t height{ 600 };
-        VulkanCube a{ width, height };
-        VulkanApp& app{ a };
+        const uint32_t width{900};
+        const uint32_t height{600};
+        VulkanCube a{width, height};
+        VulkanApp &app{a};
         app.run();
     }
-    catch (const intvlk::Error& e)
+    catch (const intvlk::Error &e)
     {
         std::cerr << "intvlk::Error: " << e.what() << '\n';
         return EXIT_FAILURE;
     }
-    catch (const vk::Error& e)
+    catch (const vk::Error &e)
     {
         std::cerr << "vk::Error: " << e.what() << '\n';
         return EXIT_FAILURE;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << "std::exception: " << e.what() << '\n';
         return EXIT_FAILURE;

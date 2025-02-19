@@ -25,15 +25,15 @@
 namespace intvlk::vma_utils
 {
     template <typename T>
-    inline void copyToDevice(const VmaAllocator& allocator,
-        const VmaAllocation& allocation,
-        std::span<T> data,
-        vk::DeviceSize stride = sizeof(T))
+    inline void copyToDevice(const VmaAllocator &allocator,
+                             const VmaAllocation &allocation,
+                             std::span<T> data,
+                             vk::DeviceSize stride = sizeof(T))
     {
         assert(sizeof(T) <= stride);
         VmaAllocationInfo allocationInfo{};
         vmaGetAllocationInfo(allocator, allocation, &allocationInfo);
-        auto* deviceData{ static_cast<std::byte*>(allocationInfo.pMappedData) };
+        auto *deviceData{static_cast<std::byte *>(allocationInfo.pMappedData)};
         assert(deviceData);
         if (stride == sizeof(T))
         {
@@ -41,7 +41,7 @@ namespace intvlk::vma_utils
         }
         else
         {
-            for (size_t i{ 0 }; i < data.size(); ++i)
+            for (size_t i{0}; i < data.size(); ++i)
             {
                 memcpy(deviceData, &data[i], sizeof(T));
                 deviceData += stride;
@@ -50,16 +50,16 @@ namespace intvlk::vma_utils
     }
 
     template <typename T>
-    inline void copyToDevice(const VmaAllocator& allocator, const VmaAllocation& allocation, const T& data)
+    inline void copyToDevice(const VmaAllocator &allocator, const VmaAllocation &allocation, const T &data)
     {
-        copyToDevice(allocator, allocation, std::span{ &data, 1 });
+        copyToDevice(allocator, allocation, std::span{&data, 1});
     }
 
     inline std::shared_ptr<VmaAllocator_T> makeAllocator(VmaAllocatorCreateFlags flags,
-        const vk::raii::PhysicalDevice& physicalDevice,
-        const vk::raii::Device& device,
-        const vk::raii::Instance& instance,
-        uint32_t apiVersion)
+                                                         const vk::raii::PhysicalDevice &physicalDevice,
+                                                         const vk::raii::Device &device,
+                                                         const vk::raii::Instance &instance,
+                                                         uint32_t apiVersion)
     {
         VmaAllocatorCreateInfo allocatorInfo{};
         allocatorInfo.flags = flags;
@@ -67,10 +67,10 @@ namespace intvlk::vma_utils
         allocatorInfo.device = *device;
         allocatorInfo.instance = *instance;
         allocatorInfo.vulkanApiVersion = apiVersion;
-        VmaAllocator _allocator{ nullptr };
+        VmaAllocator _allocator{nullptr};
         if (vmaCreateAllocator(&allocatorInfo, &_allocator))
         {
-            throw Error{ "Failed to create VMA allocator" };
+            throw Error{"Failed to create VMA allocator"};
         }
         return std::shared_ptr<VmaAllocator_T>{_allocator, vmaDestroyAllocator};
     }

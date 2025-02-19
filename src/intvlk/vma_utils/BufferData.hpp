@@ -31,114 +31,118 @@ namespace intvlk::vma_utils
     class BufferData
     {
     public:
-        BufferData(const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& _allocator,
-            vk::DeviceSize _size,
-            vk::BufferUsageFlags _bufferUsage,
-            VmaMemoryUsage memoryUsage,
-            vk::MemoryPropertyFlags requiredMemoryProperties = {},
-            VmaAllocationCreateFlags allocationFlags = {})
-            : allocator{ _allocator }
+        BufferData(const vk::raii::Device &device,
+                   const std::shared_ptr<VmaAllocator_T> &_allocator,
+                   vk::DeviceSize _size,
+                   vk::BufferUsageFlags _bufferUsage,
+                   VmaMemoryUsage memoryUsage,
+                   vk::MemoryPropertyFlags requiredMemoryProperties = {},
+                   VmaAllocationCreateFlags allocationFlags = {})
+            : allocator{_allocator}
 
 #if !defined(NDEBUG)
-            ,
-            size{ _size },
+              ,
+              size{_size},
 
-            bufferUsage{ _bufferUsage }
+              bufferUsage{_bufferUsage}
 #endif
         {
             std::tie(buffer, allocation) = makeBufferAllocation(device,
-                allocator,
-                _size,
-                _bufferUsage,
-                memoryUsage,
-                requiredMemoryProperties,
-                allocationFlags);
+                                                                allocator,
+                                                                _size,
+                                                                _bufferUsage,
+                                                                memoryUsage,
+                                                                requiredMemoryProperties,
+                                                                allocationFlags);
 
             vmaGetAllocationInfo(allocator.get(), allocation.get(), &allocationInfo);
 
             VkMemoryPropertyFlags _memoryProperties{};
             vmaGetAllocationMemoryProperties(allocator.get(), allocation.get(), &_memoryProperties);
-            memoryProperties = vk::MemoryPropertyFlags{ _memoryProperties };
+            memoryProperties = vk::MemoryPropertyFlags{_memoryProperties};
         }
 
         explicit BufferData(std::nullptr_t) {}
 
         static std::pair<vk::raii::Buffer, std::shared_ptr<VmaAllocation_T>> makeBufferAllocation(
-            const vk::raii::Device& device,
-            const std::shared_ptr<VmaAllocator_T>& allocator,
+            const vk::raii::Device &device,
+            const std::shared_ptr<VmaAllocator_T> &allocator,
             vk::DeviceSize _size,
             vk::BufferUsageFlags _bufferUsage,
             VmaMemoryUsage memoryUsage,
             vk::MemoryPropertyFlags requiredMemoryProperties,
             VmaAllocationCreateFlags allocationFlags)
         {
-            vk::BufferCreateInfo bufferCreateInfo{ vk::BufferCreateFlags{}, _size, _bufferUsage };
+            vk::BufferCreateInfo bufferCreateInfo{vk::BufferCreateFlags{}, _size, _bufferUsage};
             VkBufferCreateInfo _bufferCreateInfo = bufferCreateInfo;
-            VkBuffer _buffer{ VK_NULL_HANDLE };
+            VkBuffer _buffer{VK_NULL_HANDLE};
 
             VmaAllocationCreateInfo allocationCreateInfo{};
             allocationCreateInfo.usage = memoryUsage;
             allocationCreateInfo.requiredFlags = static_cast<VkMemoryPropertyFlags>(requiredMemoryProperties);
             allocationCreateInfo.flags = allocationFlags | VMA_ALLOCATION_CREATE_MAPPED_BIT;
-            VmaAllocation _allocation{ nullptr };
+            VmaAllocation _allocation{nullptr};
             vmaCreateBuffer(allocator.get(),
-                &_bufferCreateInfo,
-                &allocationCreateInfo,
-                &_buffer,
-                &_allocation,
-                nullptr);
+                            &_bufferCreateInfo,
+                            &allocationCreateInfo,
+                            &_buffer,
+                            &_allocation,
+                            nullptr);
 
-            vk::raii::Buffer buffer{ vk::raii::Buffer{device, _buffer} };
-            std::shared_ptr<VmaAllocation_T> allocation{ std::shared_ptr<VmaAllocation_T>{_allocation,
-                                                                                         [allocator](VmaAllocation a)
-                                                                                         { vmaFreeMemory(allocator.get(), a); }} };
-            return { std::move(buffer), allocation };
+            vk::raii::Buffer buffer{vk::raii::Buffer{device, _buffer}};
+            std::shared_ptr<VmaAllocation_T> allocation{std::shared_ptr<VmaAllocation_T>{
+                _allocation,
+                [allocator](VmaAllocation a)
+                { vmaFreeMemory(allocator.get(), a); }}};
+            return {std::move(buffer), allocation};
         }
 
         template <typename DataType>
-        void upload(const vk::raii::Device& device,
-            const vk::raii::CommandPool& commandPool,
-            const vk::raii::Queue queue,
-            const std::vector<DataType>& data,
-            size_t stride = 0) const
+        void upload(const vk::raii::Device &device,
+                    const vk::raii::CommandPool &commandPool,
+                    const vk::raii::Queue queue,
+                    const std::vector<DataType> &data,
+                    size_t stride = 0) const
         {
             if (memoryProperties & vk::MemoryPropertyFlagBits::eHostVisible)
             {
-                size_t elementSize{ stride ? stride : sizeof(DataType) };
+                size_t elementSize{stride ? stride : sizeof(DataType)};
                 assert(sizeof(DataType) <= elementSize);
 
-                copyToDevice(allocator.get(), allocation.get(), std::span{ data }, elementSize);
+                copyToDevice(allocator.get(), allocation.get(), std::span{data}, elementSize);
             }
             else
             {
                 assert(bufferUsage & vk::BufferUsageFlagBits::eTransferDst);
                 assert(memoryProperties & vk::MemoryPropertyFlagBits::eDeviceLocal);
 
-                size_t elementSize{ stride ? stride : sizeof(DataType) };
+                size_t elementSize{stride ? stride : sizeof(DataType)};
                 assert(sizeof(DataType) <= elementSize);
 
-                size_t dataSize{ data.size() * elementSize };
+                size_t dataSize{data.size() * elementSize};
                 assert(dataSize <= size);
 
-                BufferData stagingBuffer{ device,
+                BufferData stagingBuffer{device,
                                          allocator,
                                          dataSize,
                                          vk::BufferUsageFlagBits::eTransferSrc,
                                          VMA_MEMORY_USAGE_AUTO,
                                          {},
-                                         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT };
-                copyToDevice(allocator.get(), stagingBuffer.allocation.get(), std::span{ data }, elementSize);
+                                         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT};
+                copyToDevice(allocator.get(), stagingBuffer.allocation.get(), std::span{data}, elementSize);
                 vmaFlushAllocation(allocator.get(), stagingBuffer.allocation.get(), 0, dataSize);
 
-                oneTimeSubmit(device, commandPool, queue, [this, &stagingBuffer, dataSize](const vk::raii::CommandBuffer& cb)
-                    { cb.copyBuffer(stagingBuffer.buffer, buffer, vk::BufferCopy{ 0, 0, dataSize }); });
+                oneTimeSubmit(device,
+                              commandPool,
+                              queue,
+                              [this, &stagingBuffer, dataSize](const vk::raii::CommandBuffer &cb)
+                              { cb.copyBuffer(stagingBuffer.buffer, buffer, vk::BufferCopy{0, 0, dataSize}); });
             }
         }
 
-        const std::shared_ptr<VmaAllocator_T>& allocator{ nullptr };
-        std::shared_ptr<VmaAllocation_T> allocation{ nullptr };
-        vk::raii::Buffer buffer{ VK_NULL_HANDLE };
+        const std::shared_ptr<VmaAllocator_T> &allocator{nullptr};
+        std::shared_ptr<VmaAllocation_T> allocation{nullptr};
+        vk::raii::Buffer buffer{VK_NULL_HANDLE};
         VmaAllocationInfo allocationInfo{};
         vk::MemoryPropertyFlags memoryProperties{};
 #if !defined(NDEBUG)

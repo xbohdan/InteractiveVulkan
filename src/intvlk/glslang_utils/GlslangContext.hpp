@@ -36,11 +36,11 @@ namespace intvlk::glslang_utils
             glslang::InitializeProcess();
         };
 
-        GlslangContext(const GlslangContext&) = delete;
-        GlslangContext& operator=(const GlslangContext&) = delete;
+        GlslangContext(const GlslangContext &) = delete;
+        GlslangContext &operator=(const GlslangContext &) = delete;
 
-        GlslangContext(GlslangContext&&) = delete;
-        GlslangContext& operator=(GlslangContext&&) = delete;
+        GlslangContext(GlslangContext &&) = delete;
+        GlslangContext &operator=(GlslangContext &&) = delete;
 
         ~GlslangContext()
         {
@@ -86,22 +86,22 @@ namespace intvlk::glslang_utils
         }
 
         bool GLSLtoSPV(const vk::ShaderStageFlagBits shaderType,
-            const std::string& glslShader,
-            std::vector<uint32_t>& spvShader) const
+                       const std::string &glslShader,
+                       std::vector<uint32_t> &spvShader) const
         {
-            EShLanguage stage{ translateShaderStage(shaderType) };
+            EShLanguage stage{translateShaderStage(shaderType)};
 
-            std::array<const char*, 1> shaderStrings{ glslShader.c_str() };
+            std::array<const char *, 1> shaderStrings{glslShader.c_str()};
 
-            glslang::TShader shader{ stage };
+            glslang::TShader shader{stage};
             shader.setStrings(shaderStrings.data(), static_cast<int>(shaderStrings.size()));
 
-            EShMessages messages{ static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules) };
+            EShMessages messages{static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules)};
 
             if (!shader.parse(GetDefaultResources(), 100, false, messages))
             {
                 std::cerr << shader.getInfoLog() << '\n'
-                    << shader.getInfoDebugLog() << '\n';
+                          << shader.getInfoDebugLog() << '\n';
                 return false;
             }
 
@@ -111,7 +111,7 @@ namespace intvlk::glslang_utils
             if (!program.link(messages))
             {
                 std::cerr << shader.getInfoLog() << '\n'
-                    << shader.getInfoDebugLog() << '\n';
+                          << shader.getInfoDebugLog() << '\n';
                 return false;
             }
 
@@ -120,17 +120,17 @@ namespace intvlk::glslang_utils
         }
 
         template <typename DISPATCHER = VULKAN_HPP_DEFAULT_DISPATCHER_TYPE>
-        vk::raii::ShaderModule makeShaderModule(const vk::raii::Device& device,
-            vk::ShaderStageFlagBits shaderStage,
-            const std::string& shaderText) const
+        vk::raii::ShaderModule makeShaderModule(const vk::raii::Device &device,
+                                                vk::ShaderStageFlagBits shaderStage,
+                                                const std::string &shaderText) const
         {
             std::vector<uint32_t> shaderSPV{};
             if (!GLSLtoSPV(shaderStage, shaderText, shaderSPV))
             {
-                throw Error{ "Failed to compile shader!" };
+                throw Error{"Failed to compile shader!"};
             }
 
-            return vk::raii::ShaderModule{ device, vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, shaderSPV} };
+            return vk::raii::ShaderModule{device, vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, shaderSPV}};
         }
     };
 }

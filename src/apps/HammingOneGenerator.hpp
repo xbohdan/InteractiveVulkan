@@ -44,9 +44,9 @@ public:
 
 private:
     uint32_t makeTimeBasedSeed() const;
-    void writeData(std::string_view filename, const uint32_t* data, uint32_t createCount, uint32_t length) const;
+    void writeData(std::string_view filename, const uint32_t *data, uint32_t createCount, uint32_t length) const;
 
-    const std::string appName{ "Hamming One Generator" };
+    const std::string appName{"Hamming One Generator"};
 
     uint32_t createCount;
     uint32_t changeCount;
@@ -68,8 +68,8 @@ private:
     std::shared_ptr<VmaAllocator_T> allocator;
     intvlk::vma_utils::BufferData deviceBufferData;
     vk::DeviceAddress deviceBufferAddress;
-    vk::raii::PipelineLayout computePipelineLayout{ VK_NULL_HANDLE };
+    vk::raii::PipelineLayout computePipelineLayout{VK_NULL_HANDLE};
     intvlk::glslang_utils::GlslangContext glslContext{};
-    vk::raii::Pipeline computePipeline{ VK_NULL_HANDLE };
+    vk::raii::Pipeline computePipeline{VK_NULL_HANDLE};
     intvlk::vma_utils::BufferData hostBufferData;
 };
