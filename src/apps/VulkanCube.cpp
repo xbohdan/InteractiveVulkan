@@ -18,10 +18,16 @@
 #include <thread>
 
 VulkanCube::VulkanCube(uint32_t width, uint32_t height)
-    : windowData{appName, vk::Extent2D{width, height}},
+    : VulkanApp{"Vulkan Cube"},
+
+      width{width},
+
+      height{height},
+
+      windowData{getAppName(), vk::Extent2D{width, height}},
 
       instance{intvlk::makeInstance(context,
-                                    appName,
+                                    getAppName(),
                                     "No Engine",
                                     {},
                                     intvlk::getInstanceExtensions(),
@@ -76,6 +82,9 @@ VulkanCube::VulkanCube(uint32_t width, uint32_t height)
 
       meshData{device, allocator, intvlk::glm_utils::coloredCubeData.size() * sizeof(intvlk::glm_utils::Vertex)}
 {
+    assert(width > 0);
+    assert(height > 0);
+
     meshData.vertexBuffer.upload(
         device,
         vk::raii::CommandPool{

@@ -46,11 +46,10 @@ private:
     uint32_t makeTimeBasedSeed() const;
     void writeData(std::string_view filename, const uint32_t *data, uint32_t createCount, uint32_t length) const;
 
-    const std::string appName{"Hamming One Generator"};
-
     uint32_t createCount;
     uint32_t changeCount;
     uint32_t length;
+
     vk::raii::Context context{};
     vk::raii::Instance instance;
 #if !defined(NDEBUG)

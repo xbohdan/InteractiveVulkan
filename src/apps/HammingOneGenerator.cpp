@@ -16,14 +16,16 @@
 #include "HammingOneGenerator.hpp"
 
 HammingOneGenerator::HammingOneGenerator(uint32_t createCount, uint32_t changeCount, uint32_t length)
-    : createCount{createCount},
+    : VulkanApp{"Hamming One Generator"},
+
+      createCount{createCount},
 
       changeCount{changeCount},
 
       length{length},
 
       instance{intvlk::makeInstance(context,
-                                    appName,
+                                    getAppName(),
                                     "No Engine",
                                     {},
                                     {},
@@ -82,6 +84,11 @@ HammingOneGenerator::HammingOneGenerator(uint32_t createCount, uint32_t changeCo
                      VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                          VMA_ALLOCATION_CREATE_MAPPED_BIT}
 {
+    assert(createCount > 0);
+    assert(changeCount > 0);
+    assert(length > 0);
+    assert(changeCount <= createCount / 2);
+
     vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConstants)};
 
     computePipelineLayout = vk::raii::PipelineLayout{

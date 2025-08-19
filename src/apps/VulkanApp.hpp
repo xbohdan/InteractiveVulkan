@@ -15,10 +15,23 @@
 // limitations under the License.
 //
 
+#include <string>
+
 class VulkanApp
 {
 public:
+    explicit VulkanApp(std::string appName)
+        : appName{std::move(appName)} {}
+
     virtual ~VulkanApp() = default;
 
+    std::string getAppName() const
+    {
+        return appName;
+    }
+
     virtual void run() = 0;
+
+private:
+    const std::string appName;
 };

@@ -140,7 +140,7 @@ namespace intvlk::vma_utils
             }
         }
 
-        const std::shared_ptr<VmaAllocator_T> &allocator{nullptr};
+        const std::shared_ptr<VmaAllocator_T> allocator{nullptr};
         std::shared_ptr<VmaAllocation_T> allocation{nullptr};
         vk::raii::Buffer buffer{VK_NULL_HANDLE};
         VmaAllocationInfo allocationInfo{};

@@ -36,10 +36,12 @@ private:
     intvlk::SwapchainData makeSwapchain(bool isNew);
     void remakeSwapchain();
 
-    const std::string appName{"Vulkan Cube"};
     const vk::Format drawImageFormat{vk::Format::eR16G16B16A16Sfloat};
     const vk::Extent2D drawImageExtent{1080, 1080};
     const uint32_t queuedFramesCount{2};
+
+    uint32_t width;
+    uint32_t height;
 
     uint32_t frameIndex{};
     size_t frameCount{};
