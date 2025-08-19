@@ -32,63 +32,50 @@ namespace intvlk
 {
     inline const char *const khronosValidationLayerName{"VK_LAYER_KHRONOS_validation"};
 
-    inline VKAPI_ATTR vk::Bool32 VKAPI_CALL debugUtilsMessengerCallback(
-        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-        VkDebugUtilsMessageTypeFlagsEXT messageTypes,
-        VkDebugUtilsMessengerCallbackDataEXT const *pCallbackData,
-        void * /*pUserData*/)
+    inline VKAPI_ATTR VkBool32 VKAPI_CALL debugMessageFunc(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                                                           vk::DebugUtilsMessageTypeFlagsEXT messageTypes,
+                                                           vk::DebugUtilsMessengerCallbackDataEXT const *pCallbackData,
+                                                           void * /*pUserData*/)
     {
-#if !defined(NDEBUG)
-        if (static_cast<uint32_t>(pCallbackData->messageIdNumber) == 0x822806fa)
-        {
-            // Validation Warning: vkCreateInstance(): to enable extension VK_EXT_debug_utils, but this extension is intended to support use by applications when
-            // debugging and it is strongly recommended that it be otherwise avoided.
-            return vk::False;
-        }
-        else if (static_cast<uint32_t>(pCallbackData->messageIdNumber) == 0xe8d1a9fe)
-        {
-            // Validation Performance Warning: Using debug builds of the validation layers *will* adversely affect performance.
-            return vk::False;
-        }
-#endif
+        std::string message;
 
-        std::cerr << vk::to_string(static_cast<vk::DebugUtilsMessageSeverityFlagBitsEXT>(messageSeverity)) << ": "
-                  << vk::to_string(static_cast<vk::DebugUtilsMessageTypeFlagsEXT>(messageTypes)) << ":\n";
-        std::cerr << std::string("\t") << "messageIDName   = <" << pCallbackData->pMessageIdName << ">\n";
-        std::cerr << std::string("\t") << "messageIdNumber = " << pCallbackData->messageIdNumber << "\n";
-        std::cerr << std::string("\t") << "message         = <" << pCallbackData->pMessage << ">\n";
+        message += vk::to_string(messageSeverity) + ": " + vk::to_string(messageTypes) + ":\n";
+        message += std::string("\t") + "messageIDName   = <" + pCallbackData->pMessageIdName + ">\n";
+        message += std::string("\t") + "messageIdNumber = " + std::to_string(pCallbackData->messageIdNumber) + "\n";
+        message += std::string("\t") + "message         = <" + pCallbackData->pMessage + ">\n";
         if (0 < pCallbackData->queueLabelCount)
         {
-            std::cerr << std::string("\t") << "Queue Labels:\n";
-            for (uint32_t i{0}; i < pCallbackData->queueLabelCount; i++)
+            message += std::string("\t") + "Queue Labels:\n";
+            for (uint32_t i = 0; i < pCallbackData->queueLabelCount; i++)
             {
-                std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pQueueLabels[i].pLabelName << ">\n";
+                message += std::string("\t\t") + "labelName = <" + pCallbackData->pQueueLabels[i].pLabelName + ">\n";
             }
         }
         if (0 < pCallbackData->cmdBufLabelCount)
         {
-            std::cerr << std::string("\t") << "CommandBuffer Labels:\n";
-            for (uint32_t i{0}; i < pCallbackData->cmdBufLabelCount; i++)
+            message += std::string("\t") + "CommandBuffer Labels:\n";
+            for (uint32_t i = 0; i < pCallbackData->cmdBufLabelCount; i++)
             {
-                std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pCmdBufLabels[i].pLabelName << ">\n";
+                message += std::string("\t\t") + "labelName = <" + pCallbackData->pCmdBufLabels[i].pLabelName + ">\n";
             }
         }
         if (0 < pCallbackData->objectCount)
         {
-            std::cerr << std::string("\t") << "Objects:\n";
-            for (uint32_t i{0}; i < pCallbackData->objectCount; i++)
+            for (uint32_t i = 0; i < pCallbackData->objectCount; i++)
             {
-                std::cerr << std::string("\t\t") << "Object " << i << "\n";
-                std::cerr << std::string("\t\t\t") << "objectType   = " << vk::to_string(static_cast<vk::ObjectType>(pCallbackData->pObjects[i].objectType))
-                          << "\n";
-                std::cerr << std::string("\t\t\t") << "objectHandle = " << pCallbackData->pObjects[i].objectHandle << "\n";
+                message += std::string("\t") + "Object " + std::to_string(i) + "\n";
+                message += std::string("\t\t") + "objectType   = " + vk::to_string(pCallbackData->pObjects[i].objectType) + "\n";
+                message += std::string("\t\t") + "objectHandle = " + std::to_string(pCallbackData->pObjects[i].objectHandle) + "\n";
                 if (pCallbackData->pObjects[i].pObjectName)
                 {
-                    std::cerr << std::string("\t\t\t") << "objectName   = <" << pCallbackData->pObjects[i].pObjectName << ">\n";
+                    message += std::string("\t\t") + "objectName   = <" + pCallbackData->pObjects[i].pObjectName + ">\n";
                 }
             }
         }
-        return vk::False;
+
+        std::cout << message << "\n";
+
+        return false;
     }
 
     inline void blitImage(const vk::raii::CommandBuffer &commandBuffer,
@@ -382,7 +369,7 @@ namespace intvlk
                                                     vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
                                                         vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
                                                         vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation,
-                                                    debugUtilsMessengerCallback};
+                                                    &debugMessageFunc};
     }
 
     inline vk::raii::DescriptorPool makeDescriptorPool(const vk::raii::Device &device,
@@ -643,7 +630,7 @@ namespace intvlk
                                      window)};
 #if !defined(NDEBUG)
         bool validateBestPracticesValues{false};
-        bool validateSyncValues{false};
+        bool validateSyncValues{true};
         bool printfEnableValues{false};
         bool gpuAVEnableValues{false};
         std::vector<vk::LayerSettingEXT> layerSettings{

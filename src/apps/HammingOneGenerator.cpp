@@ -147,14 +147,14 @@ void HammingOneGenerator::writeData(std::string_view filename,
 {
     if (std::ofstream file{std::string{filename}})
     {
-        file << createCount << ' ' << length << '\n';
+        file << createCount << " " << length << "\n";
         for (uint32_t i{0}; i < createCount; ++i)
         {
             for (uint32_t j{0}; j < length; ++j)
             {
                 file << data[i * length + j];
             }
-            file << '\n';
+            file << "\n";
         }
     }
 }

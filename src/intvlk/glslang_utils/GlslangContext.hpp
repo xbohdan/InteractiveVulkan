@@ -100,8 +100,8 @@ namespace intvlk::glslang_utils
 
             if (!shader.parse(GetDefaultResources(), 100, false, messages))
             {
-                std::cerr << shader.getInfoLog() << '\n'
-                          << shader.getInfoDebugLog() << '\n';
+                std::cerr << shader.getInfoLog() << "\n"
+                          << shader.getInfoDebugLog() << "\n";
                 return false;
             }
 
@@ -110,8 +110,8 @@ namespace intvlk::glslang_utils
 
             if (!program.link(messages))
             {
-                std::cerr << shader.getInfoLog() << '\n'
-                          << shader.getInfoDebugLog() << '\n';
+                std::cerr << shader.getInfoLog() << "\n"
+                          << shader.getInfoDebugLog() << "\n";
                 return false;
             }
 

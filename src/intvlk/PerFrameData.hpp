@@ -33,8 +33,7 @@ namespace intvlk
             : commandPool{device, vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, queueFamilyIndex}},
               commandBuffer{makeCommandBuffer(device, commandPool)},
               fence{device, vk::FenceCreateInfo{vk::FenceCreateFlagBits::eSignaled}},
-              presentCompleteSemaphore{device, vk::SemaphoreCreateInfo{}},
-              renderCompleteSemaphore{device, vk::SemaphoreCreateInfo{}}
+              acquireSemaphore{device, vk::SemaphoreCreateInfo{}}
         {
         }
 
@@ -54,7 +53,6 @@ namespace intvlk
         vk::raii::CommandPool commandPool{VK_NULL_HANDLE};
         vk::raii::CommandBuffer commandBuffer{nullptr};
         vk::raii::Fence fence{VK_NULL_HANDLE};
-        vk::raii::Semaphore presentCompleteSemaphore{VK_NULL_HANDLE};
-        vk::raii::Semaphore renderCompleteSemaphore{VK_NULL_HANDLE};
+        vk::raii::Semaphore acquireSemaphore{VK_NULL_HANDLE};
     };
 }

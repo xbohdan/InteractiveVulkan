@@ -206,7 +206,7 @@ void VulkanCube::draw()
     {
         std::tie(result, backBufferIndex) = swapchainData.swapchain.acquireNextImage(
             std::numeric_limits<uint64_t>::max(),
-            perFrameData[frameIndex].presentCompleteSemaphore);
+            perFrameData[frameIndex].acquireSemaphore);
     }
     catch (const vk::OutOfDateKHRError &)
     {
@@ -264,11 +264,11 @@ void VulkanCube::draw()
 
     vk::CommandBufferSubmitInfo commandBufferSubmitInfo{commandBuffer};
 
-    vk::SemaphoreSubmitInfo waitSemaphoreInfo{perFrameData[frameIndex].presentCompleteSemaphore,
+    vk::SemaphoreSubmitInfo waitSemaphoreInfo{perFrameData[frameIndex].acquireSemaphore,
                                               1,
                                               vk::PipelineStageFlagBits2::eColorAttachmentOutput};
 
-    vk::SemaphoreSubmitInfo signalSemaphoreInfo{perFrameData[frameIndex].renderCompleteSemaphore,
+    vk::SemaphoreSubmitInfo signalSemaphoreInfo{swapchainData.submitSemaphores[backBufferIndex],
                                                 1,
                                                 vk::PipelineStageFlagBits2::eAllGraphics};
 
@@ -276,7 +276,7 @@ void VulkanCube::draw()
 
     graphicsQueue.submit2(submitInfo, perFrameData[frameIndex].fence);
 
-    vk::PresentInfoKHR presentInfo{*perFrameData[frameIndex].renderCompleteSemaphore,
+    vk::PresentInfoKHR presentInfo{*swapchainData.submitSemaphores[backBufferIndex],
                                    *swapchainData.swapchain,
                                    backBufferIndex};
 

@@ -100,8 +100,9 @@ namespace intvlk
             swapchain = vk::raii::SwapchainKHR{device, swapchainCreateInfo};
 
             images = swapchain.getImages();
+            uint32_t imageCount{static_cast<uint32_t>(images.size())};
 
-            imageViews.reserve(images.size());
+            imageViews.reserve(imageCount);
             vk::ImageViewCreateInfo imageViewCreateInfo{
                 vk::ImageViewCreateFlags{},
                 vk::Image{},
@@ -114,6 +115,12 @@ namespace intvlk
                 imageViewCreateInfo.image = image;
                 imageViews.emplace_back(device, imageViewCreateInfo);
             }
+
+            submitSemaphores.reserve(imageCount);
+            for (size_t i{0}; i < imageCount; ++i)
+            {
+                submitSemaphores.emplace_back(device, vk::SemaphoreCreateInfo{});
+            }
         }
 
         vk::Format colorFormat{};
@@ -121,5 +128,6 @@ namespace intvlk
         vk::raii::SwapchainKHR swapchain{VK_NULL_HANDLE};
         std::vector<vk::Image> images{};
         std::vector<vk::raii::ImageView> imageViews{};
+        std::vector<vk::raii::Semaphore> submitSemaphores{};
     };
 }

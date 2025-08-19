@@ -29,17 +29,17 @@ int main(int /*argc*/, char ** /*argv*/)
     }
     catch (const intvlk::Error &e)
     {
-        std::cerr << "intvlk::Error: " << e.what() << '\n';
+        std::cerr << "intvlk::Error: " << e.what() << "\n";
         return EXIT_FAILURE;
     }
     catch (const vk::Error &e)
     {
-        std::cerr << "vk::Error: " << e.what() << '\n';
+        std::cerr << "vk::Error: " << e.what() << "\n";
         return EXIT_FAILURE;
     }
     catch (const std::exception &e)
     {
-        std::cerr << "std::exception: " << e.what() << '\n';
+        std::cerr << "std::exception: " << e.what() << "\n";
         return EXIT_FAILURE;
     }
     catch (...)
