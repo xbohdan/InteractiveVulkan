@@ -28,9 +28,9 @@ enum class Algorithm : uint32_t
 class PushConstants
 {
 public:
-    uint32_t seed;
-    Algorithm algorithm;
-    vk::DeviceAddress ssbo;
+    uint32_t seed{};
+    Algorithm algorithm{Algorithm::eCreate};
+    vk::DeviceAddress ssbo{};
 };
 
 class HammingOneGenerator : public VulkanApp
@@ -44,7 +44,7 @@ public:
 
 private:
     uint32_t makeTimeBasedSeed() const;
-    void writeData(std::string_view filename, const uint32_t *data, uint32_t createCount, uint32_t length) const;
+    void writeData(std::string_view fileName, const uint32_t *data, uint32_t createCount, uint32_t length) const;
 
     uint32_t createCount;
     uint32_t changeCount;
@@ -67,8 +67,8 @@ private:
     std::shared_ptr<VmaAllocator_T> allocator;
     intvlk::vma_utils::BufferData deviceBufferData;
     vk::DeviceAddress deviceBufferAddress;
+    intvlk::vma_utils::BufferData hostBufferData;
     vk::raii::PipelineLayout computePipelineLayout{VK_NULL_HANDLE};
     intvlk::glslang_utils::GlslangContext glslContext{};
     vk::raii::Pipeline computePipeline{VK_NULL_HANDLE};
-    intvlk::vma_utils::BufferData hostBufferData;
 };

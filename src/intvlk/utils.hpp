@@ -476,7 +476,7 @@ namespace intvlk
         if (0 < vertexStride)
         {
             vertexInputAttributeDescriptions.reserve(vertexInputAttributeFormatOffset.size());
-            for (uint32_t i{0}; i < vertexInputAttributeFormatOffset.size(); ++i)
+            for (size_t i{0}; i < vertexInputAttributeFormatOffset.size(); ++i)
             {
                 vertexInputAttributeDescriptions.emplace_back(i,
                                                               0,
@@ -755,18 +755,16 @@ namespace intvlk
         return pickedFormat;
     }
 
-    inline std::string readFile(std::string_view filename)
+    inline std::string readFile(std::string_view fileName)
     {
         std::string shaderCode{};
-        if (std::ifstream file{std::string{filename}, std::ios::ate})
-        {
-            const auto fileSize{static_cast<size_t>(file.tellg())};
-            shaderCode.resize(fileSize);
-            file.seekg(0);
-            file.read(shaderCode.data(), fileSize);
-            return shaderCode;
-        }
-        throw std::runtime_error("Failed to open file: " + std::string{filename});
+        std::ifstream file{std::string{fileName}, std::ios::ate};
+        file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        const auto fileSize{static_cast<size_t>(file.tellg())};
+        shaderCode.resize(fileSize);
+        file.seekg(0);
+        file.read(shaderCode.data(), fileSize);
+        return shaderCode;
     }
 
     inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,

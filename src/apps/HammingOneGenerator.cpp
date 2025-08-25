@@ -68,8 +68,7 @@ HammingOneGenerator::HammingOneGenerator(uint32_t createCount, uint32_t changeCo
                            vk::BufferUsageFlagBits::eShaderDeviceAddress,
                        VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
                        {},
-                       VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                           VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT},
+                       VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT},
 
       deviceBufferAddress{device.getBufferAddress(vk::BufferDeviceAddressInfo{deviceBufferData.buffer})},
 
@@ -81,7 +80,7 @@ HammingOneGenerator::HammingOneGenerator(uint32_t createCount, uint32_t changeCo
                          vk::BufferUsageFlagBits::eShaderDeviceAddress,
                      VMA_MEMORY_USAGE_AUTO,
                      {},
-                     VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
                          VMA_ALLOCATION_CREATE_MAPPED_BIT}
 {
     assert(createCount > 0);
@@ -140,17 +139,17 @@ uint32_t HammingOneGenerator::makeTimeBasedSeed() const
            ((1 << 23) - 1);
 }
 
-void HammingOneGenerator::writeData(std::string_view filename,
+void HammingOneGenerator::writeData(std::string_view fileName,
                                     const uint32_t *data,
                                     uint32_t createCount,
                                     uint32_t length) const
 {
-    if (std::ofstream file{std::string{filename}})
+    if (std::ofstream file{std::string{fileName}})
     {
         file << createCount << " " << length << "\n";
-        for (uint32_t i{0}; i < createCount; ++i)
+        for (size_t i{0}; i < createCount; ++i)
         {
-            for (uint32_t j{0}; j < length; ++j)
+            for (size_t j{0}; j < length; ++j)
             {
                 file << data[i * length + j];
             }

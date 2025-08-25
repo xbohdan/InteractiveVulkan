@@ -109,7 +109,7 @@ namespace intvlk::vma_utils
             return {std::move(image), allocation};
         }
 
-        const std::shared_ptr<VmaAllocator_T> allocator{nullptr};
+        std::shared_ptr<VmaAllocator_T> allocator{nullptr};
         std::shared_ptr<VmaAllocation_T> allocation{nullptr};
         vk::raii::Image image{VK_NULL_HANDLE};
         vk::raii::ImageView imageView{VK_NULL_HANDLE};
