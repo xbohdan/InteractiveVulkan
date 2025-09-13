@@ -16,5 +16,6 @@
 //
 
 #include "apps/VulkanApp.hpp"
-#include "apps/VulkanCube.hpp"
-#include "apps/HammingOneGenerator.hpp"
+#include "apps/BitGenerator.hpp"
+#include "apps/Cube.hpp"
+#include "apps/HammingNeighbor.hpp"

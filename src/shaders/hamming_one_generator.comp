@@ -9,13 +9,15 @@ layout(local_size_x_id = 0) in;
 
 layout(constant_id = 1) const uint createCount = 0;
 layout(constant_id = 2) const uint changeCount = 0;
-layout(constant_id = 3) const uint length = 0;
+layout(constant_id = 3) const uint length_ = 0;
 
-layout(buffer_reference, std430) buffer SSBO {
+layout(buffer_reference, std430) buffer SSBO
+{
 	uint data[];
 };
 
-layout(push_constant) uniform UBO {
+layout(push_constant) uniform UBO
+{
 	uint seed;
 	uint algorithm;
 	SSBO ssbo;
@@ -49,8 +51,8 @@ float random(uint x)
 void create()
 {
 	const uint id = gl_GlobalInvocationID.x;
-	const uint size = createCount * length;
-	const uint part = changeCount * length;
+	const uint size = createCount * length_;
+	const uint part = changeCount * length_;
 	if (id < size - part)
 	{
 		const uint value = uint(random(seed * id) * 2.0f);
@@ -67,8 +69,8 @@ void change()
 	const uint id = gl_GlobalInvocationID.x;
 	if (id < changeCount)
 	{
-		uint pos = uint(random(seed * id) * length);
-		ssbo.data[id * length + pos] ^= 1;
+		uint pos = uint(random(seed * id) * length_);
+		ssbo.data[id * length_ + pos] ^= 1;
 	}
 }
 

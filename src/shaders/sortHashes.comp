@@ -1,0 +1,175 @@
+// This work is adapted from compute.glsl (c) 2024 by Tim Gfrerer, used under MIT.
+// Copyright(c) 2025, Bohdan Soproniuk
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+#version 450
+
+#extension GL_EXT_buffer_reference : require
+
+#define eLocalBitonicMergeSort 0
+#define eLocalDisperse 1
+#define eGlobalFlip 2
+#define eGlobalDisperse 3
+
+struct Hash
+{
+    uint id;
+    uint hash1;
+    uint hash2;
+};
+
+layout(local_size_x_id = 0) in;
+shared Hash local_values[gl_WorkGroupSize.x * 2];
+
+layout(buffer_reference, std430) buffer HashBuffer
+{
+    Hash values[];
+};
+
+layout(push_constant) uniform ParameterBlock
+{
+    uint height;
+    uint algorithm;
+    HashBuffer hb;
+};
+
+bool less(const Hash left, const Hash right)
+{
+    if (left.hash1 < right.hash1)
+    {
+        return true;
+    }
+    if (left.hash1 == right.hash1)
+    {
+        return left.hash2 < right.hash2;
+    }
+    return false;
+}
+
+void global_compare_and_swap(ivec2 idx)
+{
+    if (less(hb.values[idx.y], hb.values[idx.x]))
+    {
+        Hash tmp = hb.values[idx.x];
+        hb.values[idx.x] = hb.values[idx.y];
+        hb.values[idx.y] = tmp;
+    }
+}
+
+void local_compare_and_swap(ivec2 idx)
+{
+    if (less(local_values[idx.y], local_values[idx.x]))
+    {
+        Hash tmp = local_values[idx.x];
+        local_values[idx.x] = local_values[idx.y];
+        local_values[idx.y] = tmp;
+    }
+}
+
+void global_flip(uint h)
+{
+    uint t_prime = gl_GlobalInvocationID.x;
+    uint half_h = h / 2;
+    uint q = 2 * t_prime / h * h;
+    uint x = q + t_prime % half_h;
+    uint y = q + h - t_prime % half_h - 1;
+
+    global_compare_and_swap(ivec2(x, y));
+}
+
+void global_disperse(uint h)
+{
+    uint t_prime = gl_GlobalInvocationID.x;
+    uint half_h = h / 2;
+    uint q = 2 * t_prime / h * h;
+    uint x = q + t_prime % half_h;
+    uint y = q + t_prime % half_h + half_h;
+
+    global_compare_and_swap(ivec2(x, y));
+}
+
+void local_flip(uint h)
+{
+    uint t = gl_LocalInvocationID.x;
+    barrier();
+
+    uint half_h = h / 2;
+    ivec2 indices =
+        ivec2(h * (2 * t / h)) +
+        ivec2(t % half_h, h - 1 - t % half_h);
+
+    local_compare_and_swap(indices);
+}
+
+void local_disperse(uint h)
+{
+    uint t = gl_LocalInvocationID.x;
+    for (; h > 1; h /= 2)
+    {
+        barrier();
+
+        uint half_h = h / 2;
+        ivec2 indices =
+            ivec2(h * (2 * t / h)) +
+            ivec2(t % half_h, half_h + t % half_h);
+
+        local_compare_and_swap(indices);
+    }
+}
+
+void local_bms(uint h)
+{
+    uint t = gl_LocalInvocationID.x;
+    for (uint hh = 2; hh <= h; hh *= 2)
+    {
+        local_flip(hh);
+        local_disperse(hh / 2);
+    }
+}
+
+void main() {
+    uint t = gl_LocalInvocationID.x;
+    uint offset = gl_WorkGroupSize.x * 2 * gl_WorkGroupID.x;
+
+    if (algorithm <= eLocalDisperse)
+    {
+        local_values[t * 2] = hb.values[offset + t * 2];
+        local_values[t * 2 + 1] = hb.values[offset + t * 2 + 1];
+    }
+
+    switch (algorithm)
+    {
+    case eLocalBitonicMergeSort:
+        local_bms(height);
+        break;
+    case eLocalDisperse:
+        local_disperse(height);
+        break;
+    case eGlobalFlip:
+        global_flip(height);
+        break;
+    case eGlobalDisperse:
+        global_disperse(height);
+        break;
+    }
+
+    if (algorithm <= eLocalDisperse)
+    {
+        barrier();
+
+        hb.values[offset + t * 2] = local_values[t * 2];
+        hb.values[offset + t * 2 + 1] = local_values[t * 2 + 1];
+    }
+}

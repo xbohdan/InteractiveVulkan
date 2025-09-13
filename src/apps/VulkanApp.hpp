@@ -17,21 +17,24 @@
 
 #include <string>
 
-class VulkanApp
+namespace apps::vulkan_app
 {
-public:
-    explicit VulkanApp(std::string appName)
-        : appName{std::move(appName)} {}
-
-    virtual ~VulkanApp() = default;
-
-    std::string getAppName() const
+    class VulkanApp
     {
-        return appName;
-    }
+    public:
+        explicit VulkanApp(std::string appName)
+            : appName{std::move(appName)} {}
 
-    virtual void run() = 0;
+        virtual ~VulkanApp() = default;
 
-private:
-    const std::string appName;
-};
+        std::string getAppName() const
+        {
+            return appName;
+        }
+
+        virtual void run() = 0;
+
+    private:
+        const std::string appName;
+    };
+}
