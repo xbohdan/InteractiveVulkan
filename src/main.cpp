@@ -21,11 +21,9 @@ int main(int /*argc*/, char ** /*argv*/)
 {
     try
     {
-        //        const uint32_t width{900};
-        //        const uint32_t height{600};
-        //        Cube a{width, height};
-        //apps::bit_generator::BitGenerator a{1024, 256, 64};
-        apps::hamming_neighbor::HammingNeighbor a{"hamming_one.txt"};
+        const uint32_t width{900};
+        const uint32_t height{600};
+        apps::static_cube::StaticCube a{width, height};
         apps::vulkan_app::VulkanApp &app{a};
         app.run();
     }

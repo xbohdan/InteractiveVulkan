@@ -112,7 +112,7 @@ namespace apps::bit_generator
         vk::raii::ShaderModule computeShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eCompute,
-            intvlk::readFile("src/shaders/hamming_one_generator.comp"))};
+            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/BitGenerator/bit_generator.comp"))};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{vk::PipelineShaderStageCreateFlags{},
                                                                         vk::ShaderStageFlagBits::eCompute,

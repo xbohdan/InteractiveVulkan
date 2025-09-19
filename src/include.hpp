@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp.hpp"
-#include "apps/BitGenerator.hpp"
-#include "apps/Cube.hpp"
-#include "apps/HammingNeighbor.hpp"
+#include "apps/VulkanApp/VulkanApp.hpp"
+#include "apps/BitGenerator/BitGenerator.hpp"
+#include "apps/HammingNeighbors/HammingNeighbors.hpp"
+#include "apps/StaticCube/StaticCube.hpp"

@@ -30,8 +30,13 @@ struct Hash
     uint hash2;
 };
 
+
+// layout(local_size_x_id = 0) in;
+// shared Hash local_values[gl_WorkGroupSize.x * 2];
+
+layout(constant_id = 0) const uint WORK_GROUP_SIZE = 1;
 layout(local_size_x_id = 0) in;
-shared Hash local_values[gl_WorkGroupSize.x * 2];
+shared Hash local_values[WORK_GROUP_SIZE * 2];
 
 layout(buffer_reference, std430) buffer HashBuffer
 {

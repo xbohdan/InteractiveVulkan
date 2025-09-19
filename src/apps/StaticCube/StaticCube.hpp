@@ -19,14 +19,14 @@
 
 #include "VulkanApp.hpp"
 
-namespace apps::cube
+namespace apps::static_cube
 {
-    class Cube final : public apps::vulkan_app::VulkanApp
+    class StaticCube final : public apps::vulkan_app::VulkanApp
     {
     public:
-        Cube(uint32_t width, uint32_t height);
+        StaticCube(uint32_t width, uint32_t height);
 
-        ~Cube() override;
+        ~StaticCube() override;
 
         void run() override;
 

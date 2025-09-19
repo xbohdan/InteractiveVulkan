@@ -13,14 +13,14 @@
 // limitations under the License.
 //
 
-#include "Cube.hpp"
+#include "StaticCube.hpp"
 
 #include <thread>
 
-namespace apps::cube
+namespace apps::static_cube
 {
-    Cube::Cube(uint32_t width, uint32_t height)
-        : VulkanApp{"Cube"},
+    StaticCube::StaticCube(uint32_t width, uint32_t height)
+        : VulkanApp{"Static Cube"},
 
           width{width},
 
@@ -98,12 +98,12 @@ namespace apps::cube
         makeGraphicsPipeline();
     }
 
-    Cube::~Cube()
+    StaticCube::~StaticCube()
     {
         device.waitIdle();
     }
 
-    void Cube::run()
+    void StaticCube::run()
     {
         SDL_Event e{};
 
@@ -144,7 +144,7 @@ namespace apps::cube
         }
     }
 
-    void Cube::drawGeometry(const vk::raii::CommandBuffer &commandBuffer) const
+    void StaticCube::drawGeometry(const vk::raii::CommandBuffer &commandBuffer) const
     {
         vk::RenderingAttachmentInfo colorAttachment{drawImage.imageView, vk::ImageLayout::eColorAttachmentOptimal};
 
@@ -194,7 +194,7 @@ namespace apps::cube
         commandBuffer.endRendering();
     }
 
-    void Cube::draw()
+    void StaticCube::draw()
     {
         while (vk::Result::eTimeout == device.waitForFences(*perFrameData[frameIndex].fence,
                                                             vk::True,
@@ -299,7 +299,7 @@ namespace apps::cube
         assert(result == vk::Result::eSuccess);
     }
 
-    void Cube::makeGraphicsPipeline()
+    void StaticCube::makeGraphicsPipeline()
     {
         intvlk::glslang_utils::GlslangContext glslContext{};
 
@@ -313,11 +313,11 @@ namespace apps::cube
         vk::raii::ShaderModule vertexShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eVertex,
-            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/shaders/vulkan_cube.vert"))};
+            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/StaticCube/static_cube.vert"))};
         vk::raii::ShaderModule fragmentShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eFragment,
-            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/shaders/vulkan_cube.frag"))};
+            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/StaticCube/static_cube.frag"))};
 
         vk::raii::PipelineCache pipelineCache{device, vk::PipelineCacheCreateInfo{}};
         pipeline = intvlk::makeGraphicsPipeline(device,
@@ -335,7 +335,7 @@ namespace apps::cube
                                                 depthAttachmentData.format);
     }
 
-    intvlk::SwapchainData Cube::makeSwapchain(bool isNew)
+    intvlk::SwapchainData StaticCube::makeSwapchain(bool isNew)
     {
         device.waitIdle();
         return intvlk::SwapchainData{physicalDevice,
@@ -349,7 +349,7 @@ namespace apps::cube
                                      vk::PresentModeKHR::eMailbox};
     }
 
-    void Cube::remakeSwapchain()
+    void StaticCube::remakeSwapchain()
     {
         try
         {

@@ -13,12 +13,12 @@
 // limitations under the License.
 //
 
-#include "HammingNeighbor.hpp"
+#include "HammingNeighbors.hpp"
 
-namespace apps::hamming_neighbor
+namespace apps::hamming_neighbors
 {
-    HammingNeighbor::HammingNeighbor(std::string fileName)
-        : VulkanApp{"Hamming One"},
+    HammingNeighbors::HammingNeighbors(std::string fileName)
+        : VulkanApp{"Hamming Neighbors"},
 
           fileName{std::move(fileName)},
 
@@ -58,12 +58,12 @@ namespace apps::hamming_neighbor
         assert(!this->fileName.empty());
     }
 
-    HammingNeighbor::~HammingNeighbor()
+    HammingNeighbors::~HammingNeighbors()
     {
         device.waitIdle();
     }
 
-    void HammingNeighbor::run()
+    void HammingNeighbors::run()
     {
         std::vector<uint32_t> data{};
         std::tie(count, length, data) = readFile(fileName);
@@ -87,7 +87,6 @@ namespace apps::hamming_neighbor
             allocator,
             count * sizeof(Hash),
             vk::BufferUsageFlagBits::eStorageBuffer |
-                vk::BufferUsageFlagBits::eTransferSrc |
                 vk::BufferUsageFlagBits::eShaderDeviceAddress,
             VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
             {},
@@ -100,7 +99,6 @@ namespace apps::hamming_neighbor
             allocator,
             sizeof(uint32_t),
             vk::BufferUsageFlagBits::eStorageBuffer |
-                vk::BufferUsageFlagBits::eTransferDst |
                 vk::BufferUsageFlagBits::eShaderDeviceAddress,
             VMA_MEMORY_USAGE_AUTO,
             {},
@@ -123,35 +121,7 @@ namespace apps::hamming_neighbor
             VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
                 VMA_ALLOCATION_CREATE_MAPPED_BIT};
 
-        intvlk::oneTimeSubmit(device,
-                              commandPool,
-                              computeQueue,
-                              [&, this](const vk::raii::CommandBuffer &cb)
-                              { cb.copyBuffer(
-                                    hashBufferData.buffer,
-                                    hostBufferData.buffer,
-                                    vk::BufferCopy{0, 0, count * sizeof(Hash)}); });
-        const auto *out{static_cast<const Hash *>(hostBufferData.allocationInfo.pMappedData)};
-        for (size_t i = 0; i < count; i++)
-        {
-            std::cout << "Hash " << out[i].id << ": " << out[i].hash1 << ", " << out[i].hash2 << "\n";
-        }
-
         runSortHashesPipeline();
-
-        intvlk::oneTimeSubmit(device,
-                              commandPool,
-                              computeQueue,
-                              [&, this](const vk::raii::CommandBuffer &cb)
-                              { cb.copyBuffer(
-                                    hashBufferData.buffer,
-                                    hostBufferData.buffer,
-                                    vk::BufferCopy{0, 0, count * sizeof(Hash)}); });
-        const auto *out2 = static_cast<const Hash *>(hostBufferData.allocationInfo.pMappedData);
-        for (size_t i = 0; i < count; i++)
-        {
-            std::cout << "Hash " << out2[i].id << ": " << out2[i].hash1 << ", " << out2[i].hash2 << "\n";
-        }
 
         runPipeline(PipelineType::FindHammingNeighbors);
 
@@ -159,7 +129,7 @@ namespace apps::hamming_neighbor
         std::cout << "Result: " << *result << "\n";
     }
 
-    std::tuple<uint32_t, vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbor::makePipeline(PipelineType pipelineType) const
+    std::tuple<uint32_t, vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makePipeline(PipelineType pipelineType) const
     {
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConsts)};
 
@@ -183,8 +153,8 @@ namespace apps::hamming_neighbor
             specializationData.data()};
 
         std::string shaderPath{pipelineType == PipelineType::GenerateHashes
-                                   ? "src/shaders/generateHashes.comp"
-                                   : "src/shaders/findHammingNeighbors.comp"};
+                                   ? "/Users/skylar/xcode/InteractiveVulkan/src/apps/HammingNeighbors/generate_hashes.comp"
+                                   : "/Users/skylar/xcode/InteractiveVulkan/src/apps/HammingNeighbors/find_hamming_neighbors.comp"};
 
         vk::raii::ShaderModule computeShaderModule{
             glslContext.makeShaderModule(
@@ -209,7 +179,7 @@ namespace apps::hamming_neighbor
         return {workGroupSize, std::move(computePipelineLayout), std::move(computePipeline)};
     }
 
-    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbor::makeSortHashesPipeline(uint32_t pushConstantSize, uint32_t workGroupSize) const
+    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makeSortHashesPipeline(uint32_t pushConstantSize, uint32_t workGroupSize) const
     {
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, pushConstantSize};
 
@@ -221,13 +191,13 @@ namespace apps::hamming_neighbor
 
         vk::SpecializationInfo specializationInfo{1, &specializationMapEntry, sizeof(uint32_t), &workGroupSize};
 
-        //std::vector<uint32_t> shaderCode{intvlk::readBinaryFile("src/shaders/sortHashes.comp.spv")};
+        // std::vector<uint32_t> shaderCode{intvlk::readBinaryFile("src/shaders/sortHashes.comp.spv")};
 
         vk::raii::ShaderModule computeShaderModule{
             glslContext.makeShaderModule(
                 device,
                 vk::ShaderStageFlagBits::eCompute,
-                intvlk::readFile("src/shaders/sortHashes.comp")) };
+                intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/HammingNeighbors/sort_hashes.comp"))};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{
             vk::PipelineShaderStageCreateFlags{},
@@ -246,7 +216,7 @@ namespace apps::hamming_neighbor
         return {std::move(computePipelineLayout), std::move(computePipeline)};
     }
 
-    std::tuple<uint32_t, uint32_t, std::vector<uint32_t>> HammingNeighbor::readFile(std::string_view fileName) const
+    std::tuple<uint32_t, uint32_t, std::vector<uint32_t>> HammingNeighbors::readFile(std::string_view fileName) const
     {
         std::ifstream file{std::string{fileName}};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
@@ -272,7 +242,7 @@ namespace apps::hamming_neighbor
         return {count, length, std::move(data)};
     }
 
-    void HammingNeighbor::runPipeline(PipelineType pipelineType)
+    void HammingNeighbors::runPipeline(PipelineType pipelineType)
     {
         auto [workGroupSize, pipelineLayout, pipeline] = makePipeline(pipelineType);
 
@@ -297,7 +267,7 @@ namespace apps::hamming_neighbor
         computeQueue.waitIdle();
     }
 
-    void HammingNeighbor::runSortHashesPipeline()
+    void HammingNeighbors::runSortHashesPipeline()
     {
         const uint32_t workGroupSize{std::min(
             physicalDevice.getProperties().limits.maxComputeWorkGroupSize[0],
@@ -309,7 +279,7 @@ namespace apps::hamming_neighbor
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
         commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
 
-        uint32_t workGroupCount{ count / (workGroupSize * 2) };
+        uint32_t workGroupCount{count / (workGroupSize * 2)};
 
         auto dispatch = [workGroupCount, &pipelineLayout, &commandBuffer, this](uint32_t h, PushConstants::Algorithm algorithm)
         {

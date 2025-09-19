@@ -84,6 +84,10 @@ void main()
     const uint id = gl_GlobalInvocationID.x;
     if (id < count)
     {
+        if (id == 0)
+        {
+            atomicExchange(rb.result, 0);
+        }
         uint coeff1 = base1;
         uint coeff2 = 1;
         for (uint i = 0; i < length_; ++i)

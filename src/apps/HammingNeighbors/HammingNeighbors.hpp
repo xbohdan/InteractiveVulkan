@@ -19,7 +19,7 @@
 
 #include "VulkanApp.hpp"
 
-namespace apps::hamming_neighbor
+namespace apps::hamming_neighbors
 {
     enum class PipelineType
     {
@@ -59,12 +59,12 @@ namespace apps::hamming_neighbor
         vk::DeviceAddress hashBufferAddress;
     };
 
-    class HammingNeighbor final : public apps::vulkan_app::VulkanApp
+    class HammingNeighbors final : public apps::vulkan_app::VulkanApp
     {
     public:
-        explicit HammingNeighbor(std::string fileName);
+        explicit HammingNeighbors(std::string fileName);
 
-        ~HammingNeighbor() override;
+        ~HammingNeighbors() override;
 
         void run() override;
 
