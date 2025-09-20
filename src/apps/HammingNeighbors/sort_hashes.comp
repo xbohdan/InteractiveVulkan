@@ -134,9 +134,8 @@ void local_disperse(uint h)
     }
 }
 
-void local_bms(uint h)
+void local_bitonic_merge_sort(uint h)
 {
-    uint t = gl_LocalInvocationID.x;
     for (uint hh = 2; hh <= h; hh *= 2)
     {
         local_flip(hh);
@@ -157,7 +156,7 @@ void main() {
     switch (algorithm)
     {
     case eLocalBitonicMergeSort:
-        local_bms(height);
+        local_bitonic_merge_sort(height);
         break;
     case eLocalDisperse:
         local_disperse(height);

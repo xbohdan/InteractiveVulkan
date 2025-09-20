@@ -65,8 +65,49 @@ namespace apps::hamming_neighbors
 
     void HammingNeighbors::run()
     {
+        makeSymbolBuffer();
+
+        makeHashBuffer();
+
+        makeResultBuffer();
+
+        runPipeline(PipelineType::GenerateHashes);
+
+        runSortHashesPipeline();
+
+        runPipeline(PipelineType::FindHammingNeighbors);
+
+        printResult();
+    }
+
+    std::vector<uint32_t> HammingNeighbors::readData(std::string_view fileName)
+    {
+        std::ifstream file{std::string{fileName}};
+        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+        file >> count >> length;
+        // This bitonic mergesort works for any power-of-two number of elements, up to 1024
+        assert(count > 0 && count <= 1024);
+        assert((count & (count - 1)) == 0);
+        assert(length > 0);
+
         std::vector<uint32_t> data{};
-        std::tie(count, length, data) = readFile(fileName);
+        data.resize(count * length);
+        for (size_t i{0}; i < count; ++i)
+        {
+            for (size_t j{0}; j < length; ++j)
+            {
+                char c{};
+                file >> c;
+                data[i * length + j] = c == '1' ? 1 : 2;
+            }
+        }
+
+        return std::move(data);
+    }
+
+    void HammingNeighbors::makeSymbolBuffer()
+    {
+        std::vector<uint32_t> data{readData(fileName)};
 
         symbolBufferData = intvlk::vma_utils::BufferData{
             device,
@@ -80,8 +121,12 @@ namespace apps::hamming_neighbors
             VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT};
 
         symbolBufferData.upload(device, commandPool, computeQueue, data);
-        symbolBufferAddress = device.getBufferAddress(vk::BufferDeviceAddressInfo{symbolBufferData.buffer});
 
+        symbolBufferAddress = device.getBufferAddress(vk::BufferDeviceAddressInfo{symbolBufferData.buffer});
+    }
+
+    void HammingNeighbors::makeHashBuffer()
+    {
         hashBufferData = intvlk::vma_utils::BufferData{
             device,
             allocator,
@@ -93,43 +138,25 @@ namespace apps::hamming_neighbors
             VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT};
 
         hashBufferAddress = device.getBufferAddress(vk::BufferDeviceAddressInfo{hashBufferData.buffer});
+    }
 
+    void HammingNeighbors::makeResultBuffer()
+    {
         resultBufferData = intvlk::vma_utils::BufferData{
             device,
             allocator,
             sizeof(uint32_t),
             vk::BufferUsageFlagBits::eStorageBuffer |
+                vk::BufferUsageFlagBits::eTransferSrc |
                 vk::BufferUsageFlagBits::eShaderDeviceAddress,
-            VMA_MEMORY_USAGE_AUTO,
+            VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
             {},
-            VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                VMA_ALLOCATION_CREATE_MAPPED_BIT};
+            VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT};
 
         resultBufferAddress = device.getBufferAddress(vk::BufferDeviceAddressInfo{resultBufferData.buffer});
-
-        runPipeline(PipelineType::GenerateHashes);
-
-        intvlk::vma_utils::BufferData hostBufferData{
-            device,
-            allocator,
-            count * sizeof(Hash),
-            vk::BufferUsageFlagBits::eTransferSrc |
-                vk::BufferUsageFlagBits::eTransferDst |
-                vk::BufferUsageFlagBits::eShaderDeviceAddress,
-            VMA_MEMORY_USAGE_AUTO,
-            {},
-            VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                VMA_ALLOCATION_CREATE_MAPPED_BIT};
-
-        runSortHashesPipeline();
-
-        runPipeline(PipelineType::FindHammingNeighbors);
-
-        const auto *result{static_cast<const uint32_t *>(resultBufferData.allocationInfo.pMappedData)};
-        std::cout << "Result: " << *result << "\n";
     }
 
-    std::tuple<uint32_t, vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makePipeline(PipelineType pipelineType) const
+    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makePipeline(PipelineType pipelineType, uint32_t workGroupSize) const
     {
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConsts)};
 
@@ -141,8 +168,6 @@ namespace apps::hamming_neighbors
             {0, 0, sizeof(uint32_t)},
             {1, sizeof(uint32_t), sizeof(uint32_t)},
             {2, 2 * sizeof(uint32_t), sizeof(uint32_t)}};
-
-        const uint32_t workGroupSize{physicalDevice.getProperties().limits.maxComputeWorkGroupSize[0]};
 
         const std::vector<uint32_t> specializationData{workGroupSize, count, length};
 
@@ -176,7 +201,33 @@ namespace apps::hamming_neighbors
 
         vk::raii::Pipeline computePipeline{device, nullptr, computePipelineCreateInfo};
 
-        return {workGroupSize, std::move(computePipelineLayout), std::move(computePipeline)};
+        return {std::move(computePipelineLayout), std::move(computePipeline)};
+    }
+
+    void HammingNeighbors::runPipeline(PipelineType pipelineType)
+    {
+        const uint32_t workGroupSize{physicalDevice.getProperties().limits.maxComputeWorkGroupSize[0]};
+        auto [pipelineLayout, pipeline] = makePipeline(pipelineType, workGroupSize);
+
+        vk::raii::CommandBuffer commandBuffer{intvlk::makeCommandBuffer(device, commandPool)};
+        commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
+        commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
+        commandBuffer.pushConstants<PushConsts>(
+            pipelineLayout,
+            vk::ShaderStageFlagBits::eCompute,
+            0,
+            PushConsts{
+                symbolBufferAddress,
+                hashBufferAddress,
+                resultBufferAddress});
+        uint32_t workGroupCount{(count + workGroupSize - 1) / workGroupSize};
+        commandBuffer.dispatch(workGroupCount, 1, 1);
+        commandBuffer.end();
+
+        vk::CommandBufferSubmitInfo commandBufferSubmitInfo{commandBuffer};
+        vk::SubmitInfo2 submitInfo{vk::SubmitFlags{}, {}, commandBufferSubmitInfo, {}};
+        computeQueue.submit2(submitInfo);
+        computeQueue.waitIdle();
     }
 
     std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makeSortHashesPipeline(uint32_t pushConstantSize, uint32_t workGroupSize) const
@@ -214,57 +265,6 @@ namespace apps::hamming_neighbors
         vk::raii::Pipeline computePipeline{device, nullptr, computePipelineCreateInfo};
 
         return {std::move(computePipelineLayout), std::move(computePipeline)};
-    }
-
-    std::tuple<uint32_t, uint32_t, std::vector<uint32_t>> HammingNeighbors::readFile(std::string_view fileName) const
-    {
-        std::ifstream file{std::string{fileName}};
-        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-        uint32_t count{};
-        uint32_t length{};
-        file >> count >> length;
-        // This bitonic mergesort works for any power-of-two number of elements, up to 1024
-        assert(count > 0 && count <= 1024);
-        assert((count & (count - 1)) == 0);
-        assert(length > 0);
-
-        std::vector<uint32_t> data{};
-        data.resize(count * length);
-        for (size_t i{0}; i < count; ++i)
-        {
-            for (size_t j{0}; j < length; ++j)
-            {
-                char c{};
-                file >> c;
-                data[i * length + j] = c == '1' ? 1 : 2;
-            }
-        }
-        return {count, length, std::move(data)};
-    }
-
-    void HammingNeighbors::runPipeline(PipelineType pipelineType)
-    {
-        auto [workGroupSize, pipelineLayout, pipeline] = makePipeline(pipelineType);
-
-        vk::raii::CommandBuffer commandBuffer{intvlk::makeCommandBuffer(device, commandPool)};
-        commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
-        commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
-        commandBuffer.pushConstants<PushConsts>(
-            pipelineLayout,
-            vk::ShaderStageFlagBits::eCompute,
-            0,
-            PushConsts{
-                symbolBufferAddress,
-                hashBufferAddress,
-                resultBufferAddress});
-        uint32_t workGroupCount{(count + workGroupSize - 1) / workGroupSize};
-        commandBuffer.dispatch(workGroupCount, 1, 1);
-        commandBuffer.end();
-
-        vk::CommandBufferSubmitInfo commandBufferSubmitInfo{commandBuffer};
-        vk::SubmitInfo2 submitInfo{vk::SubmitFlags{}, {}, commandBufferSubmitInfo, {}};
-        computeQueue.submit2(submitInfo);
-        computeQueue.waitIdle();
     }
 
     void HammingNeighbors::runSortHashesPipeline()
@@ -356,5 +356,33 @@ namespace apps::hamming_neighbors
         vk::SubmitInfo2 submitInfo{vk::SubmitFlags{}, {}, commandBufferSubmitInfo, {}};
         computeQueue.submit2(submitInfo);
         computeQueue.waitIdle();
+    }
+
+    void HammingNeighbors::printResult() const
+    {
+        intvlk::vma_utils::BufferData hostBufferData{
+            device,
+            allocator,
+            sizeof(uint32_t),
+            vk::BufferUsageFlagBits::eStorageBuffer |
+                vk::BufferUsageFlagBits::eTransferDst |
+                vk::BufferUsageFlagBits::eShaderDeviceAddress,
+            VMA_MEMORY_USAGE_AUTO,
+            {},
+            VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
+                VMA_ALLOCATION_CREATE_MAPPED_BIT};
+
+        intvlk::oneTimeSubmit(device,
+                              commandPool,
+                              computeQueue,
+                              [this, &hostBufferData](const vk::raii::CommandBuffer &cb)
+                              { cb.copyBuffer(
+                                    resultBufferData.buffer,
+                                    hostBufferData.buffer,
+                                    vk::BufferCopy{0, 0, sizeof(uint32_t)}); });
+
+        const auto *result{static_cast<const uint32_t *>(hostBufferData.allocationInfo.pMappedData)};
+
+        std::cout << "Hamming Neighbors: " << *result << "\n";
     }
 }

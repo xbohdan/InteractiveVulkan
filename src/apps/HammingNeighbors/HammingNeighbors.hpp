@@ -69,14 +69,19 @@ namespace apps::hamming_neighbors
         void run() override;
 
     private:
-        std::tuple<uint32_t, vk::raii::PipelineLayout, vk::raii::Pipeline> makePipeline(PipelineType pipelineType) const;
+        std::vector<uint32_t> readData(std::string_view fileName);
+
+        void makeSymbolBuffer();
+        void makeHashBuffer();
+        void makeResultBuffer();
+
+        std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makePipeline(PipelineType pipelineType, uint32_t workGroupSize) const;
+        void runPipeline(PipelineType pipelineType);
 
         std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makeSortHashesPipeline(uint32_t pushConstantSize, uint32_t workGroupSize) const;
-        std::tuple<uint32_t, uint32_t, std::vector<uint32_t>> readFile(std::string_view fileName) const;
-        void runPipeline(PipelineType pipelineType);
         void runSortHashesPipeline();
 
-        void sortHashes();
+        void printResult() const;
 
         std::string fileName;
         uint32_t count{};
