@@ -22,7 +22,7 @@
 
 #include "include.hpp"
 
-#include "../errors.hpp"
+#include "../Error.hpp"
 
 #include <iostream>
 

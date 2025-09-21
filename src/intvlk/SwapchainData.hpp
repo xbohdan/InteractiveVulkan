@@ -24,7 +24,7 @@
 
 #include "utils.hpp"
 
-#include "errors.hpp"
+#include "Error.hpp"
 
 namespace intvlk
 {
@@ -57,7 +57,7 @@ namespace intvlk
             }
             if (swapchainExtent.width == 0 || swapchainExtent.height == 0)
             {
-                throw SwapchainZeroDimensionError{"Swapchain extent is zero"};
+                throw Error{"Swapchain extent is zero"};
             }
             extent = swapchainExtent;
             vk::SurfaceTransformFlagBitsKHR preTransform{

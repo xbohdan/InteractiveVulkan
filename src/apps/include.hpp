@@ -30,7 +30,7 @@
 #include "../intvlk/vma_utils/ImageData.hpp"
 #include "../intvlk/vma_utils/MeshData.hpp"
 
-#include "../intvlk/errors.hpp"
+#include "../intvlk/Error.hpp"
 #include "../intvlk/PerFrameData.hpp"
 #include "../intvlk/SwapchainData.hpp"
 #include "../intvlk/WindowData.hpp"

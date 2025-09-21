@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 
-#include "include.hpp"
+#include "../include.hpp"
 
-#include "VulkanApp.hpp"
+#include "../VulkanApp/VulkanApp.hpp"
 
 namespace apps::hamming_neighbors
 {
@@ -75,10 +75,14 @@ namespace apps::hamming_neighbors
         void makeHashBuffer();
         void makeResultBuffer();
 
-        std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makePipeline(PipelineType pipelineType, uint32_t workGroupSize) const;
+        std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makePipeline(
+            PipelineType pipelineType,
+            uint32_t workGroupSize) const;
         void runPipeline(PipelineType pipelineType);
 
-        std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makeSortHashesPipeline(uint32_t pushConstantSize, uint32_t workGroupSize) const;
+        std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makeSortHashesPipeline(
+            uint32_t pushConstantSize,
+            uint32_t workGroupSize) const;
         void runSortHashesPipeline();
 
         void printResult() const;

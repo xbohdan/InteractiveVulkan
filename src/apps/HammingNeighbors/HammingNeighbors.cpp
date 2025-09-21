@@ -85,10 +85,14 @@ namespace apps::hamming_neighbors
         std::ifstream file{std::string{fileName}};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
         file >> count >> length;
-        // This bitonic mergesort works for any power-of-two number of elements, up to 1024
-        assert(count > 0 && count <= 1024);
-        assert((count & (count - 1)) == 0);
-        assert(length > 0);
+        if (count <= 0 || count > 1024 || (count & (count - 1)) != 0)
+        {
+            throw intvlk::Error{"This bitonic mergesort works for any power-of-two number of elements up to 1024"};
+        }
+        if (length <= 0)
+        {
+            throw intvlk::Error{"Invalid length"};
+        }
 
         std::vector<uint32_t> data{};
         data.resize(count * length);
@@ -102,7 +106,7 @@ namespace apps::hamming_neighbors
             }
         }
 
-        return std::move(data);
+        return data;
     }
 
     void HammingNeighbors::makeSymbolBuffer()
@@ -156,7 +160,9 @@ namespace apps::hamming_neighbors
         resultBufferAddress = device.getBufferAddress(vk::BufferDeviceAddressInfo{resultBufferData.buffer});
     }
 
-    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makePipeline(PipelineType pipelineType, uint32_t workGroupSize) const
+    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makePipeline(
+        PipelineType pipelineType,
+        uint32_t workGroupSize) const
     {
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConsts)};
 
@@ -230,7 +236,9 @@ namespace apps::hamming_neighbors
         computeQueue.waitIdle();
     }
 
-    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makeSortHashesPipeline(uint32_t pushConstantSize, uint32_t workGroupSize) const
+    std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> HammingNeighbors::makeSortHashesPipeline(
+        uint32_t pushConstantSize,
+        uint32_t workGroupSize) const
     {
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, pushConstantSize};
 
@@ -289,16 +297,20 @@ namespace apps::hamming_neighbors
                 0,
                 PushConstants{h, algorithm, hashBufferAddress});
 
-            vk::BufferMemoryBarrier bufferMemoryBarrier{
-                vk::AccessFlagBits::eShaderWrite,
-                vk::AccessFlagBits::eShaderRead,
-                computeQueueFamilyIndex,
-                computeQueueFamilyIndex,
-                hashBufferData.buffer,
-                0,
-                vk::WholeSize};
+            vk::BufferMemoryBarrier2 bufferMemoryBarrier{vk::PipelineStageFlagBits2::eComputeShader,
+                                                         vk::AccessFlagBits2::eShaderWrite,
+                                                         vk::PipelineStageFlagBits2::eComputeShader,
+                                                         vk::AccessFlagBits2::eShaderRead,
+                                                         computeQueueFamilyIndex,
+                                                         computeQueueFamilyIndex,
+                                                         hashBufferData.buffer,
+                                                         0,
+                                                         vk::WholeSize};
 
-            commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader, vk::DependencyFlags{}, {}, bufferMemoryBarrier, {});
+            commandBuffer.pipelineBarrier2(vk::DependencyInfoKHR(vk::DependencyFlags{},
+                                                                 {},
+                                                                 bufferMemoryBarrier,
+                                                                 {}));
 
             commandBuffer.dispatch(workGroupCount, 1, 1);
         };
@@ -325,8 +337,7 @@ namespace apps::hamming_neighbors
 
         uint32_t h{workGroupSize * 2};
         const uint32_t n{count};
-        assert(h <= n);
-        assert(h % 2 == 0);
+        assert(h <= n && h % 2 == 0);
 
         localBitonicMergeSort(h);
 

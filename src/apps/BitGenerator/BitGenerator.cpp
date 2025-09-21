@@ -86,9 +86,8 @@ namespace apps::bit_generator
                              VMA_ALLOCATION_CREATE_MAPPED_BIT}
     {
         assert(createCount > 0);
-        assert(changeCount > 0);
+        assert(changeCount > 0 && changeCount <= createCount / 2);
         assert(length > 0);
-        assert(changeCount <= createCount / 2);
 
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConstants)};
 

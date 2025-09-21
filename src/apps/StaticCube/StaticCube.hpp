@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 
-#include "include.hpp"
+#include "../include.hpp"
 
-#include "VulkanApp.hpp"
+#include "../VulkanApp/VulkanApp.hpp"
 
 namespace apps::static_cube
 {

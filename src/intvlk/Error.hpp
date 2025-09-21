@@ -23,9 +23,4 @@ namespace intvlk
     {
         using std::runtime_error::runtime_error;
     };
-
-    class SwapchainZeroDimensionError : public Error
-    {
-        using Error::Error;
-    };
 }

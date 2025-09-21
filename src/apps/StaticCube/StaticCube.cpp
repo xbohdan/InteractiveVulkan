@@ -133,7 +133,7 @@ namespace apps::static_cube
             ++frameCount;
             if (1000 < std::chrono::duration_cast<std::chrono::milliseconds>(accumulatedTime).count())
             {
-                assert(0 < frameCount);
+                assert(frameCount > 0);
 
                 SDL_SetWindowTitle(windowData.handle.get(),
                                    std::format("{}\tFPS = {}", windowData.getName(), frameCount).c_str());
@@ -355,7 +355,7 @@ namespace apps::static_cube
         {
             swapchainData = makeSwapchain(false);
         }
-        catch (const intvlk::SwapchainZeroDimensionError &)
+        catch (const intvlk::Error &)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }

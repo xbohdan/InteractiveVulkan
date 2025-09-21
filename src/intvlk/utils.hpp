@@ -22,7 +22,7 @@
 
 #include "include.hpp"
 
-#include "errors.hpp"
+#include "Error.hpp"
 
 #include <fstream>
 #include <numeric>
@@ -35,8 +35,8 @@ namespace intvlk
     inline VKAPI_ATTR vk::Bool32 VKAPI_CALL debugUtilsMessengerCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageTypes,
-        VkDebugUtilsMessengerCallbackDataEXT const* pCallbackData,
-        void* /*pUserData*/)
+        VkDebugUtilsMessengerCallbackDataEXT const *pCallbackData,
+        void * /*pUserData*/)
     {
 #if !defined(NDEBUG)
         if (static_cast<uint32_t>(pCallbackData->messageIdNumber) == 0x822806fa)
@@ -53,14 +53,14 @@ namespace intvlk
 #endif
 
         std::cerr << vk::to_string(static_cast<vk::DebugUtilsMessageSeverityFlagBitsEXT>(messageSeverity)) << ": "
-            << vk::to_string(static_cast<vk::DebugUtilsMessageTypeFlagsEXT>(messageTypes)) << ":\n";
+                  << vk::to_string(static_cast<vk::DebugUtilsMessageTypeFlagsEXT>(messageTypes)) << ":\n";
         std::cerr << std::string("\t") << "messageIDName   = <" << pCallbackData->pMessageIdName << ">\n";
         std::cerr << std::string("\t") << "messageIdNumber = " << pCallbackData->messageIdNumber << "\n";
         std::cerr << std::string("\t") << "message         = <" << pCallbackData->pMessage << ">\n";
         if (0 < pCallbackData->queueLabelCount)
         {
             std::cerr << std::string("\t") << "Queue Labels:\n";
-            for (uint32_t i{ 0 }; i < pCallbackData->queueLabelCount; i++)
+            for (uint32_t i{0}; i < pCallbackData->queueLabelCount; i++)
             {
                 std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pQueueLabels[i].pLabelName << ">\n";
             }
@@ -68,7 +68,7 @@ namespace intvlk
         if (0 < pCallbackData->cmdBufLabelCount)
         {
             std::cerr << std::string("\t") << "CommandBuffer Labels:\n";
-            for (uint32_t i{ 0 }; i < pCallbackData->cmdBufLabelCount; i++)
+            for (uint32_t i{0}; i < pCallbackData->cmdBufLabelCount; i++)
             {
                 std::cerr << std::string("\t\t") << "labelName = <" << pCallbackData->pCmdBufLabels[i].pLabelName << ">\n";
             }
@@ -76,11 +76,11 @@ namespace intvlk
         if (0 < pCallbackData->objectCount)
         {
             std::cerr << std::string("\t") << "Objects:\n";
-            for (uint32_t i{ 0 }; i < pCallbackData->objectCount; i++)
+            for (uint32_t i{0}; i < pCallbackData->objectCount; i++)
             {
                 std::cerr << std::string("\t\t") << "Object " << i << "\n";
                 std::cerr << std::string("\t\t\t") << "objectType   = " << vk::to_string(static_cast<vk::ObjectType>(pCallbackData->pObjects[i].objectType))
-                    << "\n";
+                          << "\n";
                 std::cerr << std::string("\t\t\t") << "objectHandle = " << pCallbackData->pObjects[i].objectHandle << "\n";
                 if (pCallbackData->pObjects[i].pObjectName)
                 {
@@ -376,13 +376,13 @@ namespace intvlk
 
     inline vk::DebugUtilsMessengerCreateInfoEXT makeDebugUtilsMessengerCreateInfo()
     {
-        return vk::DebugUtilsMessengerCreateInfoEXT{ vk::DebugUtilsMessengerCreateFlagsEXT{},
+        return vk::DebugUtilsMessengerCreateInfoEXT{vk::DebugUtilsMessengerCreateFlagsEXT{},
                                                     vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
                                                         vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning,
                                                     vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
                                                         vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
                                                         vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation,
-                                                    debugUtilsMessengerCallback };
+                                                    debugUtilsMessengerCallback};
     }
 
     inline vk::raii::DescriptorPool makeDescriptorPool(const vk::raii::Device &device,
@@ -392,7 +392,7 @@ namespace intvlk
         uint32_t maxSets{std::accumulate(poolSizes.begin(), poolSizes.end(), 0U,
                                          [](uint32_t sum, const vk::DescriptorPoolSize &dps)
                                          { return sum + dps.descriptorCount; })};
-        assert(0 < maxSets);
+        assert(maxSets > 0);
 
         vk::DescriptorPoolCreateInfo descriptorPoolCreateInfo{vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
                                                               maxSets,
@@ -766,19 +766,6 @@ namespace intvlk
         }
         assert(pickedFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear);
         return pickedFormat;
-    }
-
-    inline std::vector<uint32_t> readBinaryFile(std::string_view fileName)
-    {
-        std::vector<uint32_t> shaderCode{};
-        std::ifstream file{std::string{fileName}, std::ios::ate | std::ios::binary};
-        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-        const auto fileSize{static_cast<size_t>(file.tellg())};
-        assert(fileSize % sizeof(uint32_t) == 0);
-        shaderCode.resize(fileSize / sizeof(uint32_t));
-        file.seekg(0);
-        file.read(reinterpret_cast<char *>(shaderCode.data()), fileSize);
-        return shaderCode;
     }
 
     inline std::string readFile(std::string_view fileName)
