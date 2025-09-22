@@ -116,31 +116,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="src\shaders\findHammingNeighbors.comp" />
-    <None Include="src\shaders\generateHashes.comp" />
-    <None Include="src\shaders\hamming_one_generator.comp" />
-    <None Include="src\shaders\hamming_one_generator.comp.spv" />
-    <None Include="src\shaders\sortHashes copy.comp" />
-    <None Include="src\shaders\sortHashes copy.comp.spv" />
-    <None Include="src\shaders\sortHashes.comp" />
-    <None Include="src\shaders\sortHashes.comp.spv" />
-    <None Include="src\shaders\vulkan_cube.frag" />
-    <None Include="src\shaders\vulkan_cube.frag.spv" />
-    <None Include="src\shaders\vulkan_cube.vert" />
-    <None Include="src\shaders\vulkan_cube.vert.spv" />
+    <None Include="src\apps\BitGenerator\bit_generator.comp" />
+    <None Include="src\apps\HammingNeighbors\find_hamming_neighbors.comp" />
+    <None Include="src\apps\HammingNeighbors\generate_hashes.comp" />
+    <None Include="src\apps\HammingNeighbors\sort_hashes.comp" />
+    <None Include="src\apps\StaticCube\static_cube.frag" />
+    <None Include="src\apps\StaticCube\static_cube.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\apps\BitGenerator.hpp" />
-    <ClInclude Include="src\apps\Cube.hpp" />
-    <ClInclude Include="src\apps\HammingNeighbor.hpp" />
+    <Text Include="LICENSE.txt" />
+    <Text Include="NOTICE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\apps\BitGenerator\BitGenerator.hpp" />
+    <ClInclude Include="src\apps\HammingNeighbors\HammingNeighbors.hpp" />
     <ClInclude Include="src\apps\include.hpp" />
-    <ClInclude Include="src\apps\VulkanApp.hpp" />
+    <ClInclude Include="src\apps\StaticCube\StaticCube.hpp" />
+    <ClInclude Include="src\apps\VulkanApp\VulkanApp.hpp" />
     <ClInclude Include="src\include.hpp" />
-    <ClInclude Include="src\intvlk\glm_utils\DrawPushConstants.hpp" />
-    <ClInclude Include="src\intvlk\glm_utils\geometries.hpp" />
-    <ClInclude Include="src\intvlk\glm_utils\include.hpp" />
-    <ClInclude Include="src\intvlk\glm_utils\math.hpp" />
-    <ClInclude Include="src\intvlk\glm_utils\Vertex.hpp" />
+    <ClInclude Include="src\intvlk\Error.hpp" />
     <ClInclude Include="src\intvlk\glslang_utils\GlslangContext.hpp" />
     <ClInclude Include="src\intvlk\glslang_utils\include.hpp" />
     <ClInclude Include="src\intvlk\include.hpp" />
@@ -155,19 +149,14 @@
     <ClInclude Include="src\intvlk\vma_utils\MeshData.hpp" />
     <ClInclude Include="src\intvlk\vma_utils\usage.hpp" />
     <ClInclude Include="src\intvlk\vma_utils\utils.hpp" />
-    <ClInclude Include="src\intvlk\errors.hpp" />
     <ClInclude Include="src\intvlk\WindowData.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\apps\BitGenerator.cpp" />
-    <ClCompile Include="src\apps\Cube.cpp" />
-    <ClCompile Include="src\apps\HammingNeighbor.cpp" />
+    <ClCompile Include="src\apps\BitGenerator\BitGenerator.cpp" />
+    <ClCompile Include="src\apps\HammingNeighbors\HammingNeighbors.cpp" />
+    <ClCompile Include="src\apps\StaticCube\StaticCube.cpp" />
     <ClCompile Include="src\intvlk\vma_utils\usage.cpp" />
     <ClCompile Include="src\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="LICENSE.txt" />
-    <Text Include="NOTICE.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

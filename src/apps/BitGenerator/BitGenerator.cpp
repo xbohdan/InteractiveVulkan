@@ -15,6 +15,8 @@
 
 #include "BitGenerator.hpp"
 
+#include <chrono>
+
 namespace apps::bit_generator
 {
     BitGenerator::BitGenerator(uint32_t createCount, uint32_t changeCount, uint32_t length)
@@ -140,10 +142,7 @@ namespace apps::bit_generator
                ((1 << 23) - 1);
     }
 
-    void BitGenerator::writeData(std::string_view fileName,
-                                 const uint32_t *data,
-                                 uint32_t createCount,
-                                 uint32_t length) const
+    void BitGenerator::writeData(std::string_view fileName, const uint32_t *data) const
     {
         std::ofstream file{std::string{fileName}};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
@@ -201,6 +200,6 @@ namespace apps::bit_generator
                                     hostBufferData.buffer,
                                     vk::BufferCopy{0, 0, createGroupCountX * maxComputeWorkGroupSizeX * sizeof(uint32_t)}); });
         const auto *data{static_cast<const uint32_t *>(hostBufferData.allocationInfo.pMappedData)};
-        writeData("hamming_one.txt", data, createCount, length);
+        writeData("hamming_one.txt", data);
     }
 }

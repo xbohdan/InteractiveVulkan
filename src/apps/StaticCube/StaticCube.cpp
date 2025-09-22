@@ -1,4 +1,4 @@
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,6 +14,11 @@
 //
 
 #include "StaticCube.hpp"
+
+#include "DrawPushConstants.hpp"
+#include "geometries.hpp"
+#include "math.hpp"
+#include "Vertex.hpp"
 
 #include <thread>
 
@@ -78,11 +83,11 @@ namespace apps::static_cube
                     VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT,
                     vk::ImageAspectFlagBits::eColor},
 
-          renderMatrix{intvlk::glm_utils::createModelViewProjectionClipMatrix(drawImageExtent)},
+          renderMatrix{createModelViewProjectionClipMatrix(drawImageExtent)},
 
           depthAttachmentData{device, allocator, vk::Format::eD32Sfloat, drawImage.extent},
 
-          meshData{device, allocator, intvlk::glm_utils::coloredCubeData.size() * sizeof(intvlk::glm_utils::Vertex)}
+          meshData{device, allocator, coloredCubeData.size() * sizeof(Vertex)}
     {
         assert(width > 0);
         assert(height > 0);
@@ -93,7 +98,7 @@ namespace apps::static_cube
                 device,
                 vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, graphicsAndPresentQueueFamilyIndices.first}},
             graphicsQueue,
-            intvlk::glm_utils::coloredCubeData);
+            coloredCubeData);
 
         makeGraphicsPipeline();
     }
@@ -168,13 +173,13 @@ namespace apps::static_cube
 
         commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
 
-        intvlk::glm_utils::DrawPushConstants pushConstants{renderMatrix,
-                                                           meshData.vertexBufferAddress};
+        DrawPushConstants pushConstants{renderMatrix,
+                                        meshData.vertexBufferAddress};
 
         commandBuffer.pushConstants(pipelineLayout,
                                     vk::ShaderStageFlagBits::eVertex,
                                     0,
-                                    vk::ArrayProxy<const intvlk::glm_utils::DrawPushConstants>{pushConstants});
+                                    vk::ArrayProxy<const DrawPushConstants>{pushConstants});
 
         vk::Viewport viewport{0.0f,
                               0.0f,
@@ -189,7 +194,7 @@ namespace apps::static_cube
 
         commandBuffer.setScissor(0, scissor);
 
-        commandBuffer.draw(static_cast<uint32_t>(intvlk::glm_utils::coloredCubeData.size()), 1, 0, 0);
+        commandBuffer.draw(static_cast<uint32_t>(coloredCubeData.size()), 1, 0, 0);
 
         commandBuffer.endRendering();
     }
@@ -305,7 +310,7 @@ namespace apps::static_cube
 
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eVertex,
                                                 0,
-                                                sizeof(intvlk::glm_utils::DrawPushConstants)};
+                                                sizeof(DrawPushConstants)};
         pipelineLayout = vk::raii::PipelineLayout{
             device,
             vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange}};

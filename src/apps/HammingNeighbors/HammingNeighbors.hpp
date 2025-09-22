@@ -15,9 +15,7 @@
 // limitations under the License.
 //
 
-#include "../include.hpp"
-
-#include "../VulkanApp/VulkanApp.hpp"
+#include "include.hpp"
 
 namespace apps::hamming_neighbors
 {
@@ -69,7 +67,7 @@ namespace apps::hamming_neighbors
         void run() override;
 
     private:
-        std::vector<uint32_t> readData(std::string_view fileName);
+        std::vector<uint32_t> readData();
 
         void makeSymbolBuffer();
         void makeHashBuffer();
@@ -78,12 +76,12 @@ namespace apps::hamming_neighbors
         std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makePipeline(
             PipelineType pipelineType,
             uint32_t workGroupSize) const;
-        void runPipeline(PipelineType pipelineType);
+        void runPipeline(PipelineType pipelineType) const;
 
         std::pair<vk::raii::PipelineLayout, vk::raii::Pipeline> makeSortHashesPipeline(
             uint32_t pushConstantSize,
             uint32_t workGroupSize) const;
-        void runSortHashesPipeline();
+        void runSortHashesPipeline() const;
 
         void printResult() const;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-// Copyright(c) 2024-2025, Bohdan Soproniuk
+// Copyright(c) 2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,14 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp/VulkanApp.hpp"
-#include "apps/BitGenerator/BitGenerator.hpp"
-#include "apps/HammingNeighbors/HammingNeighbors.hpp"
-#include "apps/StaticCube/StaticCube.hpp"
+#include "../VulkanApp/VulkanApp.hpp"
+
+#include "../../intvlk/include.hpp"
+
+#include "../../intvlk/utils.hpp"
+
+#include "../../intvlk/Error.hpp"
+
+#include "../../intvlk/glslang_utils/GlslangContext.hpp"
+
+#include "../../intvlk/vma_utils/BufferData.hpp"

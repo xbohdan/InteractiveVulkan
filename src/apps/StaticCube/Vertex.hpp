@@ -15,7 +15,14 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp/VulkanApp.hpp"
-#include "apps/BitGenerator/BitGenerator.hpp"
-#include "apps/HammingNeighbors/HammingNeighbors.hpp"
-#include "apps/StaticCube/StaticCube.hpp"
+#include "include.hpp"
+
+namespace apps::static_cube
+{
+    class Vertex
+    {
+    public:
+        glm::vec4 position{};
+        glm::vec4 color{};
+    };
+}

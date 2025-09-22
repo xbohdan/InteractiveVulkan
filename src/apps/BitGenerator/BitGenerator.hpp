@@ -15,9 +15,7 @@
 // limitations under the License.
 //
 
-#include "../include.hpp"
-
-#include "../VulkanApp/VulkanApp.hpp"
+#include "include.hpp"
 
 namespace apps::bit_generator
 {
@@ -46,7 +44,7 @@ namespace apps::bit_generator
 
     private:
         uint32_t makeTimeBasedSeed() const;
-        void writeData(std::string_view fileName, const uint32_t *data, uint32_t createCount, uint32_t length) const;
+        void writeData(std::string_view fileName, const uint32_t *data) const;
 
         uint32_t createCount;
         uint32_t changeCount;

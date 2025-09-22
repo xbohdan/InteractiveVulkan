@@ -1,6 +1,6 @@
 #pragma once
 
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 
 #include "include.hpp"
 
-namespace intvlk::glm_utils
+namespace apps::static_cube
 {
     class DrawPushConstants
     {

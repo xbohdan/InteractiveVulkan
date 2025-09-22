@@ -80,7 +80,7 @@ namespace apps::hamming_neighbors
         printResult();
     }
 
-    std::vector<uint32_t> HammingNeighbors::readData(std::string_view fileName)
+    std::vector<uint32_t> HammingNeighbors::readData()
     {
         std::ifstream file{std::string{fileName}};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
@@ -111,7 +111,7 @@ namespace apps::hamming_neighbors
 
     void HammingNeighbors::makeSymbolBuffer()
     {
-        std::vector<uint32_t> data{readData(fileName)};
+        std::vector<uint32_t> data{readData()};
 
         symbolBufferData = intvlk::vma_utils::BufferData{
             device,
@@ -210,10 +210,10 @@ namespace apps::hamming_neighbors
         return {std::move(computePipelineLayout), std::move(computePipeline)};
     }
 
-    void HammingNeighbors::runPipeline(PipelineType pipelineType)
+    void HammingNeighbors::runPipeline(PipelineType pipelineType) const
     {
         const uint32_t workGroupSize{physicalDevice.getProperties().limits.maxComputeWorkGroupSize[0]};
-        auto [pipelineLayout, pipeline] = makePipeline(pipelineType, workGroupSize);
+        auto [pipelineLayout, pipeline]{makePipeline(pipelineType, workGroupSize)};
 
         vk::raii::CommandBuffer commandBuffer{intvlk::makeCommandBuffer(device, commandPool)};
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
@@ -250,8 +250,6 @@ namespace apps::hamming_neighbors
 
         vk::SpecializationInfo specializationInfo{1, &specializationMapEntry, sizeof(uint32_t), &workGroupSize};
 
-        // std::vector<uint32_t> shaderCode{intvlk::readBinaryFile("src/shaders/sortHashes.comp.spv")};
-
         vk::raii::ShaderModule computeShaderModule{
             glslContext.makeShaderModule(
                 device,
@@ -275,13 +273,13 @@ namespace apps::hamming_neighbors
         return {std::move(computePipelineLayout), std::move(computePipeline)};
     }
 
-    void HammingNeighbors::runSortHashesPipeline()
+    void HammingNeighbors::runSortHashesPipeline() const
     {
         const uint32_t workGroupSize{std::min(
             physicalDevice.getProperties().limits.maxComputeWorkGroupSize[0],
             count / 2)};
 
-        auto [pipelineLayout, pipeline] = makeSortHashesPipeline(sizeof(PushConstants), workGroupSize);
+        auto [pipelineLayout, pipeline]{makeSortHashesPipeline(sizeof(PushConstants), workGroupSize)};
 
         vk::raii::CommandBuffer commandBuffer{intvlk::makeCommandBuffer(device, commandPool)};
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
@@ -289,7 +287,9 @@ namespace apps::hamming_neighbors
 
         uint32_t workGroupCount{count / (workGroupSize * 2)};
 
-        auto dispatch = [workGroupCount, &pipelineLayout, &commandBuffer, this](uint32_t h, PushConstants::Algorithm algorithm)
+        auto dispatch = [this, workGroupCount, &pipelineLayout, &commandBuffer](
+                            uint32_t h,
+                            PushConstants::Algorithm algorithm)
         {
             commandBuffer.pushConstants<PushConstants>(
                 pipelineLayout,
@@ -315,25 +315,25 @@ namespace apps::hamming_neighbors
             commandBuffer.dispatch(workGroupCount, 1, 1);
         };
 
-        auto localBitonicMergeSort{[&dispatch](uint32_t h)
-                                   {
-                                       dispatch(h, PushConstants::Algorithm::eLocalBitonicMergeSort);
-                                   }};
+        auto localBitonicMergeSort = [&dispatch](uint32_t h)
+        {
+            dispatch(h, PushConstants::Algorithm::eLocalBitonicMergeSort);
+        };
 
-        auto localDisperse{[&dispatch](uint32_t h)
-                           {
-                               dispatch(h, PushConstants::Algorithm::eLocalDisperse);
-                           }};
+        auto localDisperse = [&dispatch](uint32_t h)
+        {
+            dispatch(h, PushConstants::Algorithm::eLocalDisperse);
+        };
 
-        auto globalFlip{[&dispatch](uint32_t h)
-                        {
-                            dispatch(h, PushConstants::Algorithm::eGlobalFlip);
-                        }};
+        auto globalFlip = [&dispatch](uint32_t h)
+        {
+            dispatch(h, PushConstants::Algorithm::eGlobalFlip);
+        };
 
-        auto globalDisperse{[&dispatch](uint32_t h)
-                            {
-                                dispatch(h, PushConstants::Algorithm::eGlobalDisperse);
-                            }};
+        auto globalDisperse = [&dispatch](uint32_t h)
+        {
+            dispatch(h, PushConstants::Algorithm::eGlobalDisperse);
+        };
 
         uint32_t h{workGroupSize * 2};
         const uint32_t n{count};
