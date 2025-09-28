@@ -113,7 +113,7 @@ namespace apps::bit_generator
         vk::raii::ShaderModule computeShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eCompute,
-            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/BitGenerator/bit_generator.comp"))};
+            intvlk::readFile("src/apps/BitGenerator/shaders/bit_generator.comp"))};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{vk::PipelineShaderStageCreateFlags{},
                                                                         vk::ShaderStageFlagBits::eCompute,

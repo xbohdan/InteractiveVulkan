@@ -184,8 +184,8 @@ namespace apps::hamming_neighbors
             specializationData.data()};
 
         std::string shaderPath{pipelineType == PipelineType::GenerateHashes
-                                   ? "/Users/skylar/xcode/InteractiveVulkan/src/apps/HammingNeighbors/generate_hashes.comp"
-                                   : "/Users/skylar/xcode/InteractiveVulkan/src/apps/HammingNeighbors/find_hamming_neighbors.comp"};
+                                   ? "src/apps/HammingNeighbors/shaders/generate_hashes.comp"
+                                   : "src/apps/HammingNeighbors/shaders/find_hamming_neighbors.comp"};
 
         vk::raii::ShaderModule computeShaderModule{
             glslContext.makeShaderModule(
@@ -254,7 +254,7 @@ namespace apps::hamming_neighbors
             glslContext.makeShaderModule(
                 device,
                 vk::ShaderStageFlagBits::eCompute,
-                intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/HammingNeighbors/sort_hashes.comp"))};
+                intvlk::readFile("src/apps/HammingNeighbors/shaders/sort_hashes.comp"))};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{
             vk::PipelineShaderStageCreateFlags{},

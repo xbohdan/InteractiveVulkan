@@ -2,23 +2,23 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="src\apps\BitGenerator\bit_generator.comp">
-      <Filter>src\apps\BitGenerator</Filter>
+    <None Include="src\apps\BitGenerator\shaders\bit_generator.comp">
+      <Filter>src\apps\BitGenerator\shaders</Filter>
     </None>
-    <None Include="src\apps\HammingNeighbors\find_hamming_neighbors.comp">
-      <Filter>src\apps\HammingNeighbors</Filter>
+    <None Include="src\apps\HammingNeighbors\shaders\find_hamming_neighbors.comp">
+      <Filter>src\apps\HammingNeighbors\shaders</Filter>
     </None>
-    <None Include="src\apps\HammingNeighbors\generate_hashes.comp">
-      <Filter>src\apps\HammingNeighbors</Filter>
+    <None Include="src\apps\HammingNeighbors\shaders\generate_hashes.comp">
+      <Filter>src\apps\HammingNeighbors\shaders</Filter>
     </None>
-    <None Include="src\apps\HammingNeighbors\sort_hashes.comp">
-      <Filter>src\apps\HammingNeighbors</Filter>
+    <None Include="src\apps\HammingNeighbors\shaders\sort_hashes.comp">
+      <Filter>src\apps\HammingNeighbors\shaders</Filter>
     </None>
-    <None Include="src\apps\StaticCube\static_cube.frag">
-      <Filter>src\apps\StaticCube</Filter>
+    <None Include="src\apps\StaticCube\shaders\static_cube.frag">
+      <Filter>src\apps\StaticCube\shaders</Filter>
     </None>
-    <None Include="src\apps\StaticCube\static_cube.vert">
-      <Filter>src\apps\StaticCube</Filter>
+    <None Include="src\apps\StaticCube\shaders\static_cube.vert">
+      <Filter>src\apps\StaticCube\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +52,15 @@
     </Filter>
     <Filter Include="src\apps\VulkanApp">
       <UniqueIdentifier>{84c711b9-c152-4cfe-a02f-65345398dc21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\BitGenerator\shaders">
+      <UniqueIdentifier>{7d5707af-9f32-4ab0-9e32-afdffb09c896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\HammingNeighbors\shaders">
+      <UniqueIdentifier>{cb851554-873c-48e5-b663-e172164fd73e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\StaticCube\shaders">
+      <UniqueIdentifier>{da9b21f7-a9b6-45ba-8990-0f01776eeddf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

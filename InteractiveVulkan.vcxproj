@@ -116,12 +116,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="src\apps\BitGenerator\bit_generator.comp" />
-    <None Include="src\apps\HammingNeighbors\find_hamming_neighbors.comp" />
-    <None Include="src\apps\HammingNeighbors\generate_hashes.comp" />
-    <None Include="src\apps\HammingNeighbors\sort_hashes.comp" />
-    <None Include="src\apps\StaticCube\static_cube.frag" />
-    <None Include="src\apps\StaticCube\static_cube.vert" />
+    <None Include="src\apps\BitGenerator\shaders\bit_generator.comp" />
+    <None Include="src\apps\HammingNeighbors\shaders\find_hamming_neighbors.comp" />
+    <None Include="src\apps\HammingNeighbors\shaders\generate_hashes.comp" />
+    <None Include="src\apps\HammingNeighbors\shaders\sort_hashes.comp" />
+    <None Include="src\apps\StaticCube\shaders\static_cube.frag" />
+    <None Include="src\apps\StaticCube\shaders\static_cube.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

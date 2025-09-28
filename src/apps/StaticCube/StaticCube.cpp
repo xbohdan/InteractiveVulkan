@@ -318,11 +318,11 @@ namespace apps::static_cube
         vk::raii::ShaderModule vertexShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eVertex,
-            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/StaticCube/static_cube.vert"))};
+            intvlk::readFile("src/apps/StaticCube/shaders/static_cube.vert"))};
         vk::raii::ShaderModule fragmentShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eFragment,
-            intvlk::readFile("/Users/skylar/xcode/InteractiveVulkan/src/apps/StaticCube/static_cube.frag"))};
+            intvlk::readFile("src/apps/StaticCube/shaders/static_cube.frag"))};
 
         vk::raii::PipelineCache pipelineCache{device, vk::PipelineCacheCreateInfo{}};
         pipeline = intvlk::makeGraphicsPipeline(device,
