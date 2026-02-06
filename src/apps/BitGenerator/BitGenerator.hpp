@@ -19,20 +19,6 @@
 
 namespace apps::bit_generator
 {
-    enum class Algorithm : uint32_t
-    {
-        eCreate,
-        eChange
-    };
-
-    class PushConstants
-    {
-    public:
-        uint32_t seed{};
-        Algorithm algorithm{Algorithm::eCreate};
-        vk::DeviceAddress ssbo{};
-    };
-
     class BitGenerator final : public apps::vulkan_app::VulkanApp
     {
     public:

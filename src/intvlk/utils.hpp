@@ -771,14 +771,9 @@ namespace intvlk
 
     inline std::string readFile(std::string_view fileName)
     {
-        std::string shaderCode{};
-        std::ifstream file{std::string{fileName}, std::ios::ate};
-        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-        const auto fileSize{static_cast<size_t>(file.tellg())};
-        shaderCode.resize(fileSize);
-        file.seekg(0);
-        file.read(shaderCode.data(), fileSize);
-        return shaderCode;
+        std::ifstream file{std::string{fileName}};
+        file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
     }
 
     inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,

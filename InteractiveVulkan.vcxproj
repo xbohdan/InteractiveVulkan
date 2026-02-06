@@ -128,10 +128,21 @@
     <Text Include="NOTICE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\apps\BitGenerator\Algorithm.hpp" />
     <ClInclude Include="src\apps\BitGenerator\BitGenerator.hpp" />
+    <ClInclude Include="src\apps\BitGenerator\PushConstants.hpp" />
     <ClInclude Include="src\apps\HammingNeighbors\HammingNeighbors.hpp" />
+    <ClInclude Include="src\apps\HammingNeighbors\Hash.hpp" />
+    <ClInclude Include="src\apps\HammingNeighbors\PipelineType.hpp" />
+    <ClInclude Include="src\apps\HammingNeighbors\PushConstants.hpp" />
+    <ClInclude Include="src\apps\HammingNeighbors\SortPushConstants.hpp" />
     <ClInclude Include="src\apps\include.hpp" />
+    <ClInclude Include="src\apps\StaticCube\DrawPushConstants.hpp" />
+    <ClInclude Include="src\apps\StaticCube\geometries.hpp" />
+    <ClInclude Include="src\apps\StaticCube\include.hpp" />
+    <ClInclude Include="src\apps\StaticCube\math.hpp" />
     <ClInclude Include="src\apps\StaticCube\StaticCube.hpp" />
+    <ClInclude Include="src\apps\StaticCube\Vertex.hpp" />
     <ClInclude Include="src\apps\VulkanApp\VulkanApp.hpp" />
     <ClInclude Include="src\include.hpp" />
     <ClInclude Include="src\intvlk\Error.hpp" />

@@ -130,6 +130,39 @@
     <ClInclude Include="src\apps\VulkanApp\VulkanApp.hpp">
       <Filter>src\apps\VulkanApp</Filter>
     </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\DrawPushConstants.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\geometries.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\include.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\math.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\Vertex.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\BitGenerator\PushConstants.hpp">
+      <Filter>src\apps\BitGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\BitGenerator\Algorithm.hpp">
+      <Filter>src\apps\BitGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\PipelineType.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\Hash.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\PushConstants.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\SortPushConstants.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

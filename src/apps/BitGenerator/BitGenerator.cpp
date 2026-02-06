@@ -15,6 +15,9 @@
 
 #include "BitGenerator.hpp"
 
+#include "Algorithm.hpp"
+#include "PushConstants.hpp"
+
 #include <chrono>
 
 namespace apps::bit_generator

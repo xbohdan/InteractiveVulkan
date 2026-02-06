@@ -15,6 +15,11 @@
 
 #include "HammingNeighbors.hpp"
 
+#include "Hash.hpp"
+#include "PipelineType.hpp"
+#include "PushConstants.hpp"
+#include "SortPushConstants.hpp"
+
 namespace apps::hamming_neighbors
 {
     HammingNeighbors::HammingNeighbors(std::string fileName)
@@ -68,14 +73,14 @@ namespace apps::hamming_neighbors
         makeSymbolBuffer();
 
         makeHashBuffer();
-
+         
         makeResultBuffer();
 
-        runPipeline(PipelineType::GenerateHashes);
+        runPipeline(PipelineType::eGenerateHashes);
 
         runSortHashesPipeline();
 
-        runPipeline(PipelineType::FindHammingNeighbors);
+        runPipeline(PipelineType::eFindHammingNeighbors);
 
         printResult();
     }
@@ -164,7 +169,7 @@ namespace apps::hamming_neighbors
         PipelineType pipelineType,
         uint32_t workGroupSize) const
     {
-        vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConsts)};
+        vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eCompute, 0, sizeof(PushConstants)};
 
         vk::raii::PipelineLayout computePipelineLayout{
             device,
@@ -183,7 +188,7 @@ namespace apps::hamming_neighbors
             specializationData.size() * sizeof(uint32_t),
             specializationData.data()};
 
-        std::string shaderPath{pipelineType == PipelineType::GenerateHashes
+        std::string shaderPath{pipelineType == PipelineType::eGenerateHashes
                                    ? "src/apps/HammingNeighbors/shaders/generate_hashes.comp"
                                    : "src/apps/HammingNeighbors/shaders/find_hamming_neighbors.comp"};
 
@@ -218,11 +223,11 @@ namespace apps::hamming_neighbors
         vk::raii::CommandBuffer commandBuffer{intvlk::makeCommandBuffer(device, commandPool)};
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
         commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
-        commandBuffer.pushConstants<PushConsts>(
+        commandBuffer.pushConstants<PushConstants>(
             pipelineLayout,
             vk::ShaderStageFlagBits::eCompute,
             0,
-            PushConsts{
+            PushConstants{
                 symbolBufferAddress,
                 hashBufferAddress,
                 resultBufferAddress});
@@ -279,7 +284,7 @@ namespace apps::hamming_neighbors
             physicalDevice.getProperties().limits.maxComputeWorkGroupSize[0],
             count / 2)};
 
-        auto [pipelineLayout, pipeline]{makeSortHashesPipeline(sizeof(PushConstants), workGroupSize)};
+        auto [pipelineLayout, pipeline]{makeSortHashesPipeline(sizeof(SortPushConstants), workGroupSize)};
 
         vk::raii::CommandBuffer commandBuffer{intvlk::makeCommandBuffer(device, commandPool)};
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
@@ -289,13 +294,13 @@ namespace apps::hamming_neighbors
 
         auto dispatch = [this, workGroupCount, &pipelineLayout, &commandBuffer](
                             uint32_t h,
-                            PushConstants::Algorithm algorithm)
+                            SortPushConstants::Algorithm algorithm)
         {
-            commandBuffer.pushConstants<PushConstants>(
+            commandBuffer.pushConstants<SortPushConstants>(
                 pipelineLayout,
                 vk::ShaderStageFlagBits::eCompute,
                 0,
-                PushConstants{h, algorithm, hashBufferAddress});
+                SortPushConstants{h, algorithm, hashBufferAddress});
 
             vk::BufferMemoryBarrier2 bufferMemoryBarrier{vk::PipelineStageFlagBits2::eComputeShader,
                                                          vk::AccessFlagBits2::eShaderWrite,
@@ -317,22 +322,22 @@ namespace apps::hamming_neighbors
 
         auto localBitonicMergeSort = [&dispatch](uint32_t h)
         {
-            dispatch(h, PushConstants::Algorithm::eLocalBitonicMergeSort);
+            dispatch(h, SortPushConstants::Algorithm::eLocalBitonicMergeSort);
         };
 
         auto localDisperse = [&dispatch](uint32_t h)
         {
-            dispatch(h, PushConstants::Algorithm::eLocalDisperse);
+            dispatch(h, SortPushConstants::Algorithm::eLocalDisperse);
         };
 
         auto globalFlip = [&dispatch](uint32_t h)
         {
-            dispatch(h, PushConstants::Algorithm::eGlobalFlip);
+            dispatch(h, SortPushConstants::Algorithm::eGlobalFlip);
         };
 
         auto globalDisperse = [&dispatch](uint32_t h)
         {
-            dispatch(h, PushConstants::Algorithm::eGlobalDisperse);
+            dispatch(h, SortPushConstants::Algorithm::eGlobalDisperse);
         };
 
         uint32_t h{workGroupSize * 2};

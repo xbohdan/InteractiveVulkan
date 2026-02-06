@@ -17,46 +17,10 @@
 
 #include "include.hpp"
 
+#include "PipelineType.hpp"
+
 namespace apps::hamming_neighbors
 {
-    enum class PipelineType
-    {
-        GenerateHashes,
-        FindHammingNeighbors
-    };
-
-    class Hash
-    {
-    public:
-        uint32_t id{};
-        uint32_t hash1{};
-        uint32_t hash2{};
-    };
-
-    class PushConsts
-    {
-    public:
-        vk::DeviceAddress symbolBufferAddress{};
-        vk::DeviceAddress hashBufferAddress{};
-        vk::DeviceAddress resultBufferAddress{};
-    };
-
-    class PushConstants
-    {
-    public:
-        enum class Algorithm : uint32_t
-        {
-            eLocalBitonicMergeSort = 0,
-            eLocalDisperse = 1,
-            eGlobalFlip = 2,
-            eGlobalDisperse = 3
-        };
-
-        uint32_t h;
-        Algorithm algorithm;
-        vk::DeviceAddress hashBufferAddress;
-    };
-
     class HammingNeighbors final : public apps::vulkan_app::VulkanApp
     {
     public:
