@@ -25,7 +25,7 @@ namespace apps::bit_generator
     {
     public:
         uint32_t seed{};
-        Algorithm algorithm{ Algorithm::eCreate };
+        Algorithm algorithm{Algorithm::eCreate};
         vk::DeviceAddress ssbo{};
     };
 }

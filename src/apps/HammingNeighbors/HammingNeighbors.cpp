@@ -73,7 +73,7 @@ namespace apps::hamming_neighbors
         makeSymbolBuffer();
 
         makeHashBuffer();
-         
+
         makeResultBuffer();
 
         runPipeline(PipelineType::eGenerateHashes);

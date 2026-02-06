@@ -19,11 +19,11 @@
 
 namespace apps::hamming_neighbors
 {
-class PushConstants
-{
-public:
-    vk::DeviceAddress symbolBufferAddress{};
-    vk::DeviceAddress hashBufferAddress{};
-    vk::DeviceAddress resultBufferAddress{};
-};
+    class PushConstants
+    {
+    public:
+        vk::DeviceAddress symbolBufferAddress{};
+        vk::DeviceAddress hashBufferAddress{};
+        vk::DeviceAddress resultBufferAddress{};
+    };
 }
