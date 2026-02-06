@@ -1,6 +1,6 @@
 #pragma once
 
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,5 +15,4 @@
 // limitations under the License.
 //
 
-#define DVK_USE_PLATFORM_WIN32_KHR
 #include <vma/vk_mem_alloc.h>

@@ -1,0 +1,72 @@
+// Copyright(c) 2025, Bohdan Soproniuk
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+#version 450
+
+#extension GL_EXT_buffer_reference : require
+
+layout(local_size_x_id = 0) in;
+layout(constant_id = 1) const uint count = 0;
+layout(constant_id = 2) const uint length_ = 0;
+
+const uint base1 = 33;
+const uint base2 = 209;
+const uint mod1 = 65521;
+const uint mod2 = 16777213;
+
+struct Hash
+{
+    uint id;
+    uint hash1;
+    uint hash2;
+};
+
+layout(buffer_reference, std430) readonly buffer SymbolBuffer
+{
+    uint symbols[];
+};
+
+layout(buffer_reference, std430) buffer HashBuffer
+{
+    Hash hashes[];
+};
+
+layout(push_constant) uniform ReferenceBlock
+{
+    SymbolBuffer sb;
+    HashBuffer hb;
+};
+
+void main()
+{
+    const uint id = gl_GlobalInvocationID.x;
+    if (id < count)
+    {
+        uint hash1 = 0;
+        uint hash2 = 0;
+        uint coeff1 = base1;
+        uint coeff2 = 1;
+        for (uint i = 0; i < length_; ++i)
+        {
+            hash1 = (hash1 + coeff1 * sb.symbols[id * length_ + i]) % mod1;
+            hash2 = (hash2 + coeff2 * sb.symbols[id * length_ + i]) % mod2;
+            coeff1 = coeff1 * base1 % mod1;
+            coeff2 = coeff2 * base2 % mod2;
+        }
+        hb.hashes[id].id = id;
+        hb.hashes[id].hash1 = hash1;
+        hb.hashes[id].hash2 = hash2;
+    }
+}

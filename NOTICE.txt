@@ -18,5 +18,6 @@ This project uses the following third-party tools:
 - Vulkan SDK
 - Visual Studio
 - Visual Studio Code
+- Xcode
 
 Trademarks are the property of their respective owners.

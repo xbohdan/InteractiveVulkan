@@ -15,7 +15,21 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp/VulkanApp.hpp"
-#include "apps/BitGenerator/BitGenerator.hpp"
-#include "apps/HammingNeighbors/HammingNeighbors.hpp"
-#include "apps/StaticCube/StaticCube.hpp"
+#include "../VulkanApp/VulkanApp.hpp"
+
+#include "../../intvlk/include.hpp"
+
+#include "../../intvlk/utils.hpp"
+
+#include "../../intvlk/Error.hpp"
+#include "../../intvlk/PerFrameData.hpp"
+#include "../../intvlk/SwapchainData.hpp"
+#include "../../intvlk/WindowData.hpp"
+
+#include "../../intvlk/glm_utils/include.hpp"
+
+#include "../../intvlk/glslang_utils/GlslangContext.hpp"
+
+#include "../../intvlk/vma_utils/DepthAttachmentData.hpp"
+#include "../../intvlk/vma_utils/ImageData.hpp"
+#include "../../intvlk/vma_utils/MeshData.hpp"

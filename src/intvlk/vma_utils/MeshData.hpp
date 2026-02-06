@@ -1,6 +1,6 @@
 #pragma once
 
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 #include "include.hpp"
 
 #include "BufferData.hpp"
-
-#include <glm/glm.hpp>
 
 namespace intvlk::vma_utils
 {
@@ -40,8 +38,7 @@ namespace intvlk::vma_utils
                                vk::BufferUsageFlagBits::eShaderDeviceAddress,
                            VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
                            {},
-                           VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                               VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT}
+                           VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT}
         {
             vk::BufferDeviceAddressInfo bufferDeviceAddressInfo{};
             bufferDeviceAddressInfo.buffer = *vertexBuffer.buffer;
@@ -66,8 +63,7 @@ namespace intvlk::vma_utils
                                       vk::BufferUsageFlagBits::eTransferDst,
                                   VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE,
                                   {},
-                                  VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
-                                      VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT};
+                                  VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT};
             }
             return BufferData{nullptr};
         }

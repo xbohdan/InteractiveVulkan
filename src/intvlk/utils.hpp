@@ -1,7 +1,7 @@
 #pragma once
 
 // Copyright(c) 2019, NVIDIA CORPORATION. All rights reserved.
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@
 
 #include "include.hpp"
 
-#include "errors.hpp"
+#include "Error.hpp"
 
 #include <fstream>
+#include <iostream>
 #include <numeric>
 #include <unordered_set>
 
@@ -221,15 +222,47 @@ namespace intvlk
         commandBuffer.pipelineBarrier2(vk::DependencyInfo{vk::DependencyFlags{}, memoryBarrier});
     }
 
-    inline std::vector<const char *> gatherExtensions(const std::vector<std::string> &extensions
+    inline std::vector<const char *> gatherDeviceExtensions(const std::vector<std::string> &extensions
 #if !defined(NDEBUG)
-                                                      ,
-                                                      const std::vector<vk::ExtensionProperties> &extensionProperties
+                                                            ,
+                                                            const std::vector<vk::ExtensionProperties> &extensionProperties
 #endif
-                                                      ,
-                                                      SDL_Window *window = nullptr)
+    )
     {
         std::vector<const char *> requiredExtensions{};
+#if defined(VK_USE_PLATFORM_METAL_EXT)
+        requiredExtensions.emplace_back(vk::KHRPortabilitySubsetExtensionName);
+#endif
+        for (const auto &ext : extensions)
+        {
+            requiredExtensions.emplace_back(ext.c_str());
+        }
+        std::unordered_set<std::string_view> uniqueExtensions;
+        std::vector<const char *> enabledExtensions{};
+        for (const auto &ext : requiredExtensions)
+        {
+            if (uniqueExtensions.emplace(ext).second)
+            {
+                assert(std::ranges::any_of(extensionProperties, [ext](const vk::ExtensionProperties &ep)
+                                           { return strcmp(ext, ep.extensionName) == 0; }));
+                enabledExtensions.emplace_back(ext);
+            }
+        }
+        return enabledExtensions;
+    }
+
+    inline std::vector<const char *> gatherInstanceExtensions(const std::vector<std::string> &extensions
+#if !defined(NDEBUG)
+                                                              ,
+                                                              const std::vector<vk::ExtensionProperties> &extensionProperties
+#endif
+                                                              ,
+                                                              SDL_Window *window = nullptr)
+    {
+        std::vector<const char *> requiredExtensions{};
+#if defined(VK_USE_PLATFORM_METAL_EXT)
+        requiredExtensions.emplace_back(vk::KHRPortabilityEnumerationExtensionName);
+#endif
         for (const auto &ext : extensions)
         {
             requiredExtensions.emplace_back(ext.c_str());
@@ -360,7 +393,7 @@ namespace intvlk
         uint32_t maxSets{std::accumulate(poolSizes.begin(), poolSizes.end(), 0U,
                                          [](uint32_t sum, const vk::DescriptorPoolSize &dps)
                                          { return sum + dps.descriptorCount; })};
-        assert(0 < maxSets);
+        assert(maxSets > 0);
 
         vk::DescriptorPoolCreateInfo descriptorPoolCreateInfo{vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
                                                               maxSets,
@@ -389,12 +422,13 @@ namespace intvlk
                                        const std::vector<std::string> &extensions,
                                        uint32_t queueFamilyIndex)
     {
-        std::vector<const char *> enabledExtensions{};
-        enabledExtensions.reserve(extensions.size());
-        for (const auto &ext : extensions)
-        {
-            enabledExtensions.emplace_back(ext.c_str());
-        }
+        std::vector<const char *> enabledExtensions{
+            gatherDeviceExtensions(extensions
+#if !defined(NDEBUG)
+                                   ,
+                                   physicalDevice.enumerateDeviceExtensionProperties()
+#endif
+                                       )};
 
         float queuePriority{0.0f};
         vk::DeviceQueueCreateInfo deviceQueueCreateInfo{vk::DeviceQueueCreateFlags{},
@@ -456,7 +490,7 @@ namespace intvlk
         if (0 < vertexStride)
         {
             vertexInputAttributeDescriptions.reserve(vertexInputAttributeFormatOffset.size());
-            for (uint32_t i{0}; i < vertexInputAttributeFormatOffset.size(); ++i)
+            for (size_t i{0}; i < vertexInputAttributeFormatOffset.size(); ++i)
             {
                 vertexInputAttributeDescriptions.emplace_back(i,
                                                               0,
@@ -566,13 +600,18 @@ namespace intvlk
 #endif
         )
     {
+        vk::InstanceCreateFlags instanceCreateFlags{
+#if defined(VK_USE_PLATFORM_METAL_EXT)
+            vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR
+#endif
+        };
 #if defined(NDEBUG)
         vk::StructureChain<vk::InstanceCreateInfo> instanceCreateInfo{
-            {vk::InstanceCreateFlags{}, &applicationInfo, layers, extensions}};
+            {instanceCreateFlags, &applicationInfo, layers, extensions}};
 #else
         vk::StructureChain<vk::InstanceCreateInfo, vk::LayerSettingsCreateInfoEXT, vk::DebugUtilsMessengerCreateInfoEXT>
             instanceCreateInfo{
-                {vk::InstanceCreateFlags{}, &applicationInfo, layers, extensions},
+                {instanceCreateFlags, &applicationInfo, layers, extensions},
                 {layerSettings},
                 makeDebugUtilsMessengerCreateInfo()};
 #endif
@@ -596,21 +635,23 @@ namespace intvlk
 #endif
                              )};
         std::vector<const char *> enabledExtensions{
-            gatherExtensions(extensions
+            gatherInstanceExtensions(extensions
 #if !defined(NDEBUG)
-                             ,
-                             context.enumerateInstanceExtensionProperties()
+                                     ,
+                                     context.enumerateInstanceExtensionProperties()
 #endif
-                                 ,
-                             window)};
+                                         ,
+                                     window)};
 #if !defined(NDEBUG)
-        std::vector<const char *> validateGpuBasedValues{"GPU_BASED_GPU_ASSISTED"};
+        bool validateBestPracticesValues{false};
         bool validateSyncValues{true};
-        bool validateBestPracticesValues{true};
+        bool printfEnableValues{true};
+        bool gpuAVEnableValues{false};
         std::vector<vk::LayerSettingEXT> layerSettings{
-            {khronosValidationLayerName, "validate_gpu_based", vk::LayerSettingTypeEXT::eString, validateGpuBasedValues},
+            {khronosValidationLayerName, "validate_best_practices", vk::LayerSettingTypeEXT::eBool32, 1, &validateBestPracticesValues},
             {khronosValidationLayerName, "validate_sync", vk::LayerSettingTypeEXT::eBool32, 1, &validateSyncValues},
-            {khronosValidationLayerName, "validate_best_practices", vk::LayerSettingTypeEXT::eBool32, 1, &validateBestPracticesValues}};
+            {khronosValidationLayerName, "printf_enable", vk::LayerSettingTypeEXT::eBool32, 1, &printfEnableValues},
+            {khronosValidationLayerName, "gpuav_enable", vk::LayerSettingTypeEXT::eBool32, 1, &gpuAVEnableValues}};
 #endif
 #if defined(NDEBUG)
         vk::StructureChain<vk::InstanceCreateInfo>
@@ -728,18 +769,11 @@ namespace intvlk
         return pickedFormat;
     }
 
-    inline std::string readFile(std::string_view filename)
+    inline std::string readFile(std::string_view fileName)
     {
-        std::string shaderCode{};
-        if (std::ifstream file{std::string{filename}, std::ios::ate})
-        {
-            const auto fileSize{static_cast<size_t>(file.tellg())};
-            shaderCode.resize(fileSize);
-            file.seekg(0);
-            file.read(shaderCode.data(), fileSize);
-            return shaderCode;
-        }
-        throw std::runtime_error("Failed to open file: " + std::string{filename});
+        std::ifstream file{std::string{fileName}};
+        file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
     }
 
     inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,

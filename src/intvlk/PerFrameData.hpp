@@ -1,7 +1,7 @@
 #pragma once
 
 // Copyright(c) 2019, NVIDIA CORPORATION. All rights reserved.
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,8 +33,7 @@ namespace intvlk
             : commandPool{device, vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, queueFamilyIndex}},
               commandBuffer{makeCommandBuffer(device, commandPool)},
               fence{device, vk::FenceCreateInfo{vk::FenceCreateFlagBits::eSignaled}},
-              presentCompleteSemaphore{device, vk::SemaphoreCreateInfo{}},
-              renderCompleteSemaphore{device, vk::SemaphoreCreateInfo{}}
+              acquireSemaphore{device, vk::SemaphoreCreateInfo{}}
         {
         }
 
@@ -44,7 +43,7 @@ namespace intvlk
         {
             std::vector<PerFrameData> perFrameData{};
             perFrameData.reserve(queuedFramesCount);
-            for (uint32_t i{0}; i < queuedFramesCount; ++i)
+            for (size_t i{0}; i < queuedFramesCount; ++i)
             {
                 perFrameData.emplace_back(device, queueFamilyIndex);
             }
@@ -54,7 +53,6 @@ namespace intvlk
         vk::raii::CommandPool commandPool{VK_NULL_HANDLE};
         vk::raii::CommandBuffer commandBuffer{nullptr};
         vk::raii::Fence fence{VK_NULL_HANDLE};
-        vk::raii::Semaphore presentCompleteSemaphore{VK_NULL_HANDLE};
-        vk::raii::Semaphore renderCompleteSemaphore{VK_NULL_HANDLE};
+        vk::raii::Semaphore acquireSemaphore{VK_NULL_HANDLE};
     };
 }

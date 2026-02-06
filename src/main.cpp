@@ -1,4 +1,4 @@
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,23 +23,23 @@ int main(int /*argc*/, char ** /*argv*/)
     {
         const uint32_t width{900};
         const uint32_t height{600};
-        VulkanCube a{width, height};
-        VulkanApp &app{a};
+        apps::static_cube::StaticCube a{width, height};
+        apps::vulkan_app::VulkanApp &app{a};
         app.run();
     }
     catch (const intvlk::Error &e)
     {
-        std::cerr << "intvlk::Error: " << e.what() << '\n';
+        std::cerr << "intvlk::Error: " << e.what() << "\n";
         return EXIT_FAILURE;
     }
     catch (const vk::Error &e)
     {
-        std::cerr << "vk::Error: " << e.what() << '\n';
+        std::cerr << "vk::Error: " << e.what() << "\n";
         return EXIT_FAILURE;
     }
     catch (const std::exception &e)
     {
-        std::cerr << "std::exception: " << e.what() << '\n';
+        std::cerr << "std::exception: " << e.what() << "\n";
         return EXIT_FAILURE;
     }
     catch (...)

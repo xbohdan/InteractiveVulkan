@@ -15,7 +15,10 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp/VulkanApp.hpp"
-#include "apps/BitGenerator/BitGenerator.hpp"
-#include "apps/HammingNeighbors/HammingNeighbors.hpp"
-#include "apps/StaticCube/StaticCube.hpp"
+namespace intvlk
+{
+    class Error : public std::runtime_error
+    {
+        using std::runtime_error::runtime_error;
+    };
+}

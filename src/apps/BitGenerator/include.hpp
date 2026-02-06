@@ -1,6 +1,6 @@
 #pragma once
 
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
 // limitations under the License.
 //
 
-class VulkanApp
-{
-public:
-    virtual ~VulkanApp() = default;
+#include "../VulkanApp/VulkanApp.hpp"
 
-    virtual void run() = 0;
-};
+#include "../../intvlk/include.hpp"
+
+#include "../../intvlk/utils.hpp"
+
+#include "../../intvlk/glslang_utils/GlslangContext.hpp"
+
+#include "../../intvlk/vma_utils/BufferData.hpp"

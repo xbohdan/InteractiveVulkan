@@ -1,7 +1,7 @@
 #pragma once
 
 // Copyright(c) 2019, NVIDIA CORPORATION. All rights reserved.
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 
 #include "utils.hpp"
 
-#include "errors.hpp"
+#include "Error.hpp"
 
 namespace intvlk
 {
@@ -57,7 +57,7 @@ namespace intvlk
             }
             if (swapchainExtent.width == 0 || swapchainExtent.height == 0)
             {
-                throw SwapchainZeroDimensionError{"Swapchain extent is zero"};
+                throw Error{"Swapchain extent is zero"};
             }
             extent = swapchainExtent;
             vk::SurfaceTransformFlagBitsKHR preTransform{
@@ -100,8 +100,9 @@ namespace intvlk
             swapchain = vk::raii::SwapchainKHR{device, swapchainCreateInfo};
 
             images = swapchain.getImages();
+            uint32_t imageCount{static_cast<uint32_t>(images.size())};
 
-            imageViews.reserve(images.size());
+            imageViews.reserve(imageCount);
             vk::ImageViewCreateInfo imageViewCreateInfo{
                 vk::ImageViewCreateFlags{},
                 vk::Image{},
@@ -114,6 +115,12 @@ namespace intvlk
                 imageViewCreateInfo.image = image;
                 imageViews.emplace_back(device, imageViewCreateInfo);
             }
+
+            submitSemaphores.reserve(imageCount);
+            for (size_t i{0}; i < imageCount; ++i)
+            {
+                submitSemaphores.emplace_back(device, vk::SemaphoreCreateInfo{});
+            }
         }
 
         vk::Format colorFormat{};
@@ -121,5 +128,6 @@ namespace intvlk
         vk::raii::SwapchainKHR swapchain{VK_NULL_HANDLE};
         std::vector<vk::Image> images{};
         std::vector<vk::raii::ImageView> imageViews{};
+        std::vector<vk::raii::Semaphore> submitSemaphores{};
     };
 }

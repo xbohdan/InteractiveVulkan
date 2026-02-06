@@ -1,6 +1,6 @@
 #pragma once
 
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,15 +17,12 @@
 
 #include "include.hpp"
 
-namespace intvlk
+namespace apps::static_cube
 {
-    class Error : public std::runtime_error
+    class DrawPushConstants
     {
-        using std::runtime_error::runtime_error;
-    };
-
-    class SwapchainZeroDimensionError : public Error
-    {
-        using Error::Error;
+    public:
+        glm::mat4 renderMatrix{};
+        vk::DeviceAddress vertexBufferAddress{};
     };
 }

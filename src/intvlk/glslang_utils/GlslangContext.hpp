@@ -1,7 +1,7 @@
 #pragma once
 
 // Copyright(c) 2019, NVIDIA CORPORATION. All rights reserved.
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
 #include "include.hpp"
 
-#include "../errors.hpp"
+#include "../Error.hpp"
 
 #include <iostream>
 
@@ -100,8 +100,8 @@ namespace intvlk::glslang_utils
 
             if (!shader.parse(GetDefaultResources(), 100, false, messages))
             {
-                std::cerr << shader.getInfoLog() << '\n'
-                          << shader.getInfoDebugLog() << '\n';
+                std::cerr << shader.getInfoLog() << "\n"
+                          << shader.getInfoDebugLog() << "\n";
                 return false;
             }
 
@@ -110,8 +110,8 @@ namespace intvlk::glslang_utils
 
             if (!program.link(messages))
             {
-                std::cerr << shader.getInfoLog() << '\n'
-                          << shader.getInfoDebugLog() << '\n';
+                std::cerr << shader.getInfoLog() << "\n"
+                          << shader.getInfoDebugLog() << "\n";
                 return false;
             }
 

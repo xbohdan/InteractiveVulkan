@@ -1,7 +1,7 @@
 #pragma once
 
 // Copyright(c) 2019, NVIDIA CORPORATION. All rights reserved.
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
 
 #include "include.hpp"
 
-#include "utils.hpp"
-
 #include "../utils.hpp"
+
+#include "utils.hpp"
 
 namespace intvlk::vma_utils
 {
@@ -80,7 +80,7 @@ namespace intvlk::vma_utils
             VmaAllocationCreateInfo allocationCreateInfo{};
             allocationCreateInfo.usage = memoryUsage;
             allocationCreateInfo.requiredFlags = static_cast<VkMemoryPropertyFlags>(requiredMemoryProperties);
-            allocationCreateInfo.flags = allocationFlags | VMA_ALLOCATION_CREATE_MAPPED_BIT;
+            allocationCreateInfo.flags = allocationFlags;
             VmaAllocation _allocation{nullptr};
             vmaCreateBuffer(allocator.get(),
                             &_bufferCreateInfo,
@@ -128,7 +128,8 @@ namespace intvlk::vma_utils
                                          vk::BufferUsageFlagBits::eTransferSrc,
                                          VMA_MEMORY_USAGE_AUTO,
                                          {},
-                                         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT};
+                                         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                                             VMA_ALLOCATION_CREATE_MAPPED_BIT};
                 copyToDevice(allocator.get(), stagingBuffer.allocation.get(), std::span{data}, elementSize);
                 vmaFlushAllocation(allocator.get(), stagingBuffer.allocation.get(), 0, dataSize);
 
@@ -140,7 +141,7 @@ namespace intvlk::vma_utils
             }
         }
 
-        const std::shared_ptr<VmaAllocator_T> &allocator{nullptr};
+        std::shared_ptr<VmaAllocator_T> allocator{nullptr};
         std::shared_ptr<VmaAllocation_T> allocation{nullptr};
         vk::raii::Buffer buffer{VK_NULL_HANDLE};
         VmaAllocationInfo allocationInfo{};

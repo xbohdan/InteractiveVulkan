@@ -1,46 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="src\intvlk">
-      <UniqueIdentifier>{2dde8d1b-5238-4d55-aeab-4d8c70616d32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\intvlk\glm_utils">
-      <UniqueIdentifier>{26801a03-bb73-4d62-819a-c2a6cfa48c3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\intvlk\glslang_utils">
-      <UniqueIdentifier>{f3f827cc-7ba3-4018-acd7-63e154191470}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\intvlk\vma_utils">
-      <UniqueIdentifier>{0c7df0ea-72df-431b-91f9-4979df147297}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\apps">
-      <UniqueIdentifier>{f931b50f-9b37-4050-907a-900ba75f9ebb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\shaders">
-      <UniqueIdentifier>{e84ad96e-8305-43be-a574-330582aa943a}</UniqueIdentifier>
-    </Filter>
+    <None Include="README.md" />
+    <None Include="src\apps\BitGenerator\shaders\bit_generator.comp">
+      <Filter>src\apps\BitGenerator\shaders</Filter>
+    </None>
+    <None Include="src\apps\HammingNeighbors\shaders\find_hamming_neighbors.comp">
+      <Filter>src\apps\HammingNeighbors\shaders</Filter>
+    </None>
+    <None Include="src\apps\HammingNeighbors\shaders\generate_hashes.comp">
+      <Filter>src\apps\HammingNeighbors\shaders</Filter>
+    </None>
+    <None Include="src\apps\HammingNeighbors\shaders\sort_hashes.comp">
+      <Filter>src\apps\HammingNeighbors\shaders</Filter>
+    </None>
+    <None Include="src\apps\StaticCube\shaders\static_cube.frag">
+      <Filter>src\apps\StaticCube\shaders</Filter>
+    </None>
+    <None Include="src\apps\StaticCube\shaders\static_cube.vert">
+      <Filter>src\apps\StaticCube\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" />
-    <None Include="src\shaders\hamming_one_generator.comp">
-      <Filter>src\shaders</Filter>
-    </None>
-    <None Include="src\shaders\vulkan_cube.frag">
-      <Filter>src\shaders</Filter>
-    </None>
-    <None Include="src\shaders\vulkan_cube.vert">
-      <Filter>src\shaders</Filter>
-    </None>
+    <Text Include="LICENSE.txt" />
+    <Text Include="NOTICE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{abcd6817-7ba6-40a7-9428-058e3cd8664d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps">
+      <UniqueIdentifier>{29a72e91-5903-4722-993e-83bfe19c7eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intvlk">
+      <UniqueIdentifier>{843d0302-bd0d-4aa7-9430-8ad4b297a42e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intvlk\glslang_utils">
+      <UniqueIdentifier>{e9aff666-94a9-4d49-94a2-ee90a1e81369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\intvlk\vma_utils">
+      <UniqueIdentifier>{c3473ab0-b5e7-42a9-9ca9-a575717514bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\BitGenerator">
+      <UniqueIdentifier>{2f3295af-24a8-4617-9983-38aa00bc4b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\HammingNeighbors">
+      <UniqueIdentifier>{8338aa0b-945b-4640-bcde-4c15cdc20cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\StaticCube">
+      <UniqueIdentifier>{4fc0f09a-3246-42f7-b62f-e86349b8bc02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\VulkanApp">
+      <UniqueIdentifier>{84c711b9-c152-4cfe-a02f-65345398dc21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\BitGenerator\shaders">
+      <UniqueIdentifier>{7d5707af-9f32-4ab0-9e32-afdffb09c896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\HammingNeighbors\shaders">
+      <UniqueIdentifier>{cb851554-873c-48e5-b663-e172164fd73e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apps\StaticCube\shaders">
+      <UniqueIdentifier>{da9b21f7-a9b6-45ba-8990-0f01776eeddf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\apps\include.hpp">
+      <Filter>src\apps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\Error.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
     <ClInclude Include="src\intvlk\include.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\PerFrameData.hpp">
+      <Filter>src\intvlk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\SdlContext.hpp">
       <Filter>src\intvlk</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\SwapchainData.hpp">
@@ -49,20 +88,8 @@
     <ClInclude Include="src\intvlk\utils.hpp">
       <Filter>src\intvlk</Filter>
     </ClInclude>
-    <ClInclude Include="src\intvlk\errors.hpp">
-      <Filter>src\intvlk</Filter>
-    </ClInclude>
     <ClInclude Include="src\intvlk\WindowData.hpp">
       <Filter>src\intvlk</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\glm_utils\geometries.hpp">
-      <Filter>src\intvlk\glm_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\glm_utils\include.hpp">
-      <Filter>src\intvlk\glm_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\glm_utils\math.hpp">
-      <Filter>src\intvlk\glm_utils</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\glslang_utils\GlslangContext.hpp">
       <Filter>src\intvlk\glslang_utils</Filter>
@@ -82,38 +109,59 @@
     <ClInclude Include="src\intvlk\vma_utils\include.hpp">
       <Filter>src\intvlk\vma_utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\intvlk\vma_utils\utils.hpp">
-      <Filter>src\intvlk\vma_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\glm_utils\Vertex.hpp">
-      <Filter>src\intvlk\glm_utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\intvlk\vma_utils\MeshData.hpp">
       <Filter>src\intvlk\vma_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\PerFrameData.hpp">
-      <Filter>src\intvlk</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\glm_utils\DrawPushConstants.hpp">
-      <Filter>src\intvlk\glm_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\SdlContext.hpp">
-      <Filter>src\intvlk</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\vma_utils\usage.hpp">
       <Filter>src\intvlk\vma_utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\apps\VulkanCube.hpp">
-      <Filter>src\apps</Filter>
+    <ClInclude Include="src\intvlk\vma_utils\utils.hpp">
+      <Filter>src\intvlk\vma_utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\apps\include.hpp">
-      <Filter>src\apps</Filter>
+    <ClInclude Include="src\apps\BitGenerator\BitGenerator.hpp">
+      <Filter>src\apps\BitGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="src\apps\VulkanApp.hpp">
-      <Filter>src\apps</Filter>
+    <ClInclude Include="src\apps\HammingNeighbors\HammingNeighbors.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
     </ClInclude>
-    <ClInclude Include="src\apps\HammingOneGenerator.hpp">
-      <Filter>src\apps</Filter>
+    <ClInclude Include="src\apps\StaticCube\StaticCube.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\VulkanApp\VulkanApp.hpp">
+      <Filter>src\apps\VulkanApp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\DrawPushConstants.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\geometries.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\include.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\math.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\Vertex.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\BitGenerator\PushConstants.hpp">
+      <Filter>src\apps\BitGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\BitGenerator\Algorithm.hpp">
+      <Filter>src\apps\BitGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\PipelineType.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\Hash.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\PushConstants.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\SortPushConstants.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,15 +171,14 @@
     <ClCompile Include="src\intvlk\vma_utils\usage.cpp">
       <Filter>src\intvlk\vma_utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\apps\VulkanCube.cpp">
-      <Filter>src\apps</Filter>
+    <ClCompile Include="src\apps\BitGenerator\BitGenerator.cpp">
+      <Filter>src\apps\BitGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="src\apps\HammingOneGenerator.cpp">
-      <Filter>src\apps</Filter>
+    <ClCompile Include="src\apps\HammingNeighbors\HammingNeighbors.cpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="LICENSE.txt" />
-    <Text Include="NOTICE.txt" />
+    <ClCompile Include="src\apps\StaticCube\StaticCube.cpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

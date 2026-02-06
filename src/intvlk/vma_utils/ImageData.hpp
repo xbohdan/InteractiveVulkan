@@ -1,7 +1,7 @@
 #pragma once
 
 // Copyright(c) 2019, NVIDIA CORPORATION. All rights reserved.
-// Copyright(c) 2024, Bohdan Soproniuk
+// Copyright(c) 2024-2025, Bohdan Soproniuk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -109,7 +109,7 @@ namespace intvlk::vma_utils
             return {std::move(image), allocation};
         }
 
-        const std::shared_ptr<VmaAllocator_T> &allocator{nullptr};
+        std::shared_ptr<VmaAllocator_T> allocator{nullptr};
         std::shared_ptr<VmaAllocation_T> allocation{nullptr};
         vk::raii::Image image{VK_NULL_HANDLE};
         vk::raii::ImageView imageView{VK_NULL_HANDLE};

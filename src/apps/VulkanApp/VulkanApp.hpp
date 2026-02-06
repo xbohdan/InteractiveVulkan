@@ -15,7 +15,26 @@
 // limitations under the License.
 //
 
-#include "apps/VulkanApp/VulkanApp.hpp"
-#include "apps/BitGenerator/BitGenerator.hpp"
-#include "apps/HammingNeighbors/HammingNeighbors.hpp"
-#include "apps/StaticCube/StaticCube.hpp"
+#include <string>
+
+namespace apps::vulkan_app
+{
+    class VulkanApp
+    {
+    public:
+        explicit VulkanApp(std::string appName)
+            : appName{std::move(appName)} {}
+
+        virtual ~VulkanApp() = default;
+
+        std::string getAppName() const
+        {
+            return appName;
+        }
+
+        virtual void run() = 0;
+
+    private:
+        const std::string appName;
+    };
+}
