@@ -776,11 +776,11 @@ namespace intvlk
         return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
     }
 
-    inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,
-                               vk::Image image,
-                               vk::Format format,
-                               vk::ImageLayout oldImageLayout,
-                               vk::ImageLayout newImageLayout)
+    inline void setImageLayoutBroken(const vk::raii::CommandBuffer &commandBuffer,
+                                     vk::Image image,
+                                     vk::Format format,
+                                     vk::ImageLayout oldImageLayout,
+                                     vk::ImageLayout newImageLayout)
     {
         vk::AccessFlags2 sourceAccessMask{};
         switch (oldImageLayout)
@@ -890,6 +890,43 @@ namespace intvlk
                                                    sourceAccessMask,
                                                    destinationStage,
                                                    destinationAccessMask,
+                                                   oldImageLayout,
+                                                   newImageLayout,
+                                                   vk::QueueFamilyIgnored,
+                                                   vk::QueueFamilyIgnored,
+                                                   image,
+                                                   imageSubresourceRange};
+        commandBuffer.pipelineBarrier2(vk::DependencyInfo{vk::DependencyFlags{},
+                                                          nullptr,
+                                                          nullptr,
+                                                          imageMemoryBarrier});
+    }
+
+    inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,
+                               vk::Image image,
+                               vk::Format format,
+                               vk::ImageLayout oldImageLayout,
+                               vk::ImageLayout newImageLayout)
+    {
+        vk::ImageAspectFlags aspectMask{};
+        if (newImageLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
+        {
+            aspectMask = vk::ImageAspectFlagBits::eDepth;
+            if (format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint)
+            {
+                aspectMask |= vk::ImageAspectFlagBits::eStencil;
+            }
+        }
+        else
+        {
+            aspectMask = vk::ImageAspectFlagBits::eColor;
+        }
+
+        vk::ImageSubresourceRange imageSubresourceRange{aspectMask, 0, 1, 0, 1};
+        vk::ImageMemoryBarrier2 imageMemoryBarrier{vk::PipelineStageFlagBits2::eAllCommands,
+                                                   vk::AccessFlagBits2::eMemoryWrite,
+                                                   vk::PipelineStageFlagBits2::eAllCommands,
+                                                   vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
                                                    oldImageLayout,
                                                    newImageLayout,
                                                    vk::QueueFamilyIgnored,

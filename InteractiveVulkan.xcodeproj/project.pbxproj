@@ -8,22 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		946D8C6C2E4EA5C3004D794F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946D8C4F2E4EA2D8004D794F /* SDL2.framework */; };
-		946D8C912E4EAD5D004D794F /* libvulkan.1.4.321.dylib in Copy Files */ = {isa = PBXBuildFile; fileRef = 946D8C8E2E4EAD5D004D794F /* libvulkan.1.4.321.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		949469072E5E69CF00827594 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 949469062E5E69CF00827594 /* Cube.cpp */; };
-		949469082E5E69CF00827594 /* BitGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 949469042E5E69CF00827594 /* BitGenerator.cpp */; };
-		94C0FB872E65DEBC0027936B /* HammingNeighbor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94C0FB862E65DEBC0027936B /* HammingNeighbor.cpp */; };
 		94CD5B4C2E52496100BF0933 /* usage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CD5B372E52496100BF0933 /* usage.cpp */; };
 		94CD5B4E2E52496100BF0933 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CD5B472E52496100BF0933 /* main.cpp */; };
-		94CD5B522E52908000BF0933 /* libvulkan.1.4.321.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 946D8C8E2E4EAD5D004D794F /* libvulkan.1.4.321.dylib */; };
-		94CD5B5E2E5295C400BF0933 /* hamming_one_generator.comp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94CD5B422E52496100BF0933 /* hamming_one_generator.comp */; };
-		94CD5B5F2E5295C400BF0933 /* vulkan_cube.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94CD5B432E52496100BF0933 /* vulkan_cube.frag */; };
-		94CD5B602E5295C400BF0933 /* vulkan_cube.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94CD5B442E52496100BF0933 /* vulkan_cube.vert */; };
-		94CD5B7B2E54E31A00BF0933 /* vulkan_cube.vert.spv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94CD5B792E54E31A00BF0933 /* vulkan_cube.vert.spv */; };
-		94CD5B7C2E54E31A00BF0933 /* vulkan_cube.frag.spv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94CD5B7A2E54E31A00BF0933 /* vulkan_cube.frag.spv */; };
-		94EF88F92E566C6F00CFE7B7 /* libglslang.dylib in Copy Files */ = {isa = PBXBuildFile; fileRef = 94EF88F72E566C6F00CFE7B7 /* libglslang.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		94EF88FA2E566C6F00CFE7B7 /* libglslang-default-resource-limits.dylib in Copy Files */ = {isa = PBXBuildFile; fileRef = 94EF88F82E566C6F00CFE7B7 /* libglslang-default-resource-limits.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		94EF88FB2E566C9E00CFE7B7 /* libglslang-default-resource-limits.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 94EF88F82E566C6F00CFE7B7 /* libglslang-default-resource-limits.dylib */; };
-		94EF88FC2E566C9E00CFE7B7 /* libglslang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 94EF88F72E566C6F00CFE7B7 /* libglslang.dylib */; };
+		94F816B92F37298D00514833 /* libvulkan.1.3.296.dylib in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		94F816BA2F3729EB00514833 /* libvulkan.1.3.296.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */; };
+		94F816BD2F372AAC00514833 /* libglslang-default-resource-limits.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */; };
+		94F816C02F372AE000514833 /* libglslang.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816BF2F372AE000514833 /* libglslang.a */; };
+		94F816C12F372B0E00514833 /* libglslang-default-resource-limits.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */; };
+		94F816C22F372B0E00514833 /* libglslang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816BF2F372AE000514833 /* libglslang.a */; };
+		94F816E72F372CDF00514833 /* StaticCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94F816E22F372CDF00514833 /* StaticCube.cpp */; };
+		94F816E82F372CDF00514833 /* HammingNeighbors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94F816D32F372CDF00514833 /* HammingNeighbors.cpp */; };
+		94F816E92F372CDF00514833 /* BitGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94F816CA2F372CDF00514833 /* BitGenerator.cpp */; };
+		94F816F02F3730F700514833 /* libSPIRV-Tools.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EA2F3730F700514833 /* libSPIRV-Tools.a */; };
+		94F816F12F3730F700514833 /* libGenericCodeGen.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EB2F3730F700514833 /* libGenericCodeGen.a */; };
+		94F816F22F3730F700514833 /* libSPIRV.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EC2F3730F700514833 /* libSPIRV.a */; };
+		94F816F32F3730F700514833 /* libMachineIndependent.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816ED2F3730F700514833 /* libMachineIndependent.a */; };
+		94F816F42F3730F700514833 /* libSPIRV-Tools-opt.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */; };
+		94F816F52F3730F700514833 /* libOSDependent.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EF2F3730F700514833 /* libOSDependent.a */; };
+		94F816F62F37317200514833 /* libGenericCodeGen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EB2F3730F700514833 /* libGenericCodeGen.a */; };
+		94F816F72F37317200514833 /* libMachineIndependent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816ED2F3730F700514833 /* libMachineIndependent.a */; };
+		94F816F82F37317200514833 /* libOSDependent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EF2F3730F700514833 /* libOSDependent.a */; };
+		94F816F92F37317200514833 /* libSPIRV-Tools-opt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */; };
+		94F816FA2F37317200514833 /* libSPIRV-Tools.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EA2F3730F700514833 /* libSPIRV-Tools.a */; };
+		94F816FB2F37317200514833 /* libSPIRV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EC2F3730F700514833 /* libSPIRV.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,11 +40,6 @@
 			dstPath = src/shaders;
 			dstSubfolderSpec = 7;
 			files = (
-				94CD5B7B2E54E31A00BF0933 /* vulkan_cube.vert.spv in CopyFiles */,
-				94CD5B7C2E54E31A00BF0933 /* vulkan_cube.frag.spv in CopyFiles */,
-				94CD5B5E2E5295C400BF0933 /* hamming_one_generator.comp in CopyFiles */,
-				94CD5B5F2E5295C400BF0933 /* vulkan_cube.frag in CopyFiles */,
-				94CD5B602E5295C400BF0933 /* vulkan_cube.vert in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,9 +49,15 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				94EF88F92E566C6F00CFE7B7 /* libglslang.dylib in Copy Files */,
-				94EF88FA2E566C6F00CFE7B7 /* libglslang-default-resource-limits.dylib in Copy Files */,
-				946D8C912E4EAD5D004D794F /* libvulkan.1.4.321.dylib in Copy Files */,
+				94F816C02F372AE000514833 /* libglslang.a in Copy Files */,
+				94F816BD2F372AAC00514833 /* libglslang-default-resource-limits.a in Copy Files */,
+				94F816F12F3730F700514833 /* libGenericCodeGen.a in Copy Files */,
+				94F816F32F3730F700514833 /* libMachineIndependent.a in Copy Files */,
+				94F816F52F3730F700514833 /* libOSDependent.a in Copy Files */,
+				94F816F22F3730F700514833 /* libSPIRV.a in Copy Files */,
+				94F816F02F3730F700514833 /* libSPIRV-Tools.a in Copy Files */,
+				94F816F42F3730F700514833 /* libSPIRV-Tools-opt.a in Copy Files */,
+				94F816B92F37298D00514833 /* libvulkan.1.3.296.dylib in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,7 +65,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		94583C202E5CDB3900DEF6B3 /* hamming_one.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = hamming_one.txt; sourceTree = "<group>"; };
 		946D8BE62E4E9599004D794F /* InteractiveVulkan.sln */ = {isa = PBXFileReference; lastKnownFileType = text; path = InteractiveVulkan.sln; sourceTree = "<group>"; };
 		946D8BE72E4E9599004D794F /* InteractiveVulkan.vcxproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = InteractiveVulkan.vcxproj; sourceTree = "<group>"; };
 		946D8BE82E4E9599004D794F /* InteractiveVulkan.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = InteractiveVulkan.xcodeproj; sourceTree = "<group>"; };
@@ -66,24 +73,9 @@
 		946D8BEB2E4E9599004D794F /* NOTICE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NOTICE.txt; sourceTree = "<group>"; };
 		946D8BEC2E4E9599004D794F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		946D8C4F2E4EA2D8004D794F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		946D8C8C2E4EAD5D004D794F /* libglslang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglslang.dylib; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libglslang.dylib; sourceTree = "<group>"; };
-		946D8C8D2E4EAD5D004D794F /* libglslang-default-resource-limits.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libglslang-default-resource-limits.dylib"; path = "../../VulkanSDK/1.4.321.0/macOS/lib/libglslang-default-resource-limits.dylib"; sourceTree = "<group>"; };
-		946D8C8E2E4EAD5D004D794F /* libvulkan.1.4.321.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.4.321.dylib; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libvulkan.1.4.321.dylib; sourceTree = "<group>"; };
-		949469032E5E69CF00827594 /* BitGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BitGenerator.hpp; sourceTree = "<group>"; };
-		949469042E5E69CF00827594 /* BitGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BitGenerator.cpp; sourceTree = "<group>"; };
-		949469052E5E69CF00827594 /* Cube.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cube.hpp; sourceTree = "<group>"; };
-		949469062E5E69CF00827594 /* Cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
-		94C0FB852E65DEBC0027936B /* HammingNeighbor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HammingNeighbor.hpp; sourceTree = "<group>"; };
-		94C0FB862E65DEBC0027936B /* HammingNeighbor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HammingNeighbor.cpp; sourceTree = "<group>"; };
 		94CD5AD32E52491C00BF0933 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 		94CD5AD42E52491C00BF0933 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		94CD5B232E52496100BF0933 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
-		94CD5B242E52496100BF0933 /* VulkanApp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VulkanApp.hpp; sourceTree = "<group>"; };
-		94CD5B282E52496100BF0933 /* DrawPushConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DrawPushConstants.hpp; sourceTree = "<group>"; };
-		94CD5B292E52496100BF0933 /* geometries.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometries.hpp; sourceTree = "<group>"; };
 		94CD5B2A2E52496100BF0933 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
-		94CD5B2B2E52496100BF0933 /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
-		94CD5B2C2E52496100BF0933 /* Vertex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex.hpp; sourceTree = "<group>"; };
 		94CD5B2E2E52496100BF0933 /* GlslangContext.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GlslangContext.hpp; sourceTree = "<group>"; };
 		94CD5B2F2E52496100BF0933 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
 		94CD5B312E52496100BF0933 /* BufferData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BufferData.hpp; sourceTree = "<group>"; };
@@ -94,35 +86,52 @@
 		94CD5B362E52496100BF0933 /* usage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = usage.hpp; sourceTree = "<group>"; };
 		94CD5B372E52496100BF0933 /* usage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = usage.cpp; sourceTree = "<group>"; };
 		94CD5B382E52496100BF0933 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
-		94CD5B3A2E52496100BF0933 /* errors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = errors.hpp; sourceTree = "<group>"; };
 		94CD5B3B2E52496100BF0933 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
 		94CD5B3C2E52496100BF0933 /* PerFrameData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PerFrameData.hpp; sourceTree = "<group>"; };
 		94CD5B3D2E52496100BF0933 /* SdlContext.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SdlContext.hpp; sourceTree = "<group>"; };
 		94CD5B3E2E52496100BF0933 /* SwapchainData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SwapchainData.hpp; sourceTree = "<group>"; };
 		94CD5B3F2E52496100BF0933 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
 		94CD5B402E52496100BF0933 /* WindowData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WindowData.hpp; sourceTree = "<group>"; };
-		94CD5B422E52496100BF0933 /* hamming_one_generator.comp */ = {isa = PBXFileReference; lastKnownFileType = text; path = hamming_one_generator.comp; sourceTree = "<group>"; };
-		94CD5B432E52496100BF0933 /* vulkan_cube.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = vulkan_cube.frag; sourceTree = "<group>"; };
-		94CD5B442E52496100BF0933 /* vulkan_cube.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = vulkan_cube.vert; sourceTree = "<group>"; };
 		94CD5B462E52496100BF0933 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
 		94CD5B472E52496100BF0933 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		94CD5B612E52990A00BF0933 /* libOSDependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOSDependent.a; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libOSDependent.a; sourceTree = "<group>"; };
-		94CD5B622E52990A00BF0933 /* libGenericCodeGen.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGenericCodeGen.a; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libGenericCodeGen.a; sourceTree = "<group>"; };
-		94CD5B632E52990A00BF0933 /* libMachineIndependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMachineIndependent.a; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libMachineIndependent.a; sourceTree = "<group>"; };
-		94CD5B642E52990A00BF0933 /* libSPIRV.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSPIRV.dylib; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libSPIRV.dylib; sourceTree = "<group>"; };
-		94CD5B692E5299ED00BF0933 /* libMachineIndependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMachineIndependent.a; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libMachineIndependent.a; sourceTree = "<group>"; };
-		94CD5B6A2E5299ED00BF0933 /* libSPIRV.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSPIRV.dylib; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libSPIRV.dylib; sourceTree = "<group>"; };
-		94CD5B6B2E5299ED00BF0933 /* libGenericCodeGen.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGenericCodeGen.a; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libGenericCodeGen.a; sourceTree = "<group>"; };
-		94CD5B6C2E5299ED00BF0933 /* libOSDependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOSDependent.a; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libOSDependent.a; sourceTree = "<group>"; };
-		94CD5B712E529A7D00BF0933 /* libSPIRV-Tools-opt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools-opt.a"; path = "../../VulkanSDK/1.4.321.0/macOS/lib/libSPIRV-Tools-opt.a"; sourceTree = "<group>"; };
-		94CD5B722E529A7D00BF0933 /* libSPIRV-Tools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools.a"; path = "../../VulkanSDK/1.4.321.0/macOS/lib/libSPIRV-Tools.a"; sourceTree = "<group>"; };
-		94CD5B752E529AAB00BF0933 /* libSPIRV-Tools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools.a"; path = "../../VulkanSDK/1.4.321.0/macOS/lib/libSPIRV-Tools.a"; sourceTree = "<group>"; };
-		94CD5B762E529AAB00BF0933 /* libSPIRV-Tools-opt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools-opt.a"; path = "../../VulkanSDK/1.4.321.0/macOS/lib/libSPIRV-Tools-opt.a"; sourceTree = "<group>"; };
-		94CD5B792E54E31A00BF0933 /* vulkan_cube.vert.spv */ = {isa = PBXFileReference; lastKnownFileType = file; name = vulkan_cube.vert.spv; path = src/shaders/vulkan_cube.vert.spv; sourceTree = "<group>"; };
-		94CD5B7A2E54E31A00BF0933 /* vulkan_cube.frag.spv */ = {isa = PBXFileReference; lastKnownFileType = file; name = vulkan_cube.frag.spv; path = src/shaders/vulkan_cube.frag.spv; sourceTree = "<group>"; };
 		94CF8B602E4E8E5B0050EB0D /* InteractiveVulkan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InteractiveVulkan; sourceTree = BUILT_PRODUCTS_DIR; };
-		94EF88F72E566C6F00CFE7B7 /* libglslang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglslang.dylib; path = ../../VulkanSDK/1.4.321.0/macOS/lib/libglslang.dylib; sourceTree = "<group>"; };
-		94EF88F82E566C6F00CFE7B7 /* libglslang-default-resource-limits.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libglslang-default-resource-limits.dylib"; path = "../../VulkanSDK/1.4.321.0/macOS/lib/libglslang-default-resource-limits.dylib"; sourceTree = "<group>"; };
+		94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.296.dylib; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libvulkan.1.3.296.dylib; sourceTree = "<group>"; };
+		94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglslang-default-resource-limits.a"; path = "../../VulkanSDK/1.3.296.0/macOS/lib/libglslang-default-resource-limits.a"; sourceTree = "<group>"; };
+		94F816BC2F372AAC00514833 /* libslang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libslang.dylib; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libslang.dylib; sourceTree = "<group>"; };
+		94F816BF2F372AE000514833 /* libglslang.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglslang.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libglslang.a; sourceTree = "<group>"; };
+		94F816C52F372C3200514833 /* Error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
+		94F816C62F372CDF00514833 /* bit_generator.comp */ = {isa = PBXFileReference; lastKnownFileType = text; path = bit_generator.comp; sourceTree = "<group>"; };
+		94F816C82F372CDF00514833 /* Algorithm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Algorithm.hpp; sourceTree = "<group>"; };
+		94F816C92F372CDF00514833 /* BitGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BitGenerator.hpp; sourceTree = "<group>"; };
+		94F816CA2F372CDF00514833 /* BitGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BitGenerator.cpp; sourceTree = "<group>"; };
+		94F816CB2F372CDF00514833 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
+		94F816CC2F372CDF00514833 /* PushConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PushConstants.hpp; sourceTree = "<group>"; };
+		94F816CE2F372CDF00514833 /* find_hamming_neighbors.comp */ = {isa = PBXFileReference; lastKnownFileType = text; path = find_hamming_neighbors.comp; sourceTree = "<group>"; };
+		94F816CF2F372CDF00514833 /* generate_hashes.comp */ = {isa = PBXFileReference; lastKnownFileType = text; path = generate_hashes.comp; sourceTree = "<group>"; };
+		94F816D02F372CDF00514833 /* sort_hashes.comp */ = {isa = PBXFileReference; lastKnownFileType = text; path = sort_hashes.comp; sourceTree = "<group>"; };
+		94F816D22F372CDF00514833 /* HammingNeighbors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HammingNeighbors.hpp; sourceTree = "<group>"; };
+		94F816D32F372CDF00514833 /* HammingNeighbors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HammingNeighbors.cpp; sourceTree = "<group>"; };
+		94F816D42F372CDF00514833 /* Hash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Hash.hpp; sourceTree = "<group>"; };
+		94F816D52F372CDF00514833 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
+		94F816D62F372CDF00514833 /* PipelineType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PipelineType.hpp; sourceTree = "<group>"; };
+		94F816D72F372CDF00514833 /* PushConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PushConstants.hpp; sourceTree = "<group>"; };
+		94F816D82F372CDF00514833 /* SortPushConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SortPushConstants.hpp; sourceTree = "<group>"; };
+		94F816DA2F372CDF00514833 /* static_cube.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = static_cube.frag; sourceTree = "<group>"; };
+		94F816DB2F372CDF00514833 /* static_cube.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = static_cube.vert; sourceTree = "<group>"; };
+		94F816DD2F372CDF00514833 /* DrawPushConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DrawPushConstants.hpp; sourceTree = "<group>"; };
+		94F816DE2F372CDF00514833 /* geometries.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometries.hpp; sourceTree = "<group>"; };
+		94F816DF2F372CDF00514833 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
+		94F816E02F372CDF00514833 /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
+		94F816E12F372CDF00514833 /* StaticCube.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticCube.hpp; sourceTree = "<group>"; };
+		94F816E22F372CDF00514833 /* StaticCube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StaticCube.cpp; sourceTree = "<group>"; };
+		94F816E32F372CDF00514833 /* Vertex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex.hpp; sourceTree = "<group>"; };
+		94F816E52F372CDF00514833 /* VulkanApp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VulkanApp.hpp; sourceTree = "<group>"; };
+		94F816EA2F3730F700514833 /* libSPIRV-Tools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools.a"; path = "../../VulkanSDK/1.3.296.0/macOS/lib/libSPIRV-Tools.a"; sourceTree = "<group>"; };
+		94F816EB2F3730F700514833 /* libGenericCodeGen.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGenericCodeGen.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libGenericCodeGen.a; sourceTree = "<group>"; };
+		94F816EC2F3730F700514833 /* libSPIRV.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSPIRV.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libSPIRV.a; sourceTree = "<group>"; };
+		94F816ED2F3730F700514833 /* libMachineIndependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMachineIndependent.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libMachineIndependent.a; sourceTree = "<group>"; };
+		94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools-opt.a"; path = "../../VulkanSDK/1.3.296.0/macOS/lib/libSPIRV-Tools-opt.a"; sourceTree = "<group>"; };
+		94F816EF2F3730F700514833 /* libOSDependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOSDependent.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libOSDependent.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,10 +139,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94EF88FB2E566C9E00CFE7B7 /* libglslang-default-resource-limits.dylib in Frameworks */,
-				94EF88FC2E566C9E00CFE7B7 /* libglslang.dylib in Frameworks */,
+				94F816C22F372B0E00514833 /* libglslang.a in Frameworks */,
+				94F816C12F372B0E00514833 /* libglslang-default-resource-limits.a in Frameworks */,
+				94F816F62F37317200514833 /* libGenericCodeGen.a in Frameworks */,
+				94F816F72F37317200514833 /* libMachineIndependent.a in Frameworks */,
+				94F816F82F37317200514833 /* libOSDependent.a in Frameworks */,
+				94F816FB2F37317200514833 /* libSPIRV.a in Frameworks */,
+				94F816FA2F37317200514833 /* libSPIRV-Tools.a in Frameworks */,
+				94F816F92F37317200514833 /* libSPIRV-Tools-opt.a in Frameworks */,
+				94F816BA2F3729EB00514833 /* libvulkan.1.3.296.dylib in Frameworks */,
 				946D8C6C2E4EA5C3004D794F /* SDL2.framework in Frameworks */,
-				94CD5B522E52908000BF0933 /* libvulkan.1.4.321.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,16 +158,7 @@
 		946D8C1F2E4E9B40004D794F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				94CD5B722E529A7D00BF0933 /* libSPIRV-Tools.a */,
-				94CD5B712E529A7D00BF0933 /* libSPIRV-Tools-opt.a */,
-				94CD5B622E52990A00BF0933 /* libGenericCodeGen.a */,
-				94CD5B632E52990A00BF0933 /* libMachineIndependent.a */,
-				94CD5B612E52990A00BF0933 /* libOSDependent.a */,
-				94CD5B642E52990A00BF0933 /* libSPIRV.dylib */,
 				946D8C4F2E4EA2D8004D794F /* SDL2.framework */,
-				946D8C8D2E4EAD5D004D794F /* libglslang-default-resource-limits.dylib */,
-				946D8C8C2E4EAD5D004D794F /* libglslang.dylib */,
-				946D8C8E2E4EAD5D004D794F /* libvulkan.1.4.321.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -165,14 +171,10 @@
 		94CD5B272E52496100BF0933 /* apps */ = {
 			isa = PBXGroup;
 			children = (
-				94C0FB852E65DEBC0027936B /* HammingNeighbor.hpp */,
-				94C0FB862E65DEBC0027936B /* HammingNeighbor.cpp */,
-				949469032E5E69CF00827594 /* BitGenerator.hpp */,
-				949469042E5E69CF00827594 /* BitGenerator.cpp */,
-				949469052E5E69CF00827594 /* Cube.hpp */,
-				949469062E5E69CF00827594 /* Cube.cpp */,
-				94CD5B232E52496100BF0933 /* include.hpp */,
-				94CD5B242E52496100BF0933 /* VulkanApp.hpp */,
+				94F816CD2F372CDF00514833 /* BitGenerator */,
+				94F816D92F372CDF00514833 /* HammingNeighbors */,
+				94F816E42F372CDF00514833 /* StaticCube */,
+				94F816E62F372CDF00514833 /* VulkanApp */,
 			);
 			path = apps;
 			sourceTree = "<group>";
@@ -180,11 +182,7 @@
 		94CD5B2D2E52496100BF0933 /* glm_utils */ = {
 			isa = PBXGroup;
 			children = (
-				94CD5B282E52496100BF0933 /* DrawPushConstants.hpp */,
-				94CD5B292E52496100BF0933 /* geometries.hpp */,
 				94CD5B2A2E52496100BF0933 /* include.hpp */,
-				94CD5B2B2E52496100BF0933 /* math.hpp */,
-				94CD5B2C2E52496100BF0933 /* Vertex.hpp */,
 			);
 			path = glm_utils;
 			sourceTree = "<group>";
@@ -216,10 +214,10 @@
 		94CD5B412E52496100BF0933 /* intvlk */ = {
 			isa = PBXGroup;
 			children = (
+				94F816C52F372C3200514833 /* Error.hpp */,
 				94CD5B2D2E52496100BF0933 /* glm_utils */,
 				94CD5B302E52496100BF0933 /* glslang_utils */,
 				94CD5B392E52496100BF0933 /* vma_utils */,
-				94CD5B3A2E52496100BF0933 /* errors.hpp */,
 				94CD5B3B2E52496100BF0933 /* include.hpp */,
 				94CD5B3C2E52496100BF0933 /* PerFrameData.hpp */,
 				94CD5B3D2E52496100BF0933 /* SdlContext.hpp */,
@@ -230,22 +228,11 @@
 			path = intvlk;
 			sourceTree = "<group>";
 		};
-		94CD5B452E52496100BF0933 /* shaders */ = {
-			isa = PBXGroup;
-			children = (
-				94CD5B422E52496100BF0933 /* hamming_one_generator.comp */,
-				94CD5B432E52496100BF0933 /* vulkan_cube.frag */,
-				94CD5B442E52496100BF0933 /* vulkan_cube.vert */,
-			);
-			path = shaders;
-			sourceTree = "<group>";
-		};
 		94CD5B482E52496100BF0933 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				94CD5B272E52496100BF0933 /* apps */,
 				94CD5B412E52496100BF0933 /* intvlk */,
-				94CD5B452E52496100BF0933 /* shaders */,
 				94CD5B462E52496100BF0933 /* include.hpp */,
 				94CD5B472E52496100BF0933 /* main.cpp */,
 			);
@@ -255,17 +242,16 @@
 		94CF8B572E4E8E5B0050EB0D = {
 			isa = PBXGroup;
 			children = (
-				94583C202E5CDB3900DEF6B3 /* hamming_one.txt */,
-				94EF88F72E566C6F00CFE7B7 /* libglslang.dylib */,
-				94EF88F82E566C6F00CFE7B7 /* libglslang-default-resource-limits.dylib */,
-				94CD5B7A2E54E31A00BF0933 /* vulkan_cube.frag.spv */,
-				94CD5B792E54E31A00BF0933 /* vulkan_cube.vert.spv */,
-				94CD5B752E529AAB00BF0933 /* libSPIRV-Tools.a */,
-				94CD5B762E529AAB00BF0933 /* libSPIRV-Tools-opt.a */,
-				94CD5B6B2E5299ED00BF0933 /* libGenericCodeGen.a */,
-				94CD5B692E5299ED00BF0933 /* libMachineIndependent.a */,
-				94CD5B6C2E5299ED00BF0933 /* libOSDependent.a */,
-				94CD5B6A2E5299ED00BF0933 /* libSPIRV.dylib */,
+				94F816EB2F3730F700514833 /* libGenericCodeGen.a */,
+				94F816ED2F3730F700514833 /* libMachineIndependent.a */,
+				94F816EF2F3730F700514833 /* libOSDependent.a */,
+				94F816EC2F3730F700514833 /* libSPIRV.a */,
+				94F816EA2F3730F700514833 /* libSPIRV-Tools.a */,
+				94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */,
+				94F816BF2F372AE000514833 /* libglslang.a */,
+				94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */,
+				94F816BC2F372AAC00514833 /* libslang.dylib */,
+				94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */,
 				94CD5B482E52496100BF0933 /* src */,
 				94CD5AD32E52491C00BF0933 /* .gitattributes */,
 				94CD5AD42E52491C00BF0933 /* .gitignore */,
@@ -287,6 +273,84 @@
 				94CF8B602E4E8E5B0050EB0D /* InteractiveVulkan */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		94F816C72F372CDF00514833 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				94F816C62F372CDF00514833 /* bit_generator.comp */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		94F816CD2F372CDF00514833 /* BitGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				94F816C72F372CDF00514833 /* shaders */,
+				94F816C82F372CDF00514833 /* Algorithm.hpp */,
+				94F816C92F372CDF00514833 /* BitGenerator.hpp */,
+				94F816CA2F372CDF00514833 /* BitGenerator.cpp */,
+				94F816CB2F372CDF00514833 /* include.hpp */,
+				94F816CC2F372CDF00514833 /* PushConstants.hpp */,
+			);
+			path = BitGenerator;
+			sourceTree = "<group>";
+		};
+		94F816D12F372CDF00514833 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				94F816CE2F372CDF00514833 /* find_hamming_neighbors.comp */,
+				94F816CF2F372CDF00514833 /* generate_hashes.comp */,
+				94F816D02F372CDF00514833 /* sort_hashes.comp */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		94F816D92F372CDF00514833 /* HammingNeighbors */ = {
+			isa = PBXGroup;
+			children = (
+				94F816D12F372CDF00514833 /* shaders */,
+				94F816D22F372CDF00514833 /* HammingNeighbors.hpp */,
+				94F816D32F372CDF00514833 /* HammingNeighbors.cpp */,
+				94F816D42F372CDF00514833 /* Hash.hpp */,
+				94F816D52F372CDF00514833 /* include.hpp */,
+				94F816D62F372CDF00514833 /* PipelineType.hpp */,
+				94F816D72F372CDF00514833 /* PushConstants.hpp */,
+				94F816D82F372CDF00514833 /* SortPushConstants.hpp */,
+			);
+			path = HammingNeighbors;
+			sourceTree = "<group>";
+		};
+		94F816DC2F372CDF00514833 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				94F816DA2F372CDF00514833 /* static_cube.frag */,
+				94F816DB2F372CDF00514833 /* static_cube.vert */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		94F816E42F372CDF00514833 /* StaticCube */ = {
+			isa = PBXGroup;
+			children = (
+				94F816DC2F372CDF00514833 /* shaders */,
+				94F816DD2F372CDF00514833 /* DrawPushConstants.hpp */,
+				94F816DE2F372CDF00514833 /* geometries.hpp */,
+				94F816DF2F372CDF00514833 /* include.hpp */,
+				94F816E02F372CDF00514833 /* math.hpp */,
+				94F816E12F372CDF00514833 /* StaticCube.hpp */,
+				94F816E22F372CDF00514833 /* StaticCube.cpp */,
+				94F816E32F372CDF00514833 /* Vertex.hpp */,
+			);
+			path = StaticCube;
+			sourceTree = "<group>";
+		};
+		94F816E62F372CDF00514833 /* VulkanApp */ = {
+			isa = PBXGroup;
+			children = (
+				94F816E52F372CDF00514833 /* VulkanApp.hpp */,
+			);
+			path = VulkanApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,7 +383,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					94CF8B5F2E4E8E5B0050EB0D = {
 						CreatedOnToolsVersion = 16.4;
@@ -357,10 +421,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				94CD5B4C2E52496100BF0933 /* usage.cpp in Sources */,
+				94F816E72F372CDF00514833 /* StaticCube.cpp in Sources */,
+				94F816E82F372CDF00514833 /* HammingNeighbors.cpp in Sources */,
+				94F816E92F372CDF00514833 /* BitGenerator.cpp in Sources */,
 				94CD5B4E2E52496100BF0933 /* main.cpp in Sources */,
-				949469072E5E69CF00827594 /* Cube.cpp in Sources */,
-				94C0FB872E65DEBC0027936B /* HammingNeighbor.cpp in Sources */,
-				949469082E5E69CF00827594 /* BitGenerator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +465,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -419,14 +484,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.4.321.0/macOS/include;
-				LIBRARY_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.4.321.0/macOS/lib;
+				HEADER_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.3.296.0/macOS/include;
+				LIBRARY_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.3.296.0/macOS/lib;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 			};
 			name = Debug;
 		};
@@ -464,6 +530,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -476,13 +543,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.4.321.0/macOS/include;
-				LIBRARY_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.4.321.0/macOS/lib;
+				HEADER_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.3.296.0/macOS/include;
+				LIBRARY_SEARCH_PATHS = /Users/skylar/VulkanSDK/1.3.296.0/macOS/lib;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 			};
 			name = Release;
 		};
@@ -490,6 +558,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -504,9 +573,7 @@
 				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					/Library/Frameworks,
-					/Users/skylar/VulkanSDK/1.4.321.0/macOS/lib,
-					/Users/skylar/VulkanSDK/1.4.321.0/macOS/lib,
-					/Users/skylar/VulkanSDK/1.4.321.0/macOS/lib,
+					/Users/skylar/VulkanSDK/1.3.296.0/macOS/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -516,6 +583,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -530,9 +598,7 @@
 				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					/Library/Frameworks,
-					/Users/skylar/VulkanSDK/1.4.321.0/macOS/lib,
-					/Users/skylar/VulkanSDK/1.4.321.0/macOS/lib,
-					/Users/skylar/VulkanSDK/1.4.321.0/macOS/lib,
+					/Users/skylar/VulkanSDK/1.3.296.0/macOS/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

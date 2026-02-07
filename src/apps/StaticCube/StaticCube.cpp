@@ -220,7 +220,12 @@ namespace apps::static_cube
             remakeSwapchain();
             return;
         }
-        assert(result == vk::Result::eSuccess || result == vk::Result::eSuboptimalKHR);
+        if (result == vk::Result::eSuboptimalKHR || swapchainData.extent != windowData.getExtent())
+        {
+            remakeSwapchain();
+            return;
+        }
+        assert(result == vk::Result::eSuccess);
 
         device.resetFences(*perFrameData[frameIndex].fence);
 
@@ -231,9 +236,26 @@ namespace apps::static_cube
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
 
         intvlk::setImageLayout(commandBuffer,
+                               depthAttachmentData.image,
+                               depthAttachmentData.format,
+                               vk::ImageLayout::eUndefined,
+                               vk::ImageLayout::eDepthStencilAttachmentOptimal);
+
+        intvlk::setImageLayout(commandBuffer,
                                drawImage.image,
                                drawImage.format,
                                vk::ImageLayout::eUndefined,
+                               vk::ImageLayout::eGeneral);
+
+        commandBuffer.clearColorImage(drawImage.image,
+                                      vk::ImageLayout::eGeneral,
+                                      vk::ClearColorValue{std::array<float, 4>{0.0f, 0.0f, 0.0f, 1.0f}},
+                                      vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+
+        intvlk::setImageLayout(commandBuffer,
+                               drawImage.image,
+                               drawImage.format,
+                               vk::ImageLayout::eGeneral,
                                vk::ImageLayout::eColorAttachmentOptimal);
 
         drawGeometry(commandBuffer);
@@ -254,6 +276,12 @@ namespace apps::static_cube
                                       vk::ImageLayout::eTransferDstOptimal,
                                       vk::ClearColorValue{std::array<float, 4>{0.0f, 0.0f, 0.0f, 1.0f}},
                                       vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+
+        intvlk::setImageLayout(commandBuffer,
+                               swapchainData.images[backBufferIndex],
+                               swapchainData.colorFormat,
+                               vk::ImageLayout::eTransferDstOptimal,
+                               vk::ImageLayout::eTransferDstOptimal);
 
         intvlk::blitImage(commandBuffer,
                           drawImage.image,
