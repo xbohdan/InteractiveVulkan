@@ -17,6 +17,8 @@
 
 #include "include.hpp"
 
+#include "PerFrameData.hpp"
+
 #include <chrono>
 
 namespace apps::static_cube
@@ -40,7 +42,7 @@ namespace apps::static_cube
 
         const vk::Format drawImageFormat{vk::Format::eR16G16B16A16Sfloat};
         const vk::Extent2D drawImageExtent{1080, 1080};
-        const uint32_t queuedFramesCount{2};
+        const uint32_t queuedFramesCount{3};
 
         uint32_t width;
         uint32_t height;
@@ -64,9 +66,7 @@ namespace apps::static_cube
         vk::raii::Queue graphicsQueue;
         vk::raii::Queue presentQueue;
         intvlk::SwapchainData swapchainData;
-        intvlk::vma_utils::ImageData drawImage;
         glm::mat4 renderMatrix;
-        intvlk::vma_utils::DepthAttachmentData depthAttachmentData;
         intvlk::vma_utils::MeshData meshData;
         vk::raii::PipelineLayout pipelineLayout{VK_NULL_HANDLE};
         vk::raii::Pipeline pipeline{VK_NULL_HANDLE};

@@ -22,7 +22,6 @@
 #include "../../intvlk/utils.hpp"
 
 #include "../../intvlk/Error.hpp"
-#include "../../intvlk/PerFrameData.hpp"
 #include "../../intvlk/SwapchainData.hpp"
 #include "../../intvlk/WindowData.hpp"
 

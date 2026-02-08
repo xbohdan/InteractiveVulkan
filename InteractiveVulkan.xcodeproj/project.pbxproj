@@ -65,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		94637D912F3A537C00156C62 /* PerFrameData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PerFrameData.hpp; sourceTree = "<group>"; };
 		946D8BE62E4E9599004D794F /* InteractiveVulkan.sln */ = {isa = PBXFileReference; lastKnownFileType = text; path = InteractiveVulkan.sln; sourceTree = "<group>"; };
 		946D8BE72E4E9599004D794F /* InteractiveVulkan.vcxproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = InteractiveVulkan.vcxproj; sourceTree = "<group>"; };
 		946D8BE82E4E9599004D794F /* InteractiveVulkan.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = InteractiveVulkan.xcodeproj; sourceTree = "<group>"; };
@@ -87,7 +88,6 @@
 		94CD5B372E52496100BF0933 /* usage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = usage.cpp; sourceTree = "<group>"; };
 		94CD5B382E52496100BF0933 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
 		94CD5B3B2E52496100BF0933 /* include.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = include.hpp; sourceTree = "<group>"; };
-		94CD5B3C2E52496100BF0933 /* PerFrameData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PerFrameData.hpp; sourceTree = "<group>"; };
 		94CD5B3D2E52496100BF0933 /* SdlContext.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SdlContext.hpp; sourceTree = "<group>"; };
 		94CD5B3E2E52496100BF0933 /* SwapchainData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SwapchainData.hpp; sourceTree = "<group>"; };
 		94CD5B3F2E52496100BF0933 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
@@ -219,7 +219,6 @@
 				94CD5B302E52496100BF0933 /* glslang_utils */,
 				94CD5B392E52496100BF0933 /* vma_utils */,
 				94CD5B3B2E52496100BF0933 /* include.hpp */,
-				94CD5B3C2E52496100BF0933 /* PerFrameData.hpp */,
 				94CD5B3D2E52496100BF0933 /* SdlContext.hpp */,
 				94CD5B3E2E52496100BF0933 /* SwapchainData.hpp */,
 				94CD5B3F2E52496100BF0933 /* utils.hpp */,
@@ -338,6 +337,7 @@
 				94F816DE2F372CDF00514833 /* geometries.hpp */,
 				94F816DF2F372CDF00514833 /* include.hpp */,
 				94F816E02F372CDF00514833 /* math.hpp */,
+				94637D912F3A537C00156C62 /* PerFrameData.hpp */,
 				94F816E12F372CDF00514833 /* StaticCube.hpp */,
 				94F816E22F372CDF00514833 /* StaticCube.cpp */,
 				94F816E32F372CDF00514833 /* Vertex.hpp */,

@@ -61,7 +61,12 @@ namespace apps::static_cube
                                                      instance,
                                                      vk::ApiVersion13)},
 
-          perFrameData{intvlk::PerFrameData::make(queuedFramesCount, device, graphicsAndPresentQueueFamilyIndices.first)},
+          perFrameData{intvlk::PerFrameData::make(queuedFramesCount,
+                                                  device,
+                                                  allocator,
+                                                  drawImageFormat,
+                                                  drawImageExtent,
+                                                  graphicsAndPresentQueueFamilyIndices.first)},
 
           graphicsQueue{device, graphicsAndPresentQueueFamilyIndices.first, 0},
 
@@ -69,23 +74,7 @@ namespace apps::static_cube
 
           swapchainData{makeSwapchain(true)},
 
-          drawImage{device,
-                    allocator,
-                    drawImageFormat,
-                    drawImageExtent,
-                    vk::ImageTiling::eOptimal,
-                    vk::ImageUsageFlagBits::eTransferSrc |
-                        vk::ImageUsageFlagBits::eTransferDst |
-                        vk::ImageUsageFlagBits::eStorage |
-                        vk::ImageUsageFlagBits::eColorAttachment,
-                    vk::ImageLayout::eUndefined,
-                    vk::MemoryPropertyFlagBits::eDeviceLocal,
-                    VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT,
-                    vk::ImageAspectFlagBits::eColor},
-
           renderMatrix{createModelViewProjectionClipMatrix(drawImageExtent)},
-
-          depthAttachmentData{device, allocator, vk::Format::eD32Sfloat, drawImage.extent},
 
           meshData{device, allocator, coloredCubeData.size() * sizeof(Vertex)}
     {
@@ -135,7 +124,9 @@ namespace apps::static_cube
 
             auto endTime{std::chrono::high_resolution_clock::now()};
             accumulatedTime += endTime - startTime;
+
             ++frameCount;
+
             if (1000 < std::chrono::duration_cast<std::chrono::milliseconds>(accumulatedTime).count())
             {
                 assert(frameCount > 0);
@@ -151,9 +142,16 @@ namespace apps::static_cube
 
     void StaticCube::drawGeometry(const vk::raii::CommandBuffer &commandBuffer) const
     {
-        vk::RenderingAttachmentInfo colorAttachment{drawImage.imageView, vk::ImageLayout::eColorAttachmentOptimal};
+        vk::RenderingAttachmentInfo colorAttachment{perFrameData[frameIndex].drawImage.imageView,
+                                                    vk::ImageLayout::eColorAttachmentOptimal,
+                                                    vk::ResolveModeFlagBits::eNone,
+                                                    nullptr,
+                                                    vk::ImageLayout::eUndefined,
+                                                    vk::AttachmentLoadOp::eClear,
+                                                    vk::AttachmentStoreOp::eStore,
+                                                    vk::ClearColorValue{std::array<float, 4>{0.0f, 0.0f, 0.0f, 1.0f}}};
 
-        vk::RenderingAttachmentInfo depthAttachment{depthAttachmentData.imageView,
+        vk::RenderingAttachmentInfo depthAttachment{perFrameData[frameIndex].depthAttachmentData.imageView,
                                                     vk::ImageLayout::eDepthStencilAttachmentOptimal,
                                                     vk::ResolveModeFlagBits::eNone,
                                                     nullptr,
@@ -163,7 +161,7 @@ namespace apps::static_cube
                                                     vk::ClearDepthStencilValue{1.0f, 0}};
 
         vk::RenderingInfo renderingInfo{vk::RenderingFlags{},
-                                        vk::Rect2D{vk::Offset2D{0, 0}, drawImage.extent},
+                                        vk::Rect2D{vk::Offset2D{0, 0}, perFrameData[frameIndex].drawImage.extent},
                                         1,
                                         0,
                                         colorAttachment,
@@ -183,14 +181,14 @@ namespace apps::static_cube
 
         vk::Viewport viewport{0.0f,
                               0.0f,
-                              static_cast<float>(drawImage.extent.width),
-                              static_cast<float>(drawImage.extent.height),
+                              static_cast<float>(perFrameData[frameIndex].drawImage.extent.width),
+                              static_cast<float>(perFrameData[frameIndex].drawImage.extent.height),
                               0.0f,
                               1.0f};
 
         commandBuffer.setViewport(0, viewport);
 
-        vk::Rect2D scissor{vk::Offset2D{0, 0}, drawImage.extent};
+        vk::Rect2D scissor{vk::Offset2D{0, 0}, perFrameData[frameIndex].drawImage.extent};
 
         commandBuffer.setScissor(0, scissor);
 
@@ -236,33 +234,16 @@ namespace apps::static_cube
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
 
         intvlk::setImageLayout(commandBuffer,
-                               depthAttachmentData.image,
-                               depthAttachmentData.format,
+                               perFrameData[frameIndex].drawImage.image,
+                               perFrameData[frameIndex].drawImage.format,
                                vk::ImageLayout::eUndefined,
-                               vk::ImageLayout::eDepthStencilAttachmentOptimal);
-
-        intvlk::setImageLayout(commandBuffer,
-                               drawImage.image,
-                               drawImage.format,
-                               vk::ImageLayout::eUndefined,
-                               vk::ImageLayout::eGeneral);
-
-        commandBuffer.clearColorImage(drawImage.image,
-                                      vk::ImageLayout::eGeneral,
-                                      vk::ClearColorValue{std::array<float, 4>{0.0f, 0.0f, 0.0f, 1.0f}},
-                                      vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
-
-        intvlk::setImageLayout(commandBuffer,
-                               drawImage.image,
-                               drawImage.format,
-                               vk::ImageLayout::eGeneral,
                                vk::ImageLayout::eColorAttachmentOptimal);
 
         drawGeometry(commandBuffer);
 
         intvlk::setImageLayout(commandBuffer,
-                               drawImage.image,
-                               drawImage.format,
+                               perFrameData[frameIndex].drawImage.image,
+                               perFrameData[frameIndex].drawImage.format,
                                vk::ImageLayout::eColorAttachmentOptimal,
                                vk::ImageLayout::eTransferSrcOptimal);
 
@@ -284,8 +265,8 @@ namespace apps::static_cube
                                vk::ImageLayout::eTransferDstOptimal);
 
         intvlk::blitImage(commandBuffer,
-                          drawImage.image,
-                          drawImage.extent,
+                          perFrameData[frameIndex].drawImage.image,
+                          perFrameData[frameIndex].drawImage.extent,
                           swapchainData.images[backBufferIndex],
                           swapchainData.extent);
 
@@ -300,12 +281,12 @@ namespace apps::static_cube
         vk::CommandBufferSubmitInfo commandBufferSubmitInfo{commandBuffer};
 
         vk::SemaphoreSubmitInfo waitSemaphoreInfo{perFrameData[frameIndex].acquireSemaphore,
-                                                  1,
-                                                  vk::PipelineStageFlagBits2::eColorAttachmentOutput};
+                                                  0,
+                                                  vk::PipelineStageFlagBits2::eAllTransfer};
 
         vk::SemaphoreSubmitInfo signalSemaphoreInfo{swapchainData.submitSemaphores[backBufferIndex],
-                                                    1,
-                                                    vk::PipelineStageFlagBits2::eAllGraphics};
+                                                    0,
+                                                    vk::PipelineStageFlagBits2::eAllCommands};
 
         vk::SubmitInfo2 submitInfo{vk::SubmitFlags{}, waitSemaphoreInfo, commandBufferSubmitInfo, signalSemaphoreInfo};
 
@@ -339,6 +320,7 @@ namespace apps::static_cube
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eVertex,
                                                 0,
                                                 sizeof(DrawPushConstants)};
+
         pipelineLayout = vk::raii::PipelineLayout{
             device,
             vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange}};
@@ -347,12 +329,14 @@ namespace apps::static_cube
             device,
             vk::ShaderStageFlagBits::eVertex,
             intvlk::readFile("src/apps/StaticCube/shaders/static_cube.vert"))};
+
         vk::raii::ShaderModule fragmentShaderModule{glslContext.makeShaderModule(
             device,
             vk::ShaderStageFlagBits::eFragment,
             intvlk::readFile("src/apps/StaticCube/shaders/static_cube.frag"))};
 
         vk::raii::PipelineCache pipelineCache{device, vk::PipelineCacheCreateInfo{}};
+
         pipeline = intvlk::makeGraphicsPipeline(device,
                                                 pipelineCache,
                                                 vertexShaderModule,
@@ -364,13 +348,12 @@ namespace apps::static_cube
                                                 vk::FrontFace::eClockwise,
                                                 true,
                                                 pipelineLayout,
-                                                drawImage.format,
-                                                depthAttachmentData.format);
+                                                perFrameData[0].drawImage.format,
+                                                perFrameData[0].depthAttachmentData.format);
     }
 
     intvlk::SwapchainData StaticCube::makeSwapchain(bool isNew)
     {
-        device.waitIdle();
         return intvlk::SwapchainData{physicalDevice,
                                      device,
                                      surface,
@@ -384,6 +367,16 @@ namespace apps::static_cube
 
     void StaticCube::remakeSwapchain()
     {
+        vk::SemaphoreSubmitInfo waitSemaphoreInfo{perFrameData[frameIndex].acquireSemaphore,
+                                                  0,
+                                                  vk::PipelineStageFlagBits2::eNone};
+
+        vk::SubmitInfo2 submitInfo{vk::SubmitFlags{}, waitSemaphoreInfo};
+
+        graphicsQueue.submit2(submitInfo);
+
+        device.waitIdle();
+
         try
         {
             swapchainData = makeSwapchain(false);

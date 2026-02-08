@@ -22,34 +22,60 @@
 
 #include "include.hpp"
 
-#include "utils.hpp"
-
 namespace intvlk
 {
     class PerFrameData
     {
     public:
-        PerFrameData(const vk::raii::Device &device, uint32_t queueFamilyIndex)
-            : commandPool{device, vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, queueFamilyIndex}},
+        PerFrameData(const vk::raii::Device &device,
+                     const std::shared_ptr<VmaAllocator_T> &allocator,
+                     vk::Format format,
+                     vk::Extent2D extent,
+                     uint32_t queueFamilyIndex)
+            : drawImage{device,
+                        allocator,
+                        format,
+                        extent,
+                        vk::ImageTiling::eOptimal,
+                        vk::ImageUsageFlagBits::eTransferSrc |
+                            vk::ImageUsageFlagBits::eTransferDst |
+                            vk::ImageUsageFlagBits::eStorage |
+                            vk::ImageUsageFlagBits::eColorAttachment,
+                        vk::ImageLayout::eUndefined,
+                        vk::MemoryPropertyFlagBits::eDeviceLocal,
+                        VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT,
+                        vk::ImageAspectFlagBits::eColor},
+
+              depthAttachmentData{device, allocator, vk::Format::eD32Sfloat, extent},
+
+              commandPool{device, vk::CommandPoolCreateInfo{vk::CommandPoolCreateFlags{}, queueFamilyIndex}},
+
               commandBuffer{makeCommandBuffer(device, commandPool)},
+
               fence{device, vk::FenceCreateInfo{vk::FenceCreateFlagBits::eSignaled}},
+
               acquireSemaphore{device, vk::SemaphoreCreateInfo{}}
         {
         }
 
         static std::vector<PerFrameData> make(uint32_t queuedFramesCount,
                                               const vk::raii::Device &device,
+                                              const std::shared_ptr<VmaAllocator_T> &allocator,
+                                              vk::Format format,
+                                              vk::Extent2D extent,
                                               uint32_t queueFamilyIndex)
         {
             std::vector<PerFrameData> perFrameData{};
             perFrameData.reserve(queuedFramesCount);
             for (size_t i{0}; i < queuedFramesCount; ++i)
             {
-                perFrameData.emplace_back(device, queueFamilyIndex);
+                perFrameData.emplace_back(device, allocator, format, extent, queueFamilyIndex);
             }
             return perFrameData;
         }
 
+        intvlk::vma_utils::ImageData drawImage;
+        intvlk::vma_utils::DepthAttachmentData depthAttachmentData;
         vk::raii::CommandPool commandPool{VK_NULL_HANDLE};
         vk::raii::CommandBuffer commandBuffer{nullptr};
         vk::raii::Fence fence{VK_NULL_HANDLE};
