@@ -776,101 +776,16 @@ namespace intvlk
         return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
     }
 
-    inline void setImageLayoutBroken(const vk::raii::CommandBuffer &commandBuffer,
-                                     vk::Image image,
-                                     vk::Format format,
-                                     vk::ImageLayout oldImageLayout,
-                                     vk::ImageLayout newImageLayout)
+    inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,
+                               vk::Image image,
+                               vk::Format format,
+                               vk::PipelineStageFlags2 sourceStage,
+                               vk::AccessFlags2 sourceAccessMask,
+                               vk::PipelineStageFlags2 destinationStage,
+                               vk::AccessFlags2 destinationAccessMask,
+                               vk::ImageLayout oldImageLayout,
+                               vk::ImageLayout newImageLayout)
     {
-        vk::AccessFlags2 sourceAccessMask{};
-        switch (oldImageLayout)
-        {
-        case vk::ImageLayout::eTransferDstOptimal:
-            sourceAccessMask = vk::AccessFlagBits2::eTransferWrite;
-            break;
-        case vk::ImageLayout::ePreinitialized:
-            sourceAccessMask = vk::AccessFlagBits2::eHostWrite;
-            break;
-        case vk::ImageLayout::eGeneral:
-        case vk::ImageLayout::eUndefined:
-            break;
-        default:
-            // std::cout << "Unhandled image layout transition!\n";
-            sourceAccessMask = vk::AccessFlagBits2::eMemoryWrite;
-        }
-
-        vk::PipelineStageFlags2 sourceStage{};
-        switch (oldImageLayout)
-        {
-        case vk::ImageLayout::eGeneral:
-        case vk::ImageLayout::ePreinitialized:
-            sourceStage = vk::PipelineStageFlagBits2::eHost;
-            break;
-        case vk::ImageLayout::eTransferDstOptimal:
-            sourceStage = vk::PipelineStageFlagBits2::eTransfer;
-            break;
-        case vk::ImageLayout::eUndefined:
-            sourceStage = vk::PipelineStageFlagBits2::eTopOfPipe;
-            break;
-        default:
-            // std::cout << "Unhandled image layout transition!\n";
-            sourceStage = vk::PipelineStageFlagBits2::eAllCommands;
-        }
-
-        vk::AccessFlags2 destinationAccessMask{};
-        switch (newImageLayout)
-        {
-        case vk::ImageLayout::eColorAttachmentOptimal:
-            destinationAccessMask = vk::AccessFlagBits2::eColorAttachmentWrite;
-            break;
-        case vk::ImageLayout::eDepthStencilAttachmentOptimal:
-            destinationAccessMask = vk::AccessFlagBits2::eDepthStencilAttachmentRead |
-                                    vk::AccessFlagBits2::eDepthStencilAttachmentWrite;
-            break;
-        case vk::ImageLayout::eShaderReadOnlyOptimal:
-            destinationAccessMask = vk::AccessFlagBits2::eShaderRead;
-            break;
-        case vk::ImageLayout::eTransferSrcOptimal:
-            destinationAccessMask = vk::AccessFlagBits2::eTransferRead;
-            break;
-        case vk::ImageLayout::eTransferDstOptimal:
-            destinationAccessMask = vk::AccessFlagBits2::eTransferWrite;
-            break;
-        case vk::ImageLayout::eGeneral:
-        case vk::ImageLayout::ePresentSrcKHR:
-            break;
-        default:
-            // std::cout << "Unhandled image layout transition!\n";
-            destinationAccessMask = vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite;
-        }
-
-        vk::PipelineStageFlags2 destinationStage{};
-        switch (newImageLayout)
-        {
-        case vk::ImageLayout::eColorAttachmentOptimal:
-            destinationStage = vk::PipelineStageFlagBits2::eColorAttachmentOutput;
-            break;
-        case vk::ImageLayout::eDepthStencilAttachmentOptimal:
-            destinationStage = vk::PipelineStageFlagBits2::eEarlyFragmentTests;
-            break;
-        case vk::ImageLayout::eGeneral:
-            destinationStage = vk::PipelineStageFlagBits2::eHost;
-            break;
-        case vk::ImageLayout::ePresentSrcKHR:
-            destinationStage = vk::PipelineStageFlagBits2::eBottomOfPipe;
-            break;
-        case vk::ImageLayout::eShaderReadOnlyOptimal:
-            destinationStage = vk::PipelineStageFlagBits2::eFragmentShader;
-            break;
-        case vk::ImageLayout::eTransferDstOptimal:
-        case vk::ImageLayout::eTransferSrcOptimal:
-            destinationStage = vk::PipelineStageFlagBits2::eTransfer;
-            break;
-        default:
-            // std::cout << "Unhandled image layout transition!\n";
-            destinationStage = vk::PipelineStageFlagBits2::eAllCommands;
-        }
-
         vk::ImageAspectFlags aspectMask{};
         if (newImageLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
         {
@@ -890,43 +805,6 @@ namespace intvlk
                                                    sourceAccessMask,
                                                    destinationStage,
                                                    destinationAccessMask,
-                                                   oldImageLayout,
-                                                   newImageLayout,
-                                                   vk::QueueFamilyIgnored,
-                                                   vk::QueueFamilyIgnored,
-                                                   image,
-                                                   imageSubresourceRange};
-        commandBuffer.pipelineBarrier2(vk::DependencyInfo{vk::DependencyFlags{},
-                                                          nullptr,
-                                                          nullptr,
-                                                          imageMemoryBarrier});
-    }
-
-    inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,
-                               vk::Image image,
-                               vk::Format format,
-                               vk::ImageLayout oldImageLayout,
-                               vk::ImageLayout newImageLayout)
-    {
-        vk::ImageAspectFlags aspectMask{};
-        if (newImageLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
-        {
-            aspectMask = vk::ImageAspectFlagBits::eDepth;
-            if (format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint)
-            {
-                aspectMask |= vk::ImageAspectFlagBits::eStencil;
-            }
-        }
-        else
-        {
-            aspectMask = vk::ImageAspectFlagBits::eColor;
-        }
-
-        vk::ImageSubresourceRange imageSubresourceRange{aspectMask, 0, 1, 0, 1};
-        vk::ImageMemoryBarrier2 imageMemoryBarrier{vk::PipelineStageFlagBits2::eAllCommands,
-                                                   vk::AccessFlagBits2::eMemoryWrite,
-                                                   vk::PipelineStageFlagBits2::eAllCommands,
-                                                   vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
                                                    oldImageLayout,
                                                    newImageLayout,
                                                    vk::QueueFamilyIgnored,

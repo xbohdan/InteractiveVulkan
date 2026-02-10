@@ -236,6 +236,10 @@ namespace apps::static_cube
         intvlk::setImageLayout(commandBuffer,
                                perFrameData[frameIndex].drawImage.image,
                                perFrameData[frameIndex].drawImage.format,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferRead,
+                               vk::PipelineStageFlagBits2::eColorAttachmentOutput,
+                               vk::AccessFlagBits2::eColorAttachmentWrite,
                                vk::ImageLayout::eUndefined,
                                vk::ImageLayout::eColorAttachmentOptimal);
 
@@ -244,12 +248,21 @@ namespace apps::static_cube
         intvlk::setImageLayout(commandBuffer,
                                perFrameData[frameIndex].drawImage.image,
                                perFrameData[frameIndex].drawImage.format,
+                               vk::PipelineStageFlagBits2::eColorAttachmentOutput,
+                               vk::AccessFlagBits2::eColorAttachmentWrite,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferRead |
+                                   vk::AccessFlagBits2::eTransferWrite,
                                vk::ImageLayout::eColorAttachmentOptimal,
                                vk::ImageLayout::eTransferSrcOptimal);
 
         intvlk::setImageLayout(commandBuffer,
                                swapchainData.images[backBufferIndex],
                                swapchainData.colorFormat,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferRead,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferWrite,
                                vk::ImageLayout::eUndefined,
                                vk::ImageLayout::eTransferDstOptimal);
 
@@ -261,6 +274,10 @@ namespace apps::static_cube
         intvlk::setImageLayout(commandBuffer,
                                swapchainData.images[backBufferIndex],
                                swapchainData.colorFormat,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferWrite,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferWrite,
                                vk::ImageLayout::eTransferDstOptimal,
                                vk::ImageLayout::eTransferDstOptimal);
 
@@ -273,6 +290,10 @@ namespace apps::static_cube
         intvlk::setImageLayout(commandBuffer,
                                swapchainData.images[backBufferIndex],
                                swapchainData.colorFormat,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferWrite,
+                               vk::PipelineStageFlagBits2::eAllTransfer,
+                               vk::AccessFlagBits2::eTransferRead,
                                vk::ImageLayout::eTransferDstOptimal,
                                vk::ImageLayout::ePresentSrcKHR);
 
