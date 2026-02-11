@@ -12,25 +12,9 @@
 		94CD5B4E2E52496100BF0933 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CD5B472E52496100BF0933 /* main.cpp */; };
 		94F816B92F37298D00514833 /* libvulkan.1.3.296.dylib in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		94F816BA2F3729EB00514833 /* libvulkan.1.3.296.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */; };
-		94F816BD2F372AAC00514833 /* libglslang-default-resource-limits.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */; };
-		94F816C02F372AE000514833 /* libglslang.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816BF2F372AE000514833 /* libglslang.a */; };
-		94F816C12F372B0E00514833 /* libglslang-default-resource-limits.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */; };
-		94F816C22F372B0E00514833 /* libglslang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816BF2F372AE000514833 /* libglslang.a */; };
 		94F816E72F372CDF00514833 /* StaticCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94F816E22F372CDF00514833 /* StaticCube.cpp */; };
 		94F816E82F372CDF00514833 /* HammingNeighbors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94F816D32F372CDF00514833 /* HammingNeighbors.cpp */; };
 		94F816E92F372CDF00514833 /* BitGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94F816CA2F372CDF00514833 /* BitGenerator.cpp */; };
-		94F816F02F3730F700514833 /* libSPIRV-Tools.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EA2F3730F700514833 /* libSPIRV-Tools.a */; };
-		94F816F12F3730F700514833 /* libGenericCodeGen.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EB2F3730F700514833 /* libGenericCodeGen.a */; };
-		94F816F22F3730F700514833 /* libSPIRV.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EC2F3730F700514833 /* libSPIRV.a */; };
-		94F816F32F3730F700514833 /* libMachineIndependent.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816ED2F3730F700514833 /* libMachineIndependent.a */; };
-		94F816F42F3730F700514833 /* libSPIRV-Tools-opt.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */; };
-		94F816F52F3730F700514833 /* libOSDependent.a in Copy Files */ = {isa = PBXBuildFile; fileRef = 94F816EF2F3730F700514833 /* libOSDependent.a */; };
-		94F816F62F37317200514833 /* libGenericCodeGen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EB2F3730F700514833 /* libGenericCodeGen.a */; };
-		94F816F72F37317200514833 /* libMachineIndependent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816ED2F3730F700514833 /* libMachineIndependent.a */; };
-		94F816F82F37317200514833 /* libOSDependent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EF2F3730F700514833 /* libOSDependent.a */; };
-		94F816F92F37317200514833 /* libSPIRV-Tools-opt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */; };
-		94F816FA2F37317200514833 /* libSPIRV-Tools.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EA2F3730F700514833 /* libSPIRV-Tools.a */; };
-		94F816FB2F37317200514833 /* libSPIRV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F816EC2F3730F700514833 /* libSPIRV.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,14 +33,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				94F816C02F372AE000514833 /* libglslang.a in Copy Files */,
-				94F816BD2F372AAC00514833 /* libglslang-default-resource-limits.a in Copy Files */,
-				94F816F12F3730F700514833 /* libGenericCodeGen.a in Copy Files */,
-				94F816F32F3730F700514833 /* libMachineIndependent.a in Copy Files */,
-				94F816F52F3730F700514833 /* libOSDependent.a in Copy Files */,
-				94F816F22F3730F700514833 /* libSPIRV.a in Copy Files */,
-				94F816F02F3730F700514833 /* libSPIRV-Tools.a in Copy Files */,
-				94F816F42F3730F700514833 /* libSPIRV-Tools-opt.a in Copy Files */,
 				94F816B92F37298D00514833 /* libvulkan.1.3.296.dylib in Copy Files */,
 			);
 			name = "Copy Files";
@@ -96,9 +72,6 @@
 		94CD5B472E52496100BF0933 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		94CF8B602E4E8E5B0050EB0D /* InteractiveVulkan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InteractiveVulkan; sourceTree = BUILT_PRODUCTS_DIR; };
 		94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.296.dylib; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libvulkan.1.3.296.dylib; sourceTree = "<group>"; };
-		94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglslang-default-resource-limits.a"; path = "../../VulkanSDK/1.3.296.0/macOS/lib/libglslang-default-resource-limits.a"; sourceTree = "<group>"; };
-		94F816BC2F372AAC00514833 /* libslang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libslang.dylib; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libslang.dylib; sourceTree = "<group>"; };
-		94F816BF2F372AE000514833 /* libglslang.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglslang.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libglslang.a; sourceTree = "<group>"; };
 		94F816C52F372C3200514833 /* Error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
 		94F816C62F372CDF00514833 /* bit_generator.comp */ = {isa = PBXFileReference; lastKnownFileType = text; path = bit_generator.comp; sourceTree = "<group>"; };
 		94F816C82F372CDF00514833 /* Algorithm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Algorithm.hpp; sourceTree = "<group>"; };
@@ -126,12 +99,6 @@
 		94F816E22F372CDF00514833 /* StaticCube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StaticCube.cpp; sourceTree = "<group>"; };
 		94F816E32F372CDF00514833 /* Vertex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex.hpp; sourceTree = "<group>"; };
 		94F816E52F372CDF00514833 /* VulkanApp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VulkanApp.hpp; sourceTree = "<group>"; };
-		94F816EA2F3730F700514833 /* libSPIRV-Tools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools.a"; path = "../../VulkanSDK/1.3.296.0/macOS/lib/libSPIRV-Tools.a"; sourceTree = "<group>"; };
-		94F816EB2F3730F700514833 /* libGenericCodeGen.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGenericCodeGen.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libGenericCodeGen.a; sourceTree = "<group>"; };
-		94F816EC2F3730F700514833 /* libSPIRV.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSPIRV.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libSPIRV.a; sourceTree = "<group>"; };
-		94F816ED2F3730F700514833 /* libMachineIndependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMachineIndependent.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libMachineIndependent.a; sourceTree = "<group>"; };
-		94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSPIRV-Tools-opt.a"; path = "../../VulkanSDK/1.3.296.0/macOS/lib/libSPIRV-Tools-opt.a"; sourceTree = "<group>"; };
-		94F816EF2F3730F700514833 /* libOSDependent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOSDependent.a; path = ../../VulkanSDK/1.3.296.0/macOS/lib/libOSDependent.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,14 +106,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94F816C22F372B0E00514833 /* libglslang.a in Frameworks */,
-				94F816C12F372B0E00514833 /* libglslang-default-resource-limits.a in Frameworks */,
-				94F816F62F37317200514833 /* libGenericCodeGen.a in Frameworks */,
-				94F816F72F37317200514833 /* libMachineIndependent.a in Frameworks */,
-				94F816F82F37317200514833 /* libOSDependent.a in Frameworks */,
-				94F816FB2F37317200514833 /* libSPIRV.a in Frameworks */,
-				94F816FA2F37317200514833 /* libSPIRV-Tools.a in Frameworks */,
-				94F816F92F37317200514833 /* libSPIRV-Tools-opt.a in Frameworks */,
 				94F816BA2F3729EB00514833 /* libvulkan.1.3.296.dylib in Frameworks */,
 				946D8C6C2E4EA5C3004D794F /* SDL2.framework in Frameworks */,
 			);
@@ -241,15 +200,6 @@
 		94CF8B572E4E8E5B0050EB0D = {
 			isa = PBXGroup;
 			children = (
-				94F816EB2F3730F700514833 /* libGenericCodeGen.a */,
-				94F816ED2F3730F700514833 /* libMachineIndependent.a */,
-				94F816EF2F3730F700514833 /* libOSDependent.a */,
-				94F816EC2F3730F700514833 /* libSPIRV.a */,
-				94F816EA2F3730F700514833 /* libSPIRV-Tools.a */,
-				94F816EE2F3730F700514833 /* libSPIRV-Tools-opt.a */,
-				94F816BF2F372AE000514833 /* libglslang.a */,
-				94F816BB2F372AAC00514833 /* libglslang-default-resource-limits.a */,
-				94F816BC2F372AAC00514833 /* libslang.dylib */,
 				94F816B82F37298D00514833 /* libvulkan.1.3.296.dylib */,
 				94CD5B482E52496100BF0933 /* src */,
 				94CD5AD32E52491C00BF0933 /* .gitattributes */,

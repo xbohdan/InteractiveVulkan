@@ -229,7 +229,7 @@ namespace apps::static_cube
 
         perFrameData[frameIndex].commandPool.reset();
 
-        const auto &commandBuffer{perFrameData[frameIndex].commandBuffer};
+        const vk::raii::CommandBuffer &commandBuffer{perFrameData[frameIndex].commandBuffer};
 
         commandBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit});
 
@@ -336,8 +336,6 @@ namespace apps::static_cube
 
     void StaticCube::makeGraphicsPipeline()
     {
-        intvlk::glslang_utils::GlslangContext glslContext{};
-
         vk::PushConstantRange pushConstantRange{vk::ShaderStageFlagBits::eVertex,
                                                 0,
                                                 sizeof(DrawPushConstants)};
@@ -346,15 +344,17 @@ namespace apps::static_cube
             device,
             vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange}};
 
-        vk::raii::ShaderModule vertexShaderModule{glslContext.makeShaderModule(
-            device,
-            vk::ShaderStageFlagBits::eVertex,
-            intvlk::readFile("src/apps/StaticCube/shaders/static_cube.vert"))};
+        std::vector<uint32_t> vertexShaderSpv{intvlk::readSpirv("out/apps/StaticCube/shaders/static_cube.vert.spv")};
 
-        vk::raii::ShaderModule fragmentShaderModule{glslContext.makeShaderModule(
+        vk::raii::ShaderModule vertexShaderModule{
             device,
-            vk::ShaderStageFlagBits::eFragment,
-            intvlk::readFile("src/apps/StaticCube/shaders/static_cube.frag"))};
+            vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, vertexShaderSpv}};
+
+        std::vector<uint32_t> fragmentShaderSpv{intvlk::readSpirv("out/apps/StaticCube/shaders/static_cube.frag.spv")};
+
+        vk::raii::ShaderModule fragmentShaderModule{
+            device,
+            vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, fragmentShaderSpv}};
 
         vk::raii::PipelineCache pipelineCache{device, vk::PipelineCacheCreateInfo{}};
 

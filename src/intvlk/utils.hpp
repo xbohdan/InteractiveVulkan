@@ -776,6 +776,17 @@ namespace intvlk
         return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
     }
 
+    inline std::vector<uint32_t> readSpirv(std::string_view fileName)
+    {
+        std::ifstream file{std::string(fileName), std::ios::binary | std::ios::ate};
+        file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        const std::streamsize size = file.tellg();
+        std::vector<uint32_t> buffer(size / sizeof(uint32_t));
+        file.seekg(0);
+        file.read(reinterpret_cast<char *>(buffer.data()), size);
+        return buffer;
+    }
+
     inline void setImageLayout(const vk::raii::CommandBuffer &commandBuffer,
                                vk::Image image,
                                vk::Format format,

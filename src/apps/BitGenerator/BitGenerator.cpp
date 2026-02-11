@@ -22,8 +22,10 @@
 
 namespace apps::bit_generator
 {
-    BitGenerator::BitGenerator(uint32_t createCount, uint32_t changeCount, uint32_t length)
+    BitGenerator::BitGenerator(std::string fileName, uint32_t createCount, uint32_t changeCount, uint32_t length)
         : VulkanApp{"Bit Generator"},
+
+          fileName{std::move(fileName)},
 
           createCount{createCount},
 
@@ -113,10 +115,11 @@ namespace apps::bit_generator
                                                   specializationData.size() * sizeof(uint32_t),
                                                   specializationData.data()};
 
-        vk::raii::ShaderModule computeShaderModule{glslContext.makeShaderModule(
+        std::vector<uint32_t> shaderSpv{intvlk::readSpirv("out/apps/BitGenerator/shaders/bit_generator.comp.spv")};
+
+        vk::raii::ShaderModule computeShaderModule{
             device,
-            vk::ShaderStageFlagBits::eCompute,
-            intvlk::readFile("src/apps/BitGenerator/shaders/bit_generator.comp"))};
+            vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, shaderSpv}};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{vk::PipelineShaderStageCreateFlags{},
                                                                         vk::ShaderStageFlagBits::eCompute,
@@ -203,6 +206,6 @@ namespace apps::bit_generator
                                     hostBufferData.buffer,
                                     vk::BufferCopy{0, 0, createGroupCountX * maxComputeWorkGroupSizeX * sizeof(uint32_t)}); });
         const auto *data{static_cast<const uint32_t *>(hostBufferData.allocationInfo.pMappedData)};
-        writeData("hamming_one.txt", data);
+        writeData(fileName, data);
     }
 }

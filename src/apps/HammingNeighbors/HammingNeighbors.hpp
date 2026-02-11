@@ -70,6 +70,5 @@ namespace apps::hamming_neighbors
         vk::DeviceAddress hashBufferAddress{};
         intvlk::vma_utils::BufferData resultBufferData{nullptr};
         vk::DeviceAddress resultBufferAddress{};
-        intvlk::glslang_utils::GlslangContext glslContext{};
     };
 }

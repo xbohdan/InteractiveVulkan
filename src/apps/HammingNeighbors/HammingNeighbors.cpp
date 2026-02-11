@@ -189,14 +189,14 @@ namespace apps::hamming_neighbors
             specializationData.data()};
 
         std::string shaderPath{pipelineType == PipelineType::eGenerateHashes
-                                   ? "src/apps/HammingNeighbors/shaders/generate_hashes.comp"
-                                   : "src/apps/HammingNeighbors/shaders/find_hamming_neighbors.comp"};
+                                   ? "out/apps/HammingNeighbors/shaders/generate_hashes.comp.spv"
+                                   : "out/apps/HammingNeighbors/shaders/find_hamming_neighbors.comp.spv"};
+
+        std::vector<uint32_t> shaderSpv{intvlk::readSpirv(shaderPath)};
 
         vk::raii::ShaderModule computeShaderModule{
-            glslContext.makeShaderModule(
-                device,
-                vk::ShaderStageFlagBits::eCompute,
-                intvlk::readFile(shaderPath))};
+            device,
+            vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, shaderSpv}};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{
             vk::PipelineShaderStageCreateFlags{},
@@ -255,11 +255,11 @@ namespace apps::hamming_neighbors
 
         vk::SpecializationInfo specializationInfo{1, &specializationMapEntry, sizeof(uint32_t), &workGroupSize};
 
+        std::vector<uint32_t> shaderSpv{intvlk::readSpirv("out/apps/HammingNeighbors/shaders/sort_hashes.comp.spv")};
+
         vk::raii::ShaderModule computeShaderModule{
-            glslContext.makeShaderModule(
-                device,
-                vk::ShaderStageFlagBits::eCompute,
-                intvlk::readFile("src/apps/HammingNeighbors/shaders/sort_hashes.comp"))};
+            device,
+            vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, shaderSpv}};
 
         vk::PipelineShaderStageCreateInfo pipelineShaderStageCreateInfo{
             vk::PipelineShaderStageCreateFlags{},

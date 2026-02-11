@@ -23,6 +23,4 @@
 
 #include "../../intvlk/Error.hpp"
 
-#include "../../intvlk/glslang_utils/GlslangContext.hpp"
-
 #include "../../intvlk/vma_utils/BufferData.hpp"

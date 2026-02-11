@@ -22,7 +22,7 @@ namespace apps::bit_generator
     class BitGenerator final : public apps::vulkan_app::VulkanApp
     {
     public:
-        BitGenerator(uint32_t createCount, uint32_t changeCount, uint32_t length);
+        BitGenerator(std::string fileName, uint32_t createCount, uint32_t changeCount, uint32_t length);
 
         ~BitGenerator() override;
 
@@ -32,6 +32,7 @@ namespace apps::bit_generator
         uint32_t makeTimeBasedSeed() const;
         void writeData(std::string_view fileName, const uint32_t *data) const;
 
+        std::string fileName;
         uint32_t createCount;
         uint32_t changeCount;
         uint32_t length;
@@ -55,7 +56,6 @@ namespace apps::bit_generator
         vk::DeviceAddress deviceBufferAddress;
         intvlk::vma_utils::BufferData hostBufferData;
         vk::raii::PipelineLayout computePipelineLayout{VK_NULL_HANDLE};
-        intvlk::glslang_utils::GlslangContext glslContext{};
         vk::raii::Pipeline computePipeline{VK_NULL_HANDLE};
     };
 }

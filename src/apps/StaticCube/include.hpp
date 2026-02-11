@@ -27,8 +27,6 @@
 
 #include "../../intvlk/glm_utils/include.hpp"
 
-#include "../../intvlk/glslang_utils/GlslangContext.hpp"
-
 #include "../../intvlk/vma_utils/DepthAttachmentData.hpp"
 #include "../../intvlk/vma_utils/ImageData.hpp"
 #include "../../intvlk/vma_utils/MeshData.hpp"
