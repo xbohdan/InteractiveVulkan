@@ -62,21 +62,18 @@
     <Filter Include="src\apps\StaticCube\shaders">
       <UniqueIdentifier>{da9b21f7-a9b6-45ba-8990-0f01776eeddf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\intvlk\glm_utils">
+      <UniqueIdentifier>{7cdd9479-f03d-480f-9688-8045fd02d680}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\apps\include.hpp">
-      <Filter>src\apps</Filter>
-    </ClInclude>
     <ClInclude Include="src\intvlk\Error.hpp">
       <Filter>src\intvlk</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\include.hpp">
-      <Filter>src\intvlk</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intvlk\PerFrameData.hpp">
       <Filter>src\intvlk</Filter>
     </ClInclude>
     <ClInclude Include="src\intvlk\SdlContext.hpp">
@@ -161,6 +158,18 @@
       <Filter>src\apps\HammingNeighbors</Filter>
     </ClInclude>
     <ClInclude Include="src\apps\HammingNeighbors\SortPushConstants.hpp">
+      <Filter>src\apps\HammingNeighbors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\StaticCube\PerFrameData.hpp">
+      <Filter>src\apps\StaticCube</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intvlk\glm_utils\include.hpp">
+      <Filter>src\intvlk\glm_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\BitGenerator\include.hpp">
+      <Filter>src\apps\BitGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\apps\HammingNeighbors\include.hpp">
       <Filter>src\apps\HammingNeighbors</Filter>
     </ClInclude>
   </ItemGroup>

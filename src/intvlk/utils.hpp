@@ -783,7 +783,7 @@ namespace intvlk
         const std::streamsize size = file.tellg();
         std::vector<uint32_t> buffer(size / sizeof(uint32_t));
         file.seekg(0);
-        file.read(reinterpret_cast<char *>(buffer.data()), size);
+        file.read(std::bit_cast<char *>(buffer.data()), size);
         return buffer;
     }
 

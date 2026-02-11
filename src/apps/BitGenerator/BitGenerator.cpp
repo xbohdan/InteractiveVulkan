@@ -148,7 +148,7 @@ namespace apps::bit_generator
                ((1 << 23) - 1);
     }
 
-    void BitGenerator::writeData(std::string_view fileName, const uint32_t *data) const
+    void BitGenerator::writeData(const uint32_t *data) const
     {
         std::ofstream file{std::string{fileName}};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
@@ -206,6 +206,6 @@ namespace apps::bit_generator
                                     hostBufferData.buffer,
                                     vk::BufferCopy{0, 0, createGroupCountX * maxComputeWorkGroupSizeX * sizeof(uint32_t)}); });
         const auto *data{static_cast<const uint32_t *>(hostBufferData.allocationInfo.pMappedData)};
-        writeData(fileName, data);
+        writeData(data);
     }
 }

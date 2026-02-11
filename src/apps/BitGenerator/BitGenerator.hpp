@@ -30,7 +30,7 @@ namespace apps::bit_generator
 
     private:
         uint32_t makeTimeBasedSeed() const;
-        void writeData(std::string_view fileName, const uint32_t *data) const;
+        void writeData(const uint32_t *data) const;
 
         std::string fileName;
         uint32_t createCount;
