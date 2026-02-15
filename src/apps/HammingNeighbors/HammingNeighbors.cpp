@@ -189,8 +189,8 @@ namespace apps::hamming_neighbors
             specializationData.data()};
 
         std::string shaderPath{pipelineType == PipelineType::eGenerateHashes
-                                   ? "out/apps/HammingNeighbors/shaders/generate_hashes.comp.spv"
-                                   : "out/apps/HammingNeighbors/shaders/find_hamming_neighbors.comp.spv"};
+                                   ? "shaders/generate_hashes.comp.spv"
+                                   : "shaders/find_hamming_neighbors.comp.spv"};
 
         std::vector<uint32_t> shaderSpv{intvlk::readSpirv(shaderPath)};
 
@@ -255,7 +255,7 @@ namespace apps::hamming_neighbors
 
         vk::SpecializationInfo specializationInfo{1, &specializationMapEntry, sizeof(uint32_t), &workGroupSize};
 
-        std::vector<uint32_t> shaderSpv{intvlk::readSpirv("out/apps/HammingNeighbors/shaders/sort_hashes.comp.spv")};
+        std::vector<uint32_t> shaderSpv{intvlk::readSpirv("shaders/sort_hashes.comp.spv")};
 
         vk::raii::ShaderModule computeShaderModule{
             device,

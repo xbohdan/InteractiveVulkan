@@ -115,7 +115,7 @@ namespace apps::bit_generator
                                                   specializationData.size() * sizeof(uint32_t),
                                                   specializationData.data()};
 
-        std::vector<uint32_t> shaderSpv{intvlk::readSpirv("out/apps/BitGenerator/shaders/bit_generator.comp.spv")};
+        std::vector<uint32_t> shaderSpv{intvlk::readSpirv("shaders/bit_generator.comp.spv")};
 
         vk::raii::ShaderModule computeShaderModule{
             device,

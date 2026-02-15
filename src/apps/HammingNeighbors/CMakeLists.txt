@@ -1,0 +1,2 @@
+make_vulkan_app(HammingNeighbors)
+make_shaders(HammingNeighbors)

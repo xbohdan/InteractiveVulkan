@@ -1,0 +1,2 @@
+make_vulkan_app(BitGenerator)
+make_shaders(BitGenerator)

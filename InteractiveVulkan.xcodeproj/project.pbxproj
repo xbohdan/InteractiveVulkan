@@ -517,9 +517,6 @@
 					"DEBUG=1",
 					"VK_USE_PLATFORM_METAL_EXT=1",
 					"VK_ENABLE_BETA_EXTENSIONS=1",
-					"MVK_SHADER_DEBUG=1",
-					"MVK_SHADER_DUMP=1",
-					"MVK_SHADER_DUMP_DIR=/tmp/moltenvk_shaders",
 				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					/Library/Frameworks,
@@ -542,9 +539,6 @@
 					"NDEBUG=1",
 					"VK_USE_PLATFORM_METAL_EXT=1",
 					"VK_ENABLE_BETA_EXTENSIONS=1",
-					"MVK_SHADER_DEBUG=1",
-					"MVK_SHADER_DUMP=1",
-					"MVK_SHADER_DUMP_DIR=/tmp/moltenvk_shaders",
 				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					/Library/Frameworks,

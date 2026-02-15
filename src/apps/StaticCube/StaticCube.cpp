@@ -344,13 +344,13 @@ namespace apps::static_cube
             device,
             vk::PipelineLayoutCreateInfo{vk::PipelineLayoutCreateFlags{}, nullptr, pushConstantRange}};
 
-        std::vector<uint32_t> vertexShaderSpv{intvlk::readSpirv("out/apps/StaticCube/shaders/static_cube.vert.spv")};
+        std::vector<uint32_t> vertexShaderSpv{intvlk::readSpirv("shaders/static_cube.vert.spv")};
 
         vk::raii::ShaderModule vertexShaderModule{
             device,
             vk::ShaderModuleCreateInfo{vk::ShaderModuleCreateFlags{}, vertexShaderSpv}};
 
-        std::vector<uint32_t> fragmentShaderSpv{intvlk::readSpirv("out/apps/StaticCube/shaders/static_cube.frag.spv")};
+        std::vector<uint32_t> fragmentShaderSpv{intvlk::readSpirv("shaders/static_cube.frag.spv")};
 
         vk::raii::ShaderModule fragmentShaderModule{
             device,

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-#include "include.hpp"
+#include "BitGenerator.hpp"
 
 #include <iostream>
 
@@ -21,10 +21,7 @@ int main(int /*argc*/, char ** /*argv*/)
 {
     try
     {
-        const uint32_t width{900};
-        const uint32_t height{600};
-        apps::static_cube::StaticCube a{width, height};
-        apps::vulkan_app::VulkanApp &app{a};
+        apps::bit_generator::BitGenerator app{"hamming_one.txt", 1024, 512, 1000};
         app.run();
     }
     catch (const intvlk::Error &e)
